@@ -13,11 +13,12 @@ import (
 )
 
 func InitRouter(db *gorm.DB, e *echo.Echo) {
-	userData := ud.New(db)
 	hash := encrypts.New()
 	cloudinaryUploader := cloudinary.New()
+	userData := ud.New(db)
 	userService := us.New(userData, hash)
 	userHandlerAPI := uh.New(userService, cloudinaryUploader)
 
-	e.POST("/users", userHandlerAPI.CreateUser)
+	// define routes/ endpoint
+	e.POST("/login", userHandlerAPI.Login)
 }
