@@ -21,6 +21,22 @@ func New(service user.UserServiceInterface, cloudinaryUploader cloudinary.Cloudi
 	}
 }
 
+func (handler *UserHandler) RegisterUser(c echo.Context) error {
+	newUser := UserRequest{}
+	errBind := c.Bind(&newUser)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid", nil))
+	}
+
+	userCore := RequestToCore(newUser)
+	errInsert := handler.userService.Create(userCore)
+	if errInsert != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert data "+errInsert.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", nil))
+}
+
 func (handler *UserHandler) Login(c echo.Context) error {
 	var reqData = LoginRequest{}
 	errBind := c.Bind(&reqData)

@@ -21,4 +21,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 
 	// define routes/ endpoint
 	e.POST("/login", userHandlerAPI.Login)
+	e.POST("/users", userHandlerAPI.RegisterUser)
 }

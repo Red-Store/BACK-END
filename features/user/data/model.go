@@ -13,7 +13,7 @@ type User struct {
 	UserName     string `gorm:"unique"`
 	Email        string `gorm:"unique"`
 	Password     string
-	Role         string
+	Role         string `gorm:"not null"`
 	PhotoProfile string
 }
 
