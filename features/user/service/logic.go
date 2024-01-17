@@ -26,8 +26,26 @@ func New(repo user.UserDataInterface, hash encrypts.HashInterface) user.UserServ
 }
 
 // Create implements user.UserServiceInterface.
-func (*userService) Create(input user.Core) error {
-	panic("unimplemented")
+func (service *userService) Create(input user.Core) error {
+	errValidate := service.validate.Struct(input)
+	if errValidate != nil {
+		return errValidate
+	}
+
+	if input.Password != "" {
+		hashedPass, errHash := service.hashService.HashPassword(input.Password)
+		if errHash != nil {
+			return errors.New("Error hash password.")
+		}
+		input.Password = hashedPass
+	}
+
+	if input.Role == "" {
+		input.Role = "user"
+	}
+
+	err := service.userData.Insert(input)
+	return err
 }
 
 // GetById implements user.UserServiceInterface.
