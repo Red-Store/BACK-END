@@ -2,6 +2,7 @@ package data
 
 import (
 	"MyEcommerce/features/user"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -17,8 +18,17 @@ func New(db *gorm.DB) user.UserDataInterface {
 }
 
 // Insert implements user.UserDataInterface.
-func (*userQuery) Insert(input user.Core) error {
-	panic("unimplemented")
+func (repo *userQuery) Insert(input user.Core) error {
+	dataGorm := CoreToModel(input)
+
+	tx := repo.db.Create(&dataGorm)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return errors.New("insert failed, row affected = 0")
+	}
+	return nil
 }
 
 // SelectById implements user.UserDataInterface.
