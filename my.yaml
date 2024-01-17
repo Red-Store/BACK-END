@@ -1,4 +1,4 @@
-openapi: "3.0.3"
+openapi: '3.0.3'
 info:
   description: |
     Ini Adalah Dokumentasi E-commerce App API
@@ -9,9 +9,9 @@ info:
 servers:
   # Added by API Auto Mocking Plugin
   - description: E-commerce App
-    url: https://virtserver.swaggerhub.com/L3NONEONE_1/EcommerceAppProject/1.0.0
+    url:  https://virtserver.swaggerhub.com/L3NONEONE_1/EcommerceAppProject/1.0.0
   - description: Local
-    url: "http://localhost:8000"
+    url: 'http://localhost:8000'
 tags:
   - name: Auth
     description: API AUTH
@@ -43,37 +43,37 @@ paths:
                   type: string
                   example: lendra123
       responses:
-        "200":
+        '200':
           description: successful login
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  message:
+                  message: 
                     type: string
                     example: success login
                   token:
                     type: string
                     example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpM
-        "400":
+        '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
+                $ref: '#/components/schemas/Response400'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
-        "404":
+                $ref: '#/components/schemas/Response500'
+        '404':
           description: User Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response404"
+                $ref: '#/components/schemas/Response404'
   /users:
     post:
       tags:
@@ -84,28 +84,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UsersSchema"
+              $ref: '#/components/schemas/UsersSchema'
         description: Created user object
         required: true
       responses:
-        "200":
+        '200':
           description: successful createUser
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response200"
-        "400":
+                $ref: '#/components/schemas/Response200'
+        '400':
           description: Error createUser
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
+                $ref: '#/components/schemas/Response400'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
+                $ref: '#/components/schemas/Response500'
     get:
       tags:
         - User
@@ -113,36 +113,36 @@ paths:
       security:
         - jwtAuth: []
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetProfil"
-        "400":
+                $ref: '#/components/schemas/GetProfil'
+        '400':
           description: Invalid userid supplied
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "404":
+                $ref: '#/components/schemas/Response400'
+        '404':
           description: User not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response404"
-        "401":
+                $ref: '#/components/schemas/Response404'
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response401"
-        "500":
+                $ref: '#/components/schemas/Response401'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
+                $ref: '#/components/schemas/Response500'
     put:
       tags:
         - User
@@ -154,40 +154,40 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/EditProfil"
+              $ref: '#/components/schemas/EditProfil'
         description: Updated user object
         required: true
       responses:
-        "200":
+        '200':
           description: succes update user
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response200"
-        "400":
+                $ref: '#/components/schemas/Response200'
+        '400':
           description: Invalid userid supplied
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "404":
+                $ref: '#/components/schemas/Response400'
+        '404':
           description: User not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response404"
-        "401":
+                $ref: '#/components/schemas/Response404'
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response401"
-        "500":
+                $ref: '#/components/schemas/Response401'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
+                $ref: '#/components/schemas/Response500'
     delete:
       tags:
         - User
@@ -196,36 +196,39 @@ paths:
       security:
         - jwtAuth: []
       responses:
-        "200":
+        '200':
           description: succes delete user
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response200"
-        "400":
+                $ref: '#/components/schemas/Response200'
+        '400':
           description: Invalid userid supplied
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "404":
+                $ref: '#/components/schemas/Response400'
+        '404':
           description: User not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response404"
-        "401":
+                $ref: '#/components/schemas/Response404'
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response401"
-        "500":
+                $ref: '#/components/schemas/Response401'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
+                $ref: '#/components/schemas/Response500'
+
+
+
 
   /products:
     post:
@@ -239,36 +242,36 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProductSchema"
+              $ref: '#/components/schemas/ProductSchema'
       responses:
-        "200":
+        '200':
           description: successful Create Product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response200"
-        "400":
+                $ref: '#/components/schemas/Response200'
+        '400':
           description: Error Create Product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
+                $ref: '#/components/schemas/Response400'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
-        "401":
+                $ref: '#/components/schemas/Response500'
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response401"
+                $ref: '#/components/schemas/Response401'
     get:
       tags:
         - Product
-      summary: Get All Product
+      summary: Get All Product 
       parameters:
         - name: page
           in: query
@@ -285,30 +288,30 @@ paths:
             type: integer
             default: 8
       responses:
-        "200":
+        '200':
           description: successful Get All Product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProductGetAllResponse"
-        "400":
+                $ref: '#/components/schemas/ProductGetAllResponse'
+        '400':
           description: Error Get Product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
+                $ref: '#/components/schemas/Response400'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
-        "404":
+                $ref: '#/components/schemas/Response500'
+        '404':
           description: Product Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response404"
+                $ref: '#/components/schemas/Response404'
   /products/{id}:
     get:
       tags:
@@ -325,36 +328,36 @@ paths:
       security:
         - jwtAuth: []
       responses:
-        "200":
+        '200':
           description: successful Get Product By Id
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProductResponse"
-        "400":
+                $ref: '#/components/schemas/ProductResponse'
+        '400':
           description: Error Get Product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
+                $ref: '#/components/schemas/Response400'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
-        "401":
+                $ref: '#/components/schemas/Response500'
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response401"
-        "404":
+                $ref: '#/components/schemas/Response401'
+        '404':
           description: Product Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response404"
+                $ref: '#/components/schemas/Response404'
     put:
       tags:
         - Product
@@ -373,38 +376,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProductSchema"
+              $ref: '#/components/schemas/ProductSchema'
       responses:
-        "200":
+        '200':
           description: successful Update Product By Id
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response200"
-        "400":
+                $ref: '#/components/schemas/Response200'
+        '400':
           description: Error Update Product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
+                $ref: '#/components/schemas/Response400'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
-        "401":
+                $ref: '#/components/schemas/Response500'
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response401"
-        "404":
+                $ref: '#/components/schemas/Response401'
+        '404':
           description: Product Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response404"
+                $ref: '#/components/schemas/Response404'
     delete:
       tags:
         - Product
@@ -420,80 +423,37 @@ paths:
       security:
         - jwtAuth: []
       responses:
-        "200":
+        '200':
           description: successful Delete Product By Id
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response200"
-        "400":
+                $ref: '#/components/schemas/Response200'
+        '400':
           description: Error Delete Product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
+                $ref: '#/components/schemas/Response400'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
-        "401":
+                $ref: '#/components/schemas/Response500'
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response401"
-        "404":
+                $ref: '#/components/schemas/Response401'
+        '404':
           description: Product Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response404"
+                $ref: '#/components/schemas/Response404'
   /carts:
-    post:
-      tags:
-        - Cart
-      summary: Add Product To Cart
-      description: This can only be done by the logged in user.
-      security:
-        - jwtAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CartSchema"
-      responses:
-        "200":
-          description: successful add product
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Response200"
-        "400":
-          description: Error Add Product
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Response500"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Response401"
-        "404":
-          description: Product Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Response404"
     get:
       tags:
         - Cart
@@ -502,12 +462,83 @@ paths:
       security:
         - jwtAuth: []
       responses:
-        "200":
+        '200':
           description: successful Get Cart
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CartResponse"
+                $ref: '#/components/schemas/CartResponse'
+        '400':
+          description: Error Get Product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '404':
+          description: Product Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+  /carts/{product_id}:
+    post:
+      tags:
+        - Cart
+      summary: Add Product To Cart
+      description: This can only be done by the logged in user.
+      parameters:
+        - in: path
+          name: product_id
+          schema:
+            type: number
+            example: 1
+          required: true
+      security:
+        - jwtAuth: []
+      responses:
+        '200':
+          description: successful add product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response200'
+        '400':
+          description: Error Add Product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '404':
+          description: Product Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+  /carts/{cart_id}:
     put:
       tags:
         - Cart
@@ -515,85 +546,89 @@ paths:
       description: This can only be done by the logged in user.
       security:
         - jwtAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CartSchema"
+      parameters:
+        - in: path
+          name: cart_id
+          schema:
+            type: number
+            example: 1
+          required: true
       responses:
-        "200":
+        '200':
           description: successful Update product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response200"
-        "400":
+                $ref: '#/components/schemas/Response200'
+        '400':
           description: Error Add Product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
+                $ref: '#/components/schemas/Response400'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
-        "401":
+                $ref: '#/components/schemas/Response500'
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response401"
-        "404":
+                $ref: '#/components/schemas/Response401'
+        '404':
           description: Product Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response404"
+                $ref: '#/components/schemas/Response404'
     delete:
       tags:
         - Cart
       summary: Delete Product To Cart
       description: This can only be done by the logged in user.
+      parameters:
+        - in: path
+          name: cart_id
+          schema:
+            type: number
+            example: 1
+          required: true
       security:
         - jwtAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CartDelete"
       responses:
-        "200":
+        '200':
           description: successful Delete product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response200"
-        "400":
+                $ref: '#/components/schemas/Response200'
+        '400':
           description: Error Add Product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
+                $ref: '#/components/schemas/Response400'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
-        "401":
+                $ref: '#/components/schemas/Response500'
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response401"
-        "404":
+                $ref: '#/components/schemas/Response401'
+        '404':
           description: Product Not Found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response404"
+                $ref: '#/components/schemas/Response404'
 
   /orders:
     post:
@@ -607,32 +642,32 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/OrderSchema"
+              $ref: '#/components/schemas/OrderSchema'
       responses:
-        "200":
+        '200':
           description: successful create Order
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response200"
-        "400":
+                $ref: '#/components/schemas/Response200'
+        '400':
           description: Error create Order
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
+                $ref: '#/components/schemas/Response400'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
-        "401":
+                $ref: '#/components/schemas/Response500'
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response401"
+                $ref: '#/components/schemas/Response401'
     get:
       tags:
         - Order
@@ -641,31 +676,31 @@ paths:
       security:
         - jwtAuth: []
       responses:
-        "200":
+        '200':
           description: get order by id user
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OrderSchema"
+                $ref: '#/components/schemas/OrderSchema'
                 # $ref: '#/components/schemas/ArrayOfCartSchema'
-        "400":
+        '400':
           description: Error Get Order
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
+                $ref: '#/components/schemas/Response400'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
-        "401":
+                $ref: '#/components/schemas/Response500'
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response401"
+                $ref: '#/components/schemas/Response401'
   /admin/users:
     get:
       tags:
@@ -675,31 +710,31 @@ paths:
       security:
         - jwtAuth: []
       responses:
-        "200":
-          description: get all User
+        '200':
+          description: get all User 
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AdminUserResponse"
+                $ref: '#/components/schemas/AdminUserResponse'
                 # $ref: '#/components/schemas/ArrayOfCartSchema'
-        "400":
+        '400':
           description: Error Get User
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
+                $ref: '#/components/schemas/Response400'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
-        "401":
+                $ref: '#/components/schemas/Response500'
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response401"
+                $ref: '#/components/schemas/Response401'
   /admin/orders:
     get:
       tags:
@@ -709,94 +744,95 @@ paths:
       security:
         - jwtAuth: []
       responses:
-        "200":
-          description: success get all order
+        '200':
+          description: success get all order 
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AdminOrderResponse"
+                $ref: '#/components/schemas/AdminOrderResponse'
                 # $ref: '#/components/schemas/ArrayOfCartSchema'
-        "400":
+        '400':
           description: Error Get Order
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response400"
-        "500":
+                $ref: '#/components/schemas/Response400'
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response500"
-        "401":
+                $ref: '#/components/schemas/Response500'
+        '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Response401"
+                $ref: '#/components/schemas/Response401'
 
 components:
   schemas:
+
     Response200:
-      type: object
-      properties:
-        code:
-          type: number
-          example: 200
-        message:
-          type: string
-          example: Successful Operation
-      required:
-        - code
-        - message
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+                example: Successful Operation
+            required:
+              - code
+              - message
     Response400:
-      type: object
-      properties:
-        code:
-          type: number
-          example: 400
-        message:
-          type: string
-          example: "Bad Request"
-      required:
-        - code
-        - message
+            type: object
+            properties:
+              code:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: "Bad Request"
+            required:
+              - code
+              - message
     Response404:
-      type: object
-      properties:
-        code:
-          type: number
-          example: 404
-        message:
-          type: string
-          example: Not Found
-      required:
-        - code
-        - message
+            type: object
+            properties:
+              code:
+                type: number
+                example: 404
+              message:
+                type: string
+                example: Not Found
+            required:
+              - code
+              - message
     Response500:
-      type: object
-      properties:
-        code:
-          type: number
-          example: 500
-        message:
-          type: string
-          example: Internal Server Error
-      required:
-        - code
-        - message
+            type: object
+            properties:
+              code:
+                type: number
+                example: 500
+              message:
+                type: string
+                example: Internal Server Error
+            required:
+              - code
+              - message
     Response401:
-      type: object
-      properties:
-        code:
-          type: number
-          example: 401
-        message:
-          type: string
-          example: Unauthorized
-      required:
-        - code
-        - message
+            type: object
+            properties:
+              code:
+                type: number
+                example: 401
+              message:
+                type: string
+                example: Unauthorized
+            required:
+              - code
+              - message
     UsersSchema:
       type: object
       properties:
@@ -815,7 +851,7 @@ components:
         user_name: "lendra"
         email: "lendra@gmail.com"
         password: "lendra123"
-        role: "pembeli"
+        role: "user"
     GetProfil:
       type: object
       properties:
@@ -825,8 +861,6 @@ components:
           type: string
         email:
           type: string
-        role:
-          type: string
         photo_profil:
           type: string
           format: uri
@@ -835,8 +869,7 @@ components:
         name: "lendra syaputra"
         user_name: "lendra"
         email: "lendra@gmail.com"
-        role: "pembeli"
-        photo_profil: "https://sariroti.com/arjauser.jpg"
+        photo_profil: 'https://sariroti.com/arjauser.jpg'
     EditProfil:
       type: object
       properties:
@@ -846,10 +879,18 @@ components:
           type: string
         email:
           type: string
+        password:
+          type: string
+        photo_profil:
+          type: string
+          format: uri
+          description: URL of the product photo
       example:
         name: "lendra syaputra"
         user_name: "lendra"
         email: "lendra@gmail.com"
+        password: "lendra432"
+        photo_profil: https://sariroti.com/arjauser.jpg'
     ProductSchema:
       type: object
       properties:
@@ -873,7 +914,7 @@ components:
         price: 50000
         category: "Smartphone"
         stock: 10
-        photo_product: "https://sariroti.com/smartphone/photovivo.jpg"
+        photo_product: 'https://sariroti.com/smartphone/photovivo.jpg'
     ProductResponse:
       type: object
       properties:
@@ -893,10 +934,10 @@ components:
           type: string
           format: uri
           description: URL of the product photo
-        users:
+        users: 
           type: array
           items:
-            $ref: "#/components/schemas/UsersSchema"
+            $ref: '#/components/schemas/UsersSchema'
       example:
         id: 1
         name: "Vivo"
@@ -904,72 +945,53 @@ components:
         price: 50000
         category: "Smartphone"
         stock: 10
-        photo_product: "https://sariroti.com/smartphone/photovivo.jpg"
-        users:
+        photo_product: 'https://sariroti.com/smartphone/photovivo.jpg'
+        users: 
           id: 1
           name: TOKO ARJA
-          photo_profil: "https://sariroti.com/arjauser.jpg"
+          photo_profil: 'https://sariroti.com/arjauser.jpg'
     ProductGetAllResponse:
-      type: array
-      items:
-        type: object
         properties:
-          id:
-            type: integer
-          name:
-            type: string
-          price:
-            type: integer
-          photo_product:
-            type: string
-            format: uri
-            description: URL of the product photo
-          users:
+          Product:
             type: array
             items:
-              $ref: "#/components/schemas/UsersSchema"
-      example:
-        - id: 1
-          name: "Vivo"
-          price: 50000
-          photo_product: "https://sariroti.com/smartphone/photovivo.jpg"
-          users:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                price:
+                  type: integer
+                category:
+                  type: string
+                photo_product:
+                  type: string
+                  format: uri
+                  description: URL of the product photo
+            example:
             - id: 1
-              name: "TOKO ARJA"
-              photo_profil: "https://sariroti.com/arjauser.jpg"
-        - id: 2
-          name: "Samsung"
-          price: 60000
-          photo_product: "https://sariroti.com/smartphone/photosamsung.jpg"
-          users:
+              name: "Vivo"
+              price: 50000
+              category: phone
+              photo_product: 'https://sariroti.com/smartphone/photovivo.jpg'
             - id: 2
-              name: "TOKO BINTANG"
-              photo_profil: "https://sariroti.com/bintanguser.jpg"
-        - id: 3
-          name: "Xiaomi"
-          price: 55000
-          photo_product: "https://sariroti.com/smartphone/photoxiaomi.jpg"
-          users:
+              name: "Samsung"
+              price: 60000
+              category: phone
+              photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
             - id: 3
-              name: "TOKO CENTRAL"
-              photo_profil: "https://sariroti.com/centraluser.jpg"
-    CartSchema:
-      type: object
-      properties:
-        quantity:
-          type: integer
-        product_id:
-          type: integer
-      example:
-        quantity: 2
-        product_id: 1
+              name: "Xiaomi"
+              price: 55000
+              category: phone
+              photo_product: 'https://sariroti.com/smartphone/photoxiaomi.jpg'
     CartResponse:
       type: array
       items:
         type: object
         properties:
           product:
-            $ref: "#/components/schemas/ProductResponse"
+            $ref: '#/components/schemas/ProductResponse'
           quantity:
             type: integer
       example:
@@ -977,21 +999,14 @@ components:
             id: 1
             name: "Samsung"
             price: 60000
-            photo_product: "https://sariroti.com/smartphone/photosamsung.jpg"
+            photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
           quantity: 2
         - product:
             id: 2
             name: "vivo"
             price: 60000
-            photo_product: "https://sariroti.com/smartphone/photosamsung.jpg"
+            photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
           quantity: 3
-    CartDelete:
-      type: object
-      properties:
-        product_id:
-          type: integer
-      example:
-        product_id: 1
     AdminUserResponse:
       type: object
       properties:
@@ -1052,9 +1067,18 @@ components:
       type: object
       properties:
         cart_id:
+          type: integer
+        items:
+            # type: array
+            # $ref: '#/components/schemas/ProductResponse'
           type: array
           items:
-            type: integer
+            type: object
+            properties:
+              product:
+                $ref: '#/components/schemas/ProductResponse'
+              quantity:
+                type: integer
         address:
           type: object
           properties:
@@ -1073,12 +1097,26 @@ components:
               type: string
       example:
         cart_id: 1
-        address:
+        items:
+          - product:
+              id: 1
+              name: "Samsung"
+              price: 60000
+              photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
+            quantity: 2
+          - product:
+              id: 2
+              name: "vivo"
+              price: 60000
+              photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
+            quantity: 3
+        address: 
           street: "Jalan Veteran No.10"
           city: "Malang"
           state: "Indonesia"
           zip: 10101
-        payment: "COD (Cash Or Duel"
+        payment:
+          name: "COD (Cash Or Duel)"
   securitySchemes:
     jwtAuth:
       type: http
