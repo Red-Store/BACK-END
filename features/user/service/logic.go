@@ -54,8 +54,13 @@ func (service *userService) GetById(userIdLogin int) (*user.Core, error) {
 }
 
 // Update implements user.UserServiceInterface.
-func (*userService) Update(userIdLogin int, input user.Core) error {
-	panic("unimplemented")
+func (service *userService) Update(userIdLogin int, input user.Core) error {
+	if userIdLogin <= 0 {
+		return errors.New("invalid id")
+	}
+
+	err := service.userData.Update(userIdLogin, input)
+	return err
 }
 
 // Delete implements user.UserServiceInterface.
