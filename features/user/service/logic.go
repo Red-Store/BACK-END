@@ -5,7 +5,6 @@ import (
 	"MyEcommerce/utils/encrypts"
 	"MyEcommerce/utils/middlewares"
 	"errors"
-	"log"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -49,8 +48,9 @@ func (service *userService) Create(input user.Core) error {
 }
 
 // GetById implements user.UserServiceInterface.
-func (*userService) GetById(userIdLogin int) (*user.Core, error) {
-	panic("unimplemented")
+func (service *userService) GetById(userIdLogin int) (*user.Core, error) {
+	result, err := service.userData.SelectById(userIdLogin)
+	return result, err
 }
 
 // Update implements user.UserServiceInterface.
@@ -65,8 +65,14 @@ func (*userService) Delete(userIdLogin int) error {
 
 // Login implements user.UserServiceInterface.
 func (service *userService) Login(email string, password string) (data *user.Core, token string, err error) {
-	if email == "" || password == "" {
+	if email == "" && password == "" {
 		return nil, "", errors.New("email dan password wajib diisi")
+	}
+	if email == "" {
+		return nil, "", errors.New("email wajib diisi")
+	}
+	if password == "" {
+		return nil, "", errors.New("password wajib diisi")
 	}
 
 	data, err = service.userData.Login(email, password)
@@ -77,7 +83,7 @@ func (service *userService) Login(email string, password string) (data *user.Cor
 	if !isValid {
 		return nil, "", errors.New("password tidak sesuai.")
 	}
-	log.Println("id user:", data.ID)
+
 	token, errJwt := middlewares.CreateToken(int(data.ID))
 	if errJwt != nil {
 		return nil, "", errJwt

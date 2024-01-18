@@ -3,6 +3,7 @@ package router
 import (
 	"MyEcommerce/utils/cloudinary"
 	"MyEcommerce/utils/encrypts"
+	"MyEcommerce/utils/middlewares"
 
 	ud "MyEcommerce/features/user/data"
 	uh "MyEcommerce/features/user/handler"
@@ -22,4 +23,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// define routes/ endpoint
 	e.POST("/login", userHandlerAPI.Login)
 	e.POST("/users", userHandlerAPI.RegisterUser)
+	e.GET("/users", userHandlerAPI.GetUser, middlewares.JWTMiddleware())
 }
