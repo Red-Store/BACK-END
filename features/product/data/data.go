@@ -9,12 +9,12 @@ import (
 
 type Product struct {
 	gorm.Model
-	Name         string
-	Description  string
-	Category     string
-	Stock        int
-	Price        int
-	PhotoProduct string
+	Name         string 
+	Description  string 
+	Category     string 
+	Stock        int    
+	Price        int    
+	PhotoProduct string 
 	UserID       uint
 	User         data.User
 }

@@ -1,6 +1,8 @@
 package service
 
-import "MyEcommerce/features/product"
+import (
+	"MyEcommerce/features/product"
+)
 
 type productService struct {
 	productData product.ProductDataInterface
@@ -18,4 +20,13 @@ func (ps *productService) Create(userIdLogin int, input product.Core) error {
 		return err
 	}
 	return nil
+}
+
+// GettAll implements product.ProductServiceInterface.
+func (ps *productService) GettAll() ([]product.Core, error) {
+	products, err := ps.productData.SelectAll()
+	if err != nil {
+		return nil, err
+	}
+	return products, nil
 }

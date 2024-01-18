@@ -41,7 +41,7 @@ func (handler *ProductHandler) CreateProduct(c echo.Context) error {
 
 	imageURL, err := handler.cld.UploadImage(fileHeader)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error uploading the image", nil))
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error uploading the image, jenis file salah", nil))
 	}
 	
 	productCore := RequestToCore(newProduct, imageURL, uint(userIdLogin))

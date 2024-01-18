@@ -18,7 +18,7 @@ func New(db *gorm.DB) product.ProductDataInterface {
 }
 
 func (repo *productQuery) Insert(userIdLogin int, input product.Core) error {
-	
+
 	productInputGorm := CoreToModel(input)
 
 	// simpan ke DB
@@ -31,4 +31,20 @@ func (repo *productQuery) Insert(userIdLogin int, input product.Core) error {
 		return errors.New("insert failed, row affected = 0")
 	}
 	return nil
+}
+
+// SelectAll implements product.ProductDataInterface.
+func (repo *productQuery) SelectAll() ([]product.Core, error) {
+	var products []Product
+	err := repo.db.Find(&products).Error
+	if err != nil {
+		return nil, err
+	}
+
+	var productCores []product.Core
+	for _, p := range products {
+		productCores = append(productCores, p.ModelToCore())
+	}
+
+	return productCores, nil
 }
