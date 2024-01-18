@@ -12,8 +12,8 @@ func New(repo product.ProductDataInterface) product.ProductServiceInterface {
 	}
 }
 
-func (ps *productService) Create(UserID int, input product.Core) error {
-	err := ps.productData.Insert(UserID, input)
+func (ps *productService) Create(userIdLogin int, input product.Core) error {
+	err := ps.productData.Insert(userIdLogin, input)
 	if err != nil {
 		return err
 	}

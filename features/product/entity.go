@@ -20,10 +20,10 @@ type Core struct {
 }
 
 type ProductDataInterface interface {
-	Insert(UserID int, input Core) error
+	Insert(userIdLogin int, input Core) error
 }
 
 // interface untuk Service Layer
 type ProductServiceInterface interface {
-	Create(UserID int, input Core) error
+	Create(userIdLogin int, input Core) error
 }

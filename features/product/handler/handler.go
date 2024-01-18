@@ -23,8 +23,8 @@ func New(ps product.ProductServiceInterface, cloudinaryUploader cloudinary.Cloud
 }
 
 func (handler *ProductHandler) CreateProduct(c echo.Context) error {
-	userID := middlewares.ExtractTokenUserId(c)
-	if userID == 0 {
+	userIdLogin := middlewares.ExtractTokenUserId(c)
+	if userIdLogin == 0 {
 		return c.JSON(http.StatusUnauthorized, responses.WebResponse("Unauthorized user", nil))
 	}
 
@@ -43,12 +43,11 @@ func (handler *ProductHandler) CreateProduct(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error uploading the image", nil))
 	}
-
 	
-	productCore := RequestToCore(newProduct, imageURL)
+	productCore := RequestToCore(newProduct, imageURL, uint(userIdLogin))
 	productCore.PhotoProduct = imageURL
 
-	errInsert := handler.productService.Create(userID, productCore)
+	errInsert := handler.productService.Create(userIdLogin, productCore)
 	if errInsert != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert data", nil))
 	}

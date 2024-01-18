@@ -17,7 +17,8 @@ func New(db *gorm.DB) product.ProductDataInterface {
 	}
 }
 
-func (repo *productQuery) Insert(UserID int, input product.Core) error {
+func (repo *productQuery) Insert(userIdLogin int, input product.Core) error {
+	
 	productInputGorm := CoreToModel(input)
 
 	// simpan ke DB

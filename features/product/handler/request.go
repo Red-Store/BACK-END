@@ -14,8 +14,9 @@ type ProductRequest struct {
 	PhotoProduct *multipart.FileHeader `json:"photo_product" form:"photo_product"`
 }
 
-func RequestToCore(input ProductRequest, imageURL string) product.Core {
+func RequestToCore(input ProductRequest, imageURL string, userIdLogin uint) product.Core {
 	return product.Core{
+		UserID: userIdLogin,
 		Name:         input.Name,
 		Description:  input.Description,
 		Category:     input.Category,
