@@ -50,6 +50,17 @@ func (handler *UserHandler) GetUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", userResult))
 }
 
+func (handler *UserHandler) DeleteUser(c echo.Context) error {
+	userIdLogin := middlewares.ExtractTokenUserId(c)
+
+	errDelete := handler.userService.Delete(userIdLogin)
+	if errDelete != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error delete data "+errDelete.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse("success delete data", nil))
+}
+
 func (handler *UserHandler) Login(c echo.Context) error {
 	var reqData = LoginRequest{}
 	errBind := c.Bind(&reqData)
