@@ -34,9 +34,9 @@ func (repo *productQuery) Insert(userIdLogin int, input product.Core) error {
 }
 
 // SelectAll implements product.ProductDataInterface.
-func (repo *productQuery) SelectAll() ([]product.Core, error) {
+func (repo *productQuery) SelectAll(page, limit int) ([]product.Core, error) {
 	var products []Product
-	err := repo.db.Find(&products).Error
+	err := repo.db.Limit(limit).Offset((page - 1) * limit).Find(&products).Error
 	if err != nil {
 		return nil, err
 	}

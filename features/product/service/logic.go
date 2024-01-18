@@ -23,10 +23,22 @@ func (ps *productService) Create(userIdLogin int, input product.Core) error {
 }
 
 // GettAll implements product.ProductServiceInterface.
-func (ps *productService) GettAll() ([]product.Core, error) {
-	products, err := ps.productData.SelectAll()
-	if err != nil {
-		return nil, err
+func (ps *productService) GettAll(page, limit int) ([]product.Core, int, int, error) {
+	if page == 0 {
+		page = 1
 	}
-	return products, nil
+
+	if limit == 0 {
+		limit = 8
+	}
+	
+	products, err := ps.productData.SelectAll(page, limit)
+	if err != nil {
+		return nil, 0, 0, err
+	}
+
+	startIndex := (page - 1) * limit + 1
+	endIndex := startIndex + len(products) - 1
+
+	return products, startIndex, endIndex, nil
 }

@@ -21,11 +21,11 @@ type Core struct {
 
 type ProductDataInterface interface {
 	Insert(userIdLogin int, input Core) error
-	SelectAll() ([]Core, error)
+	SelectAll(page, limit int) ([]Core, error)
 }
 
 // interface untuk Service Layer
 type ProductServiceInterface interface {
 	Create(userIdLogin int, input Core) error
-	GettAll() ([]Core, error)
+	GettAll(page, limit int) ([]Core, int, int, error)
 }

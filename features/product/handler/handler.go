@@ -6,6 +6,7 @@ import (
 	"MyEcommerce/utils/middlewares"
 	"MyEcommerce/utils/responses"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -18,7 +19,7 @@ type ProductHandler struct {
 func New(ps product.ProductServiceInterface, cloudinaryUploader cloudinary.CloudinaryUploaderInterface) *ProductHandler {
 	return &ProductHandler{
 		productService: ps,
-		cld: cloudinaryUploader,
+		cld:            cloudinaryUploader,
 	}
 }
 
@@ -43,7 +44,7 @@ func (handler *ProductHandler) CreateProduct(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error uploading the image, jenis file salah", nil))
 	}
-	
+
 	productCore := RequestToCore(newProduct, imageURL, uint(userIdLogin))
 	productCore.PhotoProduct = imageURL
 
@@ -53,4 +54,22 @@ func (handler *ProductHandler) CreateProduct(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", nil))
+}
+
+func (handler *ProductHandler) GetAllProduct(c echo.Context) error {
+	page, _ := strconv.Atoi(c.QueryParam("page"))
+	limit, _ := strconv.Atoi(c.QueryParam("limit"))
+
+	products, startIndex, endIndex, err := handler.productService.GettAll(page, limit)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error get data", nil))
+	}
+
+	response := map[string]interface{}{
+		"products":   products,
+		"startIndex": startIndex,
+		"endIndex":   endIndex,
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse("success get data", response))
 }

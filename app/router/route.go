@@ -34,4 +34,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 
 	// define routes/ endpoint PRODUCTS
 	e.POST("/products", productHandlerAPI.CreateProduct, middlewares.JWTMiddleware())
+	e.GET("/products", productHandlerAPI.GetAllProduct)
 }
