@@ -3,6 +3,7 @@ package handler
 import (
 	"MyEcommerce/features/user"
 	"MyEcommerce/utils/cloudinary"
+	"MyEcommerce/utils/middlewares"
 	"MyEcommerce/utils/responses"
 	"net/http"
 
@@ -35,6 +36,18 @@ func (handler *UserHandler) RegisterUser(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", nil))
+}
+
+func (handler *UserHandler) GetUser(c echo.Context) error {
+	userIdLogin := middlewares.ExtractTokenUserId(c)
+
+	result, errSelect := handler.userService.GetById(userIdLogin)
+	if errSelect != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+errSelect.Error(), nil))
+	}
+
+	var userResult = CoreToResponse(result)
+	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", userResult))
 }
 
 func (handler *UserHandler) Login(c echo.Context) error {
