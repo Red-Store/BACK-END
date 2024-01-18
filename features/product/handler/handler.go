@@ -42,7 +42,7 @@ func (handler *ProductHandler) CreateProduct(c echo.Context) error {
 
 	imageURL, err := handler.cld.UploadImage(fileHeader)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error uploading the image, jenis file salah", nil))
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error uploading the image", nil))
 	}
 
 	productCore := RequestToCore(newProduct, imageURL, uint(userIdLogin))
@@ -68,4 +68,19 @@ func (handler *ProductHandler) GetAllProduct(c echo.Context) error {
 	productResponses := CoreToResponseListGetAllProduct(products)
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success get data", productResponses))
+}
+
+func (handler *ProductHandler) GetProductById(c echo.Context) error {
+	productID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error parsing product id", nil))
+	}
+
+	result, errSelect := handler.productService.GetById(productID)
+	if errSelect != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+errSelect.Error(), nil))
+	}
+
+	var productResult = CoreToResponse(*result)
+	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", productResult))
 }

@@ -48,3 +48,15 @@ func (repo *productQuery) SelectAll(page, limit int) ([]product.Core, error) {
 
 	return productCores, nil
 }
+
+// SelectById implements product.ProductDataInterface.
+func (repo *productQuery) SelectById(IdProduct int) (*product.Core, error) {
+	var productDataGorm Product
+	tx := repo.db.Preload("User").Where("id = ?", IdProduct).First(&productDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	result := productDataGorm.ModelToCore()
+	return &result, nil
+}

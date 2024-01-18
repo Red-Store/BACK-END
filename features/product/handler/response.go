@@ -2,32 +2,35 @@ package handler
 
 import (
 	"MyEcommerce/features/product"
-	"time"
+	"MyEcommerce/features/user/handler"
 )
 
 type ProductResponse struct {
-	ID           uint      `json:"id" form:"id"`
-	Name         string    `json:"name" form:"name"`
-	Description  string    `json:"description" form:"description"`
-	Category     string    `json:"category" form:"category"`
-	Stock        int       `json:"stock" form:"stock"`
-	Price        int       `json:"price" form:"price"`
-	PhotoProduct string    `json:"photo_product" form:"photo_product"`
-	CreatedAt    time.Time `json:"created_at" form:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at" form:"updated_at"`
-	UserID       uint      `json:"user_id" form:"user_id"`
+	ID           uint   `json:"id" form:"id"`
+	Name         string `json:"name" form:"name"`
+	Description  string `json:"description" form:"description"`
+	Category     string `json:"category" form:"category"`
+	Stock        int    `json:"stock" form:"stock"`
+	Price        int    `json:"price" form:"price"`
+	PhotoProduct string `json:"photo_product" form:"photo_product"`
+	Users        handler.UserProductResponse
 }
 
 type GetAllProductResponse struct {
-	ID           uint      `json:"id" form:"id"`
-	Name         string    `json:"name" form:"name"`
-	Category     string    `json:"category" form:"category"`
-	Price        int       `json:"price" form:"price"`
-	PhotoProduct string    `json:"photo_product" form:"photo_product"`
+	ID           uint   `json:"id" form:"id"`
+	Name         string `json:"name" form:"name"`
+	Category     string `json:"category" form:"category"`
+	Price        int    `json:"price" form:"price"`
+	PhotoProduct string `json:"photo_product" form:"photo_product"`
 }
 
-
 func CoreToResponse(data product.Core) ProductResponse {
+	userResponse := handler.UserProductResponse{
+		Name:         data.User.Name,
+		UserName:     data.User.UserName,
+		PhotoProfile: data.User.PhotoProfile,
+	}
+
 	return ProductResponse{
 		ID:           data.ID,
 		Name:         data.Name,
@@ -36,9 +39,7 @@ func CoreToResponse(data product.Core) ProductResponse {
 		Stock:        data.Stock,
 		Price:        data.Price,
 		PhotoProduct: data.PhotoProduct,
-		CreatedAt:    data.CreatedAt,
-		UpdatedAt:    data.UpdatedAt,
-		UserID:       data.UserID,
+		Users:        userResponse,
 	}
 }
 

@@ -31,11 +31,17 @@ func (ps *productService) GetAll(page, limit int) ([]product.Core, error) {
 	if limit == 0 {
 		limit = 8
 	}
-	
+
 	products, err := ps.productData.SelectAll(page, limit)
 	if err != nil {
 		return nil, err
 	}
 
 	return products, nil
+}
+
+// GetById implements product.ProductServiceInterface.
+func (ps *productService) GetById(IdProduct int) (*product.Core, error) {
+	result, err := ps.productData.SelectById(IdProduct)
+	return result, err
 }

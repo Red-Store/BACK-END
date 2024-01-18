@@ -43,5 +43,6 @@ func (p Product) ModelToCore() product.Core {
 		PhotoProduct: p.PhotoProduct,
 		CreatedAt:    p.CreatedAt,
 		UpdatedAt:    p.UpdatedAt,
+		User:         p.User.ModelToCore(),
 	}
 }
