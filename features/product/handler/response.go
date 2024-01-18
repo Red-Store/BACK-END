@@ -18,6 +18,15 @@ type ProductResponse struct {
 	UserID       uint      `json:"user_id" form:"user_id"`
 }
 
+type GetAllProductResponse struct {
+	ID           uint      `json:"id" form:"id"`
+	Name         string    `json:"name" form:"name"`
+	Category     string    `json:"category" form:"category"`
+	Price        int       `json:"price" form:"price"`
+	PhotoProduct string    `json:"photo_product" form:"photo_product"`
+}
+
+
 func CoreToResponse(data product.Core) ProductResponse {
 	return ProductResponse{
 		ID:           data.ID,
@@ -31,6 +40,24 @@ func CoreToResponse(data product.Core) ProductResponse {
 		UpdatedAt:    data.UpdatedAt,
 		UserID:       data.UserID,
 	}
+}
+
+func CoreToGetAllResponse(data product.Core) GetAllProductResponse {
+	return GetAllProductResponse{
+		ID:           data.ID,
+		Name:         data.Name,
+		Category:     data.Category,
+		Price:        data.Price,
+		PhotoProduct: data.PhotoProduct,
+	}
+}
+
+func CoreToResponseListGetAllProduct(data []product.Core) []GetAllProductResponse {
+	var results []GetAllProductResponse
+	for _, v := range data {
+		results = append(results, CoreToGetAllResponse(v))
+	}
+	return results
 }
 
 func CoreToResponseList(data []product.Core) []ProductResponse {

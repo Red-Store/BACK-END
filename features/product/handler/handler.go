@@ -60,16 +60,12 @@ func (handler *ProductHandler) GetAllProduct(c echo.Context) error {
 	page, _ := strconv.Atoi(c.QueryParam("page"))
 	limit, _ := strconv.Atoi(c.QueryParam("limit"))
 
-	products, startIndex, endIndex, err := handler.productService.GettAll(page, limit)
+	products, err := handler.productService.GetAll(page, limit)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error get data", nil))
 	}
 
-	response := map[string]interface{}{
-		"products":   products,
-		"startIndex": startIndex,
-		"endIndex":   endIndex,
-	}
+	productResponses := CoreToResponseListGetAllProduct(products)
 
-	return c.JSON(http.StatusOK, responses.WebResponse("success get data", response))
+	return c.JSON(http.StatusOK, responses.WebResponse("success get data", productResponses))
 }
