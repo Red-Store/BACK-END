@@ -15,7 +15,7 @@ type ProductResponse struct {
 	PhotoProduct string    `json:"photo_product" form:"photo_product"`
 	CreatedAt    time.Time `json:"created_at" form:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at" form:"updated_at"`
-	UserID       int      `json:"user_id" form:"user_id"`
+	UserID       uint      `json:"user_id" form:"user_id"`
 }
 
 func CoreToResponse(data product.Core) ProductResponse {

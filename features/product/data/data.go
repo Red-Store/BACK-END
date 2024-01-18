@@ -15,24 +15,25 @@ type Product struct {
 	Stock        int
 	Price        int
 	PhotoProduct string
-	UserID       int
+	UserID       uint
 	User         data.User
 }
 
 func CoreToModel(input product.Core) Product {
 	return Product{
+		UserID:       input.UserID,
 		Name:         input.Name,
 		Description:  input.Description,
 		Category:     input.Category,
 		Stock:        input.Stock,
 		Price:        input.Price,
 		PhotoProduct: input.PhotoProduct,
-		UserID:       input.UserID,
 	}
 }
 
 func (p Product) ModelToCore() product.Core {
 	return product.Core{
+		UserID:       p.UserID,
 		ID:           p.ID,
 		Name:         p.Name,
 		Description:  p.Description,
@@ -40,7 +41,6 @@ func (p Product) ModelToCore() product.Core {
 		Stock:        p.Stock,
 		Price:        p.Price,
 		PhotoProduct: p.PhotoProduct,
-		UserID:       p.UserID,
 		CreatedAt:    p.CreatedAt,
 		UpdatedAt:    p.UpdatedAt,
 	}

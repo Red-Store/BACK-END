@@ -48,7 +48,7 @@ func (handler *ProductHandler) CreateProduct(c echo.Context) error {
 	productCore := RequestToCore(newProduct, imageURL)
 	productCore.PhotoProduct = imageURL
 
-	errInsert := handler.productService.Create(productCore)
+	errInsert := handler.productService.Create(userID, productCore)
 	if errInsert != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert data", nil))
 	}

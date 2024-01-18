@@ -18,15 +18,7 @@ func New(db *gorm.DB) product.ProductDataInterface {
 }
 
 func (repo *productQuery) Insert(UserID int, input product.Core) error {
-	productInputGorm := Product{
-		UserID:       UserID,
-		Name:         input.Name,
-		Description:  input.Description,
-		Category:     input.Category,
-		Stock:        input.Stock,
-		Price:        input.Price,
-		PhotoProduct: input.PhotoProduct,
-	}
+	productInputGorm := CoreToModel(input)
 
 	// simpan ke DB
 	tx := repo.db.Create(&productInputGorm)

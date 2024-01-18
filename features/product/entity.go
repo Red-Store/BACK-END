@@ -1,6 +1,9 @@
 package product
 
-import "time"
+import (
+	"MyEcommerce/features/user/data"
+	"time"
+)
 
 type Core struct {
 	ID           uint
@@ -10,17 +13,17 @@ type Core struct {
 	Stock        int
 	Price        int
 	PhotoProduct string
-	UserID       int
+	UserID       uint
+	User         data.User
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 }
 
 type ProductDataInterface interface {
 	Insert(UserID int, input Core) error
-	
 }
 
 // interface untuk Service Layer
 type ProductServiceInterface interface {
-	Create(input Core) error
+	Create(UserID int, input Core) error
 }
