@@ -32,5 +32,7 @@ func (c Cart) ModelToCore() cart.Core {
 		Quantity:  c.Quantity,
 		CreatedAt: c.CreatedAt,
 		UpdatedAt: c.UpdatedAt,
+		Product:   c.Product.ModelToCore(),
+		User:      c.User.ModelToCore(),
 	}
 }

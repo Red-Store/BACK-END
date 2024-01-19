@@ -51,7 +51,18 @@ func (repo *cartQuery) Insert(userIdLogin int, productId int) error {
 
 // Select implements cart.CartDataInterface.
 func (repo *cartQuery) Select(userIdLogin int) ([]cart.Core, error) {
-	panic("unimplemented")
+	var cartDataGorms []Cart
+	tx := repo.db.Preload("Product").Preload("Product.User").Where("user_id = ?", userIdLogin).Find(&cartDataGorms)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	var results []cart.Core
+	for _, cartDataGorm := range cartDataGorms {
+		result := cartDataGorm.ModelToCore()
+		results = append(results, result)
+	}
+	return results, nil
 }
 
 // Update implements cart.CartDataInterface.
