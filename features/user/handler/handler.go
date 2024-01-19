@@ -92,6 +92,7 @@ func (handler *UserHandler) Login(c echo.Context) error {
 	responseData := map[string]any{
 		"token": token,
 		"nama":  result.Name,
+		"role":  result.Role,
 	}
 	return c.JSON(http.StatusOK, responses.WebResponse("success login", responseData))
 }
