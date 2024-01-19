@@ -59,6 +59,14 @@ func (service *userService) Update(userIdLogin int, input user.Core) error {
 		return errors.New("invalid id")
 	}
 
+	if input.Password != "" {
+		hashedPass, errHash := service.hashService.HashPassword(input.Password)
+		if errHash != nil {
+			return errors.New("Error hash password.")
+		}
+		input.Password = hashedPass
+	}
+
 	err := service.userData.Update(userIdLogin, input)
 	return err
 }
