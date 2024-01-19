@@ -126,3 +126,25 @@ func (handler *ProductHandler) UpdateProductById(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success update data", nil))
 }
+
+func (handler *ProductHandler) DeleteProductById(c echo.Context) error {
+	userIdLogin := middlewares.ExtractTokenUserId(c)
+	if userIdLogin == 0 {
+		return c.JSON(http.StatusUnauthorized, responses.WebResponse("Unauthorized user", nil))
+	}
+
+	productID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error parsing product id", nil))
+	}
+
+	errDelete := handler.productService.Delete(userIdLogin, productID)
+	if errDelete != nil {
+		if errDelete.Error() == "you do not have permission to delete this product" {
+			return c.JSON(http.StatusForbidden, responses.WebResponse("you do not have permission to delete this product", nil))
+		}
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error deleting data", nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse("success delete data", nil))
+}

@@ -81,3 +81,12 @@ func (repo *productQuery) Update(userIdLogin int, input product.Core) error {
 
 	return nil
 }
+
+// Delete implements product.ProductDataInterface.
+func (repo *productQuery) Delete(IdProduct int) error {
+	tx := repo.db.Delete(&Product{}, IdProduct)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	return nil
+}

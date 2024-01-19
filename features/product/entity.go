@@ -12,7 +12,7 @@ type Core struct {
 	Category     string
 	Stock        int
 	Price        int
-	PhotoProduct string 
+	PhotoProduct string
 	UserID       uint
 	User         user.Core
 	CreatedAt    time.Time
@@ -24,6 +24,7 @@ type ProductDataInterface interface {
 	SelectAll(page, limit int) ([]Core, error)
 	SelectById(IdProduct int) (*Core, error)
 	Update(userIdLogin int, input Core) error
+	Delete(IdProduct int) error
 }
 
 // interface untuk Service Layer
@@ -32,4 +33,5 @@ type ProductServiceInterface interface {
 	GetAll(page, limit int) ([]Core, error)
 	GetById(IdProduct int) (*Core, error)
 	Update(userIdLogin int, input Core) error
+	Delete(userIdLogin, IdProduct int) error
 }

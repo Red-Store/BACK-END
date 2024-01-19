@@ -64,3 +64,21 @@ func (ps *productService) Update(userIdLogin int, input product.Core) error {
 	}
 	return nil
 }
+
+// Delete implements product.ProductServiceInterface.
+func (ps *productService) Delete(userIdLogin int, IdProduct int) error {
+	product, err := ps.productData.SelectById(IdProduct)
+	if err != nil {
+		return err
+	}
+
+	if product.UserID != uint(userIdLogin) {
+		return errors.New("you do not have permission to delete this product")
+	}
+
+	err = ps.productData.Delete(IdProduct)
+	if err != nil {
+		return err
+	}
+	return nil
+}
