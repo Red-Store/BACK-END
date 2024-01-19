@@ -8,6 +8,7 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
@@ -37,6 +38,11 @@ func (cu *CloudinaryUploader) UploadImage(fileHeader *multipart.FileHeader) (str
 
 	defer file.Close()
 
+	ext := strings.ToLower(filepath.Ext(fileHeader.Filename))
+	if ext != ".png" && ext != ".jpg" && ext != ".jpeg" {
+		return "", fmt.Errorf("invalid file type: %w", err)
+	}
+
 	uploadParams := uploader.UploadParams{
 		Folder: "BE20_MyEcommerce",
 	}
@@ -47,9 +53,9 @@ func (cu *CloudinaryUploader) UploadImage(fileHeader *multipart.FileHeader) (str
 	}
 
 	_, err = file.Seek(0, 0)
-    if err != nil {
-        return "", fmt.Errorf("error seeking file: %w", err)
-    }
+	if err != nil {
+		return "", fmt.Errorf("error seeking file: %w", err)
+	}
 
 	localFilePath := filepath.Join("utils", "images", fileHeader.Filename)
 	if err := SaveImageToLocal(file, localFilePath); err != nil {

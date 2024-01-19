@@ -22,6 +22,12 @@ type AdminUserResponse struct {
 	CreatedAt    time.Time `json:"created_at" form:"created_at"`
 }
 
+type UserProductResponse struct {
+	Name         string `json:"name" form:"name"`
+	UserName     string `json:"user_name" form:"user_name"`
+	PhotoProfile string `json:"photo_profile" form:"photo_profile"`
+}
+
 func CoreToResponse(data *user.Core) UserResponse {
 	var result = UserResponse{
 		Name:         data.Name,
