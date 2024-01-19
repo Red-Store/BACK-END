@@ -38,3 +38,34 @@ func (handler *CartHandler) CreateCart(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", nil))
 }
+
+func (handler *CartHandler) UpdateCart(c echo.Context) error {
+	userIdLogin := middlewares.ExtractTokenUserId(c)
+	if userIdLogin == 0 {
+		return c.JSON(http.StatusUnauthorized, responses.WebResponse("Unauthorized user", nil))
+	}
+
+	cartID, err := strconv.Atoi(c.Param("cart_id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error parsing cart id", nil))
+	}
+
+	updateCart := CartRequest{}
+	errBind := c.Bind(&updateCart)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid", nil))
+	}
+
+	cartCore := RequestToCore(updateCart, uint(userIdLogin), uint(cartID))
+
+	errUpdate := handler.cartService.UpdateCart(userIdLogin, cartID, cartCore)
+	if errUpdate != nil {
+		if errUpdate.Error() == "you do not have permission to edit this product" {
+			return c.JSON(http.StatusForbidden, responses.WebResponse("you do not have permission to edit this product", nil))
+		}
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error updating data", nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse("success update data", nil))
+
+}

@@ -36,5 +36,9 @@ func (cs *cartService) Get(userIdLogin int) ([]cart.Core, error) {
 
 // UpdateCart implements cart.CartServiceInterface.
 func (cs *cartService) UpdateCart(userIdLogin int, cartId int, input cart.Core) error {
-	panic("unimplemented")
+	err := cs.cartData.Update(userIdLogin, cartId, input)
+	if err != nil {
+		return err
+	}
+	return nil
 }
