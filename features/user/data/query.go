@@ -72,3 +72,19 @@ func (repo *userQuery) Login(email string, password string) (data *user.Core, er
 	result := userGorm.ModelToCore()
 	return &result, nil
 }
+
+// SelectAdminUsers implements user.UserDataInterface.
+func (repo *userQuery) SelectAdminUsers(page, limit int) ([]user.Core, error) {
+	var usersDataGorm []User
+	tx := repo.db.Where("role = 'user'").Limit(limit).Offset((page - 1) * limit).Find(&usersDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	var usersDataCore []user.Core
+	for _, value := range usersDataGorm {
+		var usersCore = value.ModelToCore()
+		usersDataCore = append(usersDataCore, usersCore)
+	}
+	return usersDataCore, nil
+}
