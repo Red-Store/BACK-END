@@ -29,14 +29,14 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	productHandlerAPI := ph.New(productService, cloudinaryUploader)
 
 	// define routes/ endpoint ADMIN
-  e.GET("admin/users", userHandlerAPI.GetAdminUserData, middlewares.JWTMiddleware())
+	e.GET("admin/users", userHandlerAPI.GetAdminUserData, middlewares.JWTMiddleware())
 
 	// define routes/ endpoint USERS
 	e.POST("/login", userHandlerAPI.Login)
 	e.POST("/users", userHandlerAPI.RegisterUser)
 	e.GET("/users", userHandlerAPI.GetUser, middlewares.JWTMiddleware())
 	e.PUT("/users", userHandlerAPI.UpdateUser, middlewares.JWTMiddleware())
-  e.DELETE("/users", userHandlerAPI.DeleteUser, middlewares.JWTMiddleware())
+	e.DELETE("/users", userHandlerAPI.DeleteUser, middlewares.JWTMiddleware())
 
 	// define routes/ endpoint PRODUCTS
 	e.POST("/products", productHandlerAPI.CreateProduct, middlewares.JWTMiddleware())
@@ -48,7 +48,6 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.GET("/products/search", productHandlerAPI.SearchProduct)
 	// define routes/ endpoint CARTS
 
-
-  // define routes/ endpoint ORDERS
+	// define routes/ endpoint ORDERS
 
 }
