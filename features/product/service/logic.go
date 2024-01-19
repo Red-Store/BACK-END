@@ -82,3 +82,12 @@ func (ps *productService) Delete(userIdLogin int, IdProduct int) error {
 	}
 	return nil
 }
+
+// GetByUserId implements product.ProductServiceInterface.
+func (ps *productService) GetByUserId(userIdLogin int) ([]product.Core, error) {
+	products, err := ps.productData.SelectByUserId(userIdLogin)
+	if err != nil {
+		return nil, err
+	}
+	return products, nil
+}

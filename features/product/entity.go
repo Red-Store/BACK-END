@@ -25,6 +25,7 @@ type ProductDataInterface interface {
 	SelectById(IdProduct int) (*Core, error)
 	Update(userIdLogin int, input Core) error
 	Delete(IdProduct int) error
+	SelectByUserId(userIdLogin int) ([]Core, error)
 }
 
 // interface untuk Service Layer
@@ -34,4 +35,5 @@ type ProductServiceInterface interface {
 	GetById(IdProduct int) (*Core, error)
 	Update(userIdLogin int, input Core) error
 	Delete(userIdLogin, IdProduct int) error
+	GetByUserId(userIdLogin int) ([]Core, error)
 }

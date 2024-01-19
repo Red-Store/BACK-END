@@ -148,3 +148,18 @@ func (handler *ProductHandler) DeleteProductById(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success delete data", nil))
 }
+
+func (handler *ProductHandler) GetProductByUserId(c echo.Context) error {
+	userIdLogin := middlewares.ExtractTokenUserId(c)
+	if userIdLogin == 0 {
+		return c.JSON(http.StatusUnauthorized, responses.WebResponse("Unauthorized user", nil))
+	}
+
+	products, err := handler.productService.GetByUserId(userIdLogin)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data", nil))
+	}
+
+	productResponses := CoreToResponseListGetAllProduct(products)
+	return c.JSON(http.StatusOK, responses.WebResponse("success read data", productResponses))
+}
