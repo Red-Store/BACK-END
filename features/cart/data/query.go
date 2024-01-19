@@ -18,7 +18,14 @@ func New(db *gorm.DB) cart.CartDataInterface {
 
 // Delete implements cart.CartDataInterface.
 func (repo *cartQuery) Delete(userIdLogin int, cartId int) error {
-	panic("unimplemented")
+	var cartGorm Cart
+
+	tx := repo.db.Where("user_id = ? AND id = ?", userIdLogin, cartId).First(&cartGorm)
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	return repo.db.Delete(&cartGorm).Error
 }
 
 // Insert implements cart.CartDataInterface.
