@@ -12,6 +12,7 @@ type Core struct {
 	PhotoProfile string
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
+	DeletedAt    *time.Time
 }
 
 // interface untuk Data Layer
