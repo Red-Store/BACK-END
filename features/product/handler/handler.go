@@ -84,3 +84,45 @@ func (handler *ProductHandler) GetProductById(c echo.Context) error {
 	var productResult = CoreToResponse(*result)
 	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", productResult))
 }
+
+func (handler *ProductHandler) UpdateProductById(c echo.Context) error {
+	userIdLogin := middlewares.ExtractTokenUserId(c)
+	if userIdLogin == 0 {
+		return c.JSON(http.StatusUnauthorized, responses.WebResponse("Unauthorized user", nil))
+	}
+
+	productID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error parsing product id", nil))
+	}
+
+	updateProduct := ProductRequest{}
+	errBind := c.Bind(&updateProduct)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid", nil))
+	}
+
+	fileHeader, err := c.FormFile("photo_product")
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error retrieving the file", nil))
+	}
+
+	imageURL, err := handler.cld.UploadImage(fileHeader)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error uploading the image", nil))
+	}
+
+	productCore := RequestToCore(updateProduct, imageURL, uint(userIdLogin))
+	productCore.ID = uint(productID)
+	productCore.PhotoProduct = imageURL
+
+	errUpdate := handler.productService.Update(userIdLogin, productCore)
+	if errUpdate != nil {
+		if errUpdate.Error() == "you do not have permission to edit this product" {
+			return c.JSON(http.StatusForbidden, responses.WebResponse("you do not have permission to edit this product", nil))
+		}
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error updating data", nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse("success update data", nil))
+}

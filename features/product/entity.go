@@ -23,6 +23,7 @@ type ProductDataInterface interface {
 	Insert(userIdLogin int, input Core) error
 	SelectAll(page, limit int) ([]Core, error)
 	SelectById(IdProduct int) (*Core, error)
+	Update(userIdLogin int, input Core) error
 }
 
 // interface untuk Service Layer
@@ -30,4 +31,5 @@ type ProductServiceInterface interface {
 	Create(userIdLogin int, input Core) error
 	GetAll(page, limit int) ([]Core, error)
 	GetById(IdProduct int) (*Core, error)
+	Update(userIdLogin int, input Core) error
 }

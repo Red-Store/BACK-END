@@ -60,3 +60,24 @@ func (repo *productQuery) SelectById(IdProduct int) (*product.Core, error) {
 	result := productDataGorm.ModelToCore()
 	return &result, nil
 }
+
+// Update implements product.ProductDataInterface.
+func (repo *productQuery) Update(userIdLogin int, input product.Core) error {
+	product := Product{}
+	tx := repo.db.Where("id = ? AND user_id = ?", input.ID, userIdLogin).First(&product)
+	if tx.Error != nil {
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+			return errors.New("you do not have permission to edit this product")
+		}
+		return tx.Error
+	}
+
+	productInputGorm := CoreToModel(input)
+
+	tx = repo.db.Model(&product).Updates(&productInputGorm)
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	return nil
+}

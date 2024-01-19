@@ -28,6 +28,8 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	productService := ps.New(productData)
 	productHandlerAPI := ph.New(productService, cloudinaryUploader)
 
+	// define routes/ endpoint ADMIN
+
 	// define routes/ endpoint USERS
 	e.POST("/login", userHandlerAPI.Login)
 	e.POST("/users", userHandlerAPI.RegisterUser)
@@ -36,4 +38,12 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.POST("/products", productHandlerAPI.CreateProduct, middlewares.JWTMiddleware())
 	e.GET("/products", productHandlerAPI.GetAllProduct)
 	e.GET("/products/:id", productHandlerAPI.GetProductById)
+	e.PUT("/products/:id", productHandlerAPI.UpdateProductById, middlewares.JWTMiddleware())
+
+
+	// define routes/ endpoint CARTS
+
+
+
+	// define routes/ endpoint ORDERS
 }

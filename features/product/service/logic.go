@@ -2,6 +2,7 @@ package service
 
 import (
 	"MyEcommerce/features/product"
+	"errors"
 )
 
 type productService struct {
@@ -44,4 +45,22 @@ func (ps *productService) GetAll(page, limit int) ([]product.Core, error) {
 func (ps *productService) GetById(IdProduct int) (*product.Core, error) {
 	result, err := ps.productData.SelectById(IdProduct)
 	return result, err
+}
+
+// Update implements product.ProductServiceInterface.
+func (ps *productService) Update(userIdLogin int, input product.Core) error {
+	product, err := ps.productData.SelectById(int(input.ID))
+	if err != nil {
+		return err
+	}
+
+	if product.UserID != uint(userIdLogin) {
+		return errors.New("you do not have permission to edit this product")
+	}
+
+	err = ps.productData.Update(userIdLogin, input)
+	if err != nil {
+		return err
+	}
+	return nil
 }
