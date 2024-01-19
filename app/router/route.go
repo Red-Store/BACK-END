@@ -33,6 +33,8 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// define routes/ endpoint USERS
 	e.POST("/login", userHandlerAPI.Login)
 	e.POST("/users", userHandlerAPI.RegisterUser)
+  e.GET("/users", userHandlerAPI.GetUser, middlewares.JWTMiddleware())
+	e.PUT("/users", userHandlerAPI.UpdateUser, middlewares.JWTMiddleware())
 
 	// define routes/ endpoint PRODUCTS
 	e.POST("/products", productHandlerAPI.CreateProduct, middlewares.JWTMiddleware())
@@ -44,5 +46,6 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.GET("/products/search", productHandlerAPI.SearchProduct)
 	// define routes/ endpoint CARTS
 
-	// define routes/ endpoint ORDERS
+
+  // define routes/ endpoint ORDERS
 }

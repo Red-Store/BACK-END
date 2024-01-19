@@ -4,10 +4,10 @@ import "time"
 
 type Core struct {
 	ID           uint
-	Name         string 
-	UserName     string 
+	Name         string `validate:"required"`
+	UserName     string `validate:"required"`
 	Email        string `validate:"required,email"`
-	Password     string
+	Password     string `validate:"required"`
 	Role         string
 	PhotoProfile string
 	CreatedAt    time.Time

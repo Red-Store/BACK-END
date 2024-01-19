@@ -32,13 +32,29 @@ func (repo *userQuery) Insert(input user.Core) error {
 }
 
 // SelectById implements user.UserDataInterface.
-func (*userQuery) SelectById(userIdLogin int) (*user.Core, error) {
-	panic("unimplemented")
+func (repo *userQuery) SelectById(userIdLogin int) (*user.Core, error) {
+	var userDataGorm User
+	tx := repo.db.First(&userDataGorm, userIdLogin)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	result := userDataGorm.ModelToCore()
+	return &result, nil
 }
 
 // Update implements user.UserDataInterface.
-func (*userQuery) Update(userIdLogin int, input user.Core) error {
-	panic("unimplemented")
+func (repo *userQuery) Update(userIdLogin int, input user.Core) error {
+	dataGorm := CoreToModel(input)
+	tx := repo.db.Model(&User{}).Where("id = ?", userIdLogin).Updates(dataGorm)
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	if tx.RowsAffected == 0 {
+		return errors.New("error record not found ")
+	}
+	return nil
 }
 
 // Delete implements user.UserDataInterface.
