@@ -67,5 +67,26 @@ func (handler *CartHandler) UpdateCart(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success update data", nil))
+}
 
+func (handler *CartHandler) DeleteProductCart(c echo.Context) error {
+	userIdLogin := middlewares.ExtractTokenUserId(c)
+	if userIdLogin == 0 {
+		return c.JSON(http.StatusUnauthorized, responses.WebResponse("Unauthorized user", nil))
+	}
+
+	cartID, err := strconv.Atoi(c.Param("cart_id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error parsing cart id", nil))
+	}
+
+	errDelete := handler.cartService.DeleteCart(userIdLogin, cartID)
+	if errDelete != nil {
+		if errDelete.Error() == "you do not have permission to delete this product" {
+			return c.JSON(http.StatusForbidden, responses.WebResponse("you do not have permission to delete this product", nil))
+		}
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error deleting data", nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse("success delete data", nil))
 }

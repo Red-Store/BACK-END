@@ -26,7 +26,11 @@ func (cs *cartService) Create(userIdLogin int, productId int) error {
 
 // DeleteCart implements cart.CartServiceInterface.
 func (cs *cartService) DeleteCart(userIdLogin int, cartId int) error {
-	panic("unimplemented")
+	err := cs.cartData.Delete(userIdLogin, cartId)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // Get implements cart.CartServiceInterface.
