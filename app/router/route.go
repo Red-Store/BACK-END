@@ -13,6 +13,10 @@ import (
 	ph "MyEcommerce/features/product/handler"
 	ps "MyEcommerce/features/product/service"
 
+	cd "MyEcommerce/features/cart/data"
+	ch "MyEcommerce/features/cart/handler"
+	cs "MyEcommerce/features/cart/service"
+
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -27,6 +31,10 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	productData := pd.New(db)
 	productService := ps.New(productData)
 	productHandlerAPI := ph.New(productService, cloudinaryUploader)
+
+	cartData := cd.New(db)
+	cartService := cs.New(cartData)
+	cartHandlerAPI := ch.New(cartService)
 
 	// define routes/ endpoint ADMIN
 	e.GET("admin/users", userHandlerAPI.GetAdminUserData, middlewares.JWTMiddleware())
@@ -46,7 +54,9 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.DELETE("/products/:id", productHandlerAPI.DeleteProductById, middlewares.JWTMiddleware())
 	e.GET("/users/products", productHandlerAPI.GetProductByUserId, middlewares.JWTMiddleware())
 	e.GET("/products/search", productHandlerAPI.SearchProduct)
+
 	// define routes/ endpoint CARTS
+	e.POST("/carts/:product_id", cartHandlerAPI.CreateCart, middlewares.JWTMiddleware())
 
 	// define routes/ endpoint ORDERS
 

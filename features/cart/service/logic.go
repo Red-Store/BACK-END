@@ -1,6 +1,8 @@
 package service
 
-import "MyEcommerce/features/cart"
+import (
+	"MyEcommerce/features/cart"
+)
 
 type cartService struct {
 	cartData cart.CartDataInterface
@@ -15,7 +17,11 @@ func New(repo cart.CartDataInterface) cart.CartServiceInterface {
 
 // Create implements cart.CartServiceInterface.
 func (cs *cartService) Create(userIdLogin int, productId int) error {
-	panic("unimplemented")
+	err := cs.cartData.Insert(userIdLogin, productId)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // DeleteCart implements cart.CartServiceInterface.

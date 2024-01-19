@@ -23,7 +23,23 @@ func (repo *cartQuery) Delete(userIdLogin int, cartId int) error {
 
 // Insert implements cart.CartDataInterface.
 func (repo *cartQuery) Insert(userIdLogin int, productId int) error {
-	panic("unimplemented")
+	var cartGorm Cart
+
+	tx := repo.db.Where("user_id = ? AND product_id = ?", userIdLogin, productId).First(&cartGorm)
+
+	if tx.Error != nil {
+		if tx.Error == gorm.ErrRecordNotFound {
+			newCart := Cart{
+				UserID:    uint(userIdLogin),
+				ProductID: uint(productId),
+				Quantity:  1,
+			}
+			return repo.db.Create(&newCart).Error
+		}
+		return tx.Error
+	}
+	cartGorm.Quantity++
+	return repo.db.Save(&cartGorm).Error
 }
 
 // Select implements cart.CartDataInterface.

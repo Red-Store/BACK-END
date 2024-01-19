@@ -1,6 +1,14 @@
 package handler
 
-import "MyEcommerce/features/cart"
+import (
+	"MyEcommerce/features/cart"
+	"MyEcommerce/utils/middlewares"
+	"MyEcommerce/utils/responses"
+	"net/http"
+	"strconv"
+
+	"github.com/labstack/echo/v4"
+)
 
 type CartHandler struct {
 	cartService cart.CartServiceInterface
@@ -10,4 +18,23 @@ func New(cs cart.CartServiceInterface) *CartHandler {
 	return &CartHandler{
 		cartService: cs,
 	}
+}
+
+func (handler *CartHandler) CreateCart(c echo.Context) error {
+	userIdLogin := middlewares.ExtractTokenUserId(c)
+	if userIdLogin == 0 {
+		return c.JSON(http.StatusUnauthorized, responses.WebResponse("Unauthorized user", nil))
+	}
+
+	productID, err := strconv.Atoi(c.Param("product_id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error parsing product id", nil))
+	}
+
+	errInsert := handler.cartService.Create(userIdLogin, productID)
+	if errInsert != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert data", nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", nil))
 }
