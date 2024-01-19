@@ -78,9 +78,6 @@ func ReadEnv() *AppConfig {
 }
 
 func SetupCloudinary() (*cloudinary.Cloudinary, error) {
-	// cldSecret := "Oish5XyXkCiiV6oTW2sEo0lEkGg"
-	// cldName := "dlxvvuhph"
-	// cldKey := "533421842888945"
 	cldName := viper.GetString("CLDNAME")
 	cldKey := viper.GetString("CLDKEY")
 	cldSecret := viper.GetString("CLDSECRET")
