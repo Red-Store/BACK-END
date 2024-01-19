@@ -2,6 +2,7 @@ package data
 
 import (
 	"MyEcommerce/features/user"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -39,5 +40,25 @@ func (u User) ModelToCore() user.Core {
 		PhotoProfile: u.PhotoProfile,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
+	}
+}
+
+func (u User) ModelToCoreAdmin() user.Core {
+	var deletedAt *time.Time
+	// Periksa apakah DeletedAt tidak nil
+	if u.DeletedAt.Valid {
+		deletedAt = &u.DeletedAt.Time
+	}
+	return user.Core{
+		ID:           u.ID,
+		Name:         u.Name,
+		UserName:     u.UserName,
+		Email:        u.Email,
+		Password:     u.Password,
+		Role:         u.Role,
+		PhotoProfile: u.PhotoProfile,
+		CreatedAt:    u.CreatedAt,
+		UpdatedAt:    u.UpdatedAt,
+		DeletedAt:    deletedAt,
 	}
 }
