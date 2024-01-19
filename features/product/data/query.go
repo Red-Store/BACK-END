@@ -3,6 +3,7 @@ package data
 import (
 	"MyEcommerce/features/product"
 	"errors"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -95,6 +96,23 @@ func (repo *productQuery) Delete(IdProduct int) error {
 func (repo *productQuery) SelectByUserId(userIdLogin int) ([]product.Core, error) {
 	var productDataGorms []Product
 	tx := repo.db.Where("user_id = ?", userIdLogin).Find(&productDataGorms)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	var results []product.Core
+	for _, productDataGorm := range productDataGorms {
+		result := productDataGorm.ModelToCore()
+		results = append(results, result)
+	}
+	return results, nil
+}
+
+// Search implements product.ProductDataInterface.
+func (repo *productQuery) Search(query string) ([]product.Core, error) {
+	var productDataGorms []Product
+	log.Println("query", query)
+	tx := repo.db.Where("name LIKE ?", "%"+query+"%").Find(&productDataGorms)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}

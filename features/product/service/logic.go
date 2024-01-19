@@ -91,3 +91,12 @@ func (ps *productService) GetByUserId(userIdLogin int) ([]product.Core, error) {
 	}
 	return products, nil
 }
+
+// Search implements product.ProductServiceInterface.
+func (ps *productService) Search(query string) ([]product.Core, error) {
+	products, err := ps.productData.Search(query)
+	if err != nil {
+		return products, err
+	}
+	return products, nil
+}

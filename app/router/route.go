@@ -40,7 +40,8 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.GET("/products/:id", productHandlerAPI.GetProductById)
 	e.PUT("/products/:id", productHandlerAPI.UpdateProductById, middlewares.JWTMiddleware())
 	e.DELETE("/products/:id", productHandlerAPI.DeleteProductById, middlewares.JWTMiddleware())
-	e.GET("/products/users", productHandlerAPI.GetProductByUserId, middlewares.JWTMiddleware())
+	e.GET("/users/products", productHandlerAPI.GetProductByUserId, middlewares.JWTMiddleware())
+	e.GET("/products/search", productHandlerAPI.SearchProduct)
 	// define routes/ endpoint CARTS
 
 	// define routes/ endpoint ORDERS

@@ -163,3 +163,18 @@ func (handler *ProductHandler) GetProductByUserId(c echo.Context) error {
 	productResponses := CoreToResponseListGetAllProduct(products)
 	return c.JSON(http.StatusOK, responses.WebResponse("success read data", productResponses))
 }
+
+func (handler *ProductHandler) SearchProduct(c echo.Context) error {
+	query := c.QueryParam("search")
+	if query == "" {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("query parameter is required", nil))
+	}
+
+	products, err := handler.productService.Search(query)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data", nil))
+	}
+
+	productResponses := CoreToResponseListGetAllProduct(products)
+	return c.JSON(http.StatusOK, responses.WebResponse("success read data", productResponses))
+}
