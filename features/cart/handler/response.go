@@ -2,20 +2,27 @@ package handler
 
 import (
 	"MyEcommerce/features/cart"
-	"MyEcommerce/features/product/handler"
+	ph"MyEcommerce/features/product/handler"
+	uh"MyEcommerce/features/user/handler"
+
 )
 
 type CartResponse struct {
 	ID       uint `json:"id" form:"id"`
 	Quantity int  `json:"quantity" form:"quantity"`
-	Products handler.CartProductResponse
+	Products ph.CartProductResponse
 }
 
-func CoreToResponse(data cart.Core) CartResponse {	
-	productResponse := handler.CartProductResponse{
+func CoreToResponse(data cart.Core) CartResponse {
+	userResponse := uh.CartUserResponse{
+		Name: data.Product.User.Name,
+	}
+
+	productResponse := ph.CartProductResponse{
 		Name:         data.Product.Name,
 		Price:        data.Product.Price,
 		PhotoProduct: data.Product.PhotoProduct,
+		Users:        userResponse,
 	}
 
 	return CartResponse{

@@ -90,3 +90,18 @@ func (handler *CartHandler) DeleteProductCart(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success delete data", nil))
 }
+
+func (handler *CartHandler) GetProductCart(c echo.Context) error {
+	userIdLogin := middlewares.ExtractTokenUserId(c)
+	if userIdLogin == 0 {
+		return c.JSON(http.StatusUnauthorized, responses.WebResponse("Unauthorized user", nil))
+	}
+
+	results, errSelect := handler.cartService.Get(userIdLogin)
+	if errSelect != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+errSelect.Error(), nil))
+	}
+
+	var userResult = CoreToResponseList(results)
+	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", userResult))
+}
