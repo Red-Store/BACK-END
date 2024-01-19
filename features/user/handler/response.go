@@ -28,6 +28,11 @@ type UserProductResponse struct {
 	PhotoProfile string `json:"photo_profile" form:"photo_profile"`
 }
 
+type CartUserResponse struct {
+	Name         string `json:"name" form:"name"`
+}
+
+
 func CoreToResponse(data *user.Core) UserResponse {
 	var result = UserResponse{
 		Name:         data.Name,
