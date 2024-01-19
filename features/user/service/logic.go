@@ -54,17 +54,18 @@ func (service *userService) GetById(userIdLogin int) (*user.Core, error) {
 }
 
 // Update implements user.UserServiceInterface.
-func (*userService) Update(userIdLogin int, input user.Core) error {
-	panic("unimplemented")
-}
-
-// Delete implements user.UserServiceInterface.
-func (service *userService) Delete(userIdLogin int) error {
+func (service *userService) Update(userIdLogin int, input user.Core) error {
 	if userIdLogin <= 0 {
 		return errors.New("invalid id")
 	}
-	err := service.userData.Delete(userIdLogin)
+
+	err := service.userData.Update(userIdLogin, input)
 	return err
+}
+
+// Delete implements user.UserServiceInterface.
+func (*userService) Delete(userIdLogin int) error {
+	panic("unimplemented")
 }
 
 // Login implements user.UserServiceInterface.
@@ -93,4 +94,26 @@ func (service *userService) Login(email string, password string) (data *user.Cor
 		return nil, "", errJwt
 	}
 	return data, token, err
+}
+
+// GetAdminUsers implements user.UserServiceInterface.
+func (service *userService) GetAdminUsers(userIdLogin, page, limit int) ([]user.Core, error) {
+	valUser, errVal := service.userData.SelectById(userIdLogin)
+	if errVal != nil {
+		return nil, errVal
+	}
+	if valUser.Role == "user" {
+		return nil, errors.New("Sorry, your role does not have this access")
+	}
+
+	if page == 0 {
+		page = 1
+	}
+
+	if limit == 0 {
+		limit = 10
+	}
+
+	result, err := service.userData.SelectAdminUsers(page, limit)
+	return result, err
 }

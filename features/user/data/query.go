@@ -44,21 +44,22 @@ func (repo *userQuery) SelectById(userIdLogin int) (*user.Core, error) {
 }
 
 // Update implements user.UserDataInterface.
-func (*userQuery) Update(userIdLogin int, input user.Core) error {
-	panic("unimplemented")
-}
-
-// Delete implements user.UserDataInterface.
-func (repo *userQuery) Delete(userIdLogin int) error {
-	tx := repo.db.Delete(&User{}, userIdLogin)
+func (repo *userQuery) Update(userIdLogin int, input user.Core) error {
+	dataGorm := CoreToModel(input)
+	tx := repo.db.Model(&User{}).Where("id = ?", userIdLogin).Updates(dataGorm)
 	if tx.Error != nil {
 		return tx.Error
 	}
 
 	if tx.RowsAffected == 0 {
-		return errors.New("error record not found")
+		return errors.New("error record not found ")
 	}
 	return nil
+}
+
+// Delete implements user.UserDataInterface.
+func (*userQuery) Delete(userIdLogin int) error {
+	panic("unimplemented")
 }
 
 // Login implements user.UserDataInterface.
@@ -70,4 +71,20 @@ func (repo *userQuery) Login(email string, password string) (data *user.Core, er
 	}
 	result := userGorm.ModelToCore()
 	return &result, nil
+}
+
+// SelectAdminUsers implements user.UserDataInterface.
+func (repo *userQuery) SelectAdminUsers(page, limit int) ([]user.Core, error) {
+	var usersDataGorm []User
+	tx := repo.db.Where("role = 'user'").Limit(limit).Offset((page - 1) * limit).Find(&usersDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	var usersDataCore []user.Core
+	for _, value := range usersDataGorm {
+		var usersCore = value.ModelToCore()
+		usersDataCore = append(usersDataCore, usersCore)
+	}
+	return usersDataCore, nil
 }

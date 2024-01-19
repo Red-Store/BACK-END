@@ -6,6 +6,7 @@ import (
 	"MyEcommerce/utils/middlewares"
 	"MyEcommerce/utils/responses"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -50,15 +51,32 @@ func (handler *UserHandler) GetUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", userResult))
 }
 
-func (handler *UserHandler) DeleteUser(c echo.Context) error {
+func (handler *UserHandler) UpdateUser(c echo.Context) error {
 	userIdLogin := middlewares.ExtractTokenUserId(c)
 
-	errDelete := handler.userService.Delete(userIdLogin)
-	if errDelete != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error delete data "+errDelete.Error(), nil))
+	var userData = UserRequest{}
+	errBind := c.Bind(&userData)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid", nil))
 	}
 
-	return c.JSON(http.StatusOK, responses.WebResponse("success delete data", nil))
+	fileData, err := c.FormFile("photo_profile")
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error retrieving the file", nil))
+	}
+
+	imageURL, err := handler.cld.UploadImage(fileData)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error uploading the image", nil))
+	}
+
+	userCore := UpdateRequestToCore(userData, imageURL)
+	errUpdate := handler.userService.Update(userIdLogin, userCore)
+	if errUpdate != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error update data "+errUpdate.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse("success update data", nil))
 }
 
 func (handler *UserHandler) Login(c echo.Context) error {
@@ -74,6 +92,27 @@ func (handler *UserHandler) Login(c echo.Context) error {
 	responseData := map[string]any{
 		"token": token,
 		"nama":  result.Name,
+		"role":  result.Role,
 	}
 	return c.JSON(http.StatusOK, responses.WebResponse("success login", responseData))
+}
+
+func (handler *UserHandler) GetAdminUserData(c echo.Context) error {
+	userIdLogin := middlewares.ExtractTokenUserId(c)
+	page, errPage := strconv.Atoi(c.QueryParam("page"))
+	if errPage != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error. page should be number", nil))
+	}
+	limit, errLimit := strconv.Atoi(c.QueryParam("limit"))
+	if errLimit != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error. limit should be number", nil))
+	}
+
+	result, errSelect := handler.userService.GetAdminUsers(userIdLogin, page, limit)
+	if errSelect != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+errSelect.Error(), nil))
+	}
+
+	var userResult = CoreToResponseList(result)
+	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", userResult))
 }
