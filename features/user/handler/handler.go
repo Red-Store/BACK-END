@@ -61,13 +61,16 @@ func (handler *UserHandler) UpdateUser(c echo.Context) error {
 	}
 
 	fileData, err := c.FormFile("photo_profile")
-	if err != nil {
+	if err != nil && err != http.ErrMissingFile {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse("error retrieving the file", nil))
 	}
 
-	imageURL, err := handler.cld.UploadImage(fileData)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error uploading the image", nil))
+	var imageURL string
+	if fileData != nil {
+		imageURL, err = handler.cld.UploadImage(fileData)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, responses.WebResponse("error uploading the image", nil))
+		}
 	}
 
 	userCore := UpdateRequestToCore(userData, imageURL)
