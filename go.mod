@@ -8,6 +8,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.0
 	github.com/labstack/echo-jwt/v4 v4.2.0
 	github.com/labstack/echo/v4 v4.11.4
+	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/viper v1.18.2
 	golang.org/x/crypto v0.18.0
 	gorm.io/driver/mysql v1.5.2
