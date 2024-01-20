@@ -16,10 +16,19 @@ func New(repo product.ProductDataInterface) product.ProductServiceInterface {
 }
 
 func (ps *productService) Create(userIdLogin int, input product.Core) error {
+	if input.Name == "" {
+		return errors.New("nama produk tidak boleh kosong")
+	}
+
+	if input.Price <= 0 {
+		return errors.New("harga produk harus lebih besar dari 0")
+	}
+
 	err := ps.productData.Insert(userIdLogin, input)
 	if err != nil {
 		return err
 	}
+	
 	return nil
 }
 

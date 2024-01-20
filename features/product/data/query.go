@@ -21,8 +21,8 @@ func New(db *gorm.DB) product.ProductDataInterface {
 func (repo *productQuery) Insert(userIdLogin int, input product.Core) error {
 
 	productInputGorm := CoreToModel(input)
+	productInputGorm.UserID = uint(userIdLogin)
 
-	// simpan ke DB
 	tx := repo.db.Create(&productInputGorm)
 	if tx.Error != nil {
 		return tx.Error
