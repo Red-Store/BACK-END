@@ -103,13 +103,16 @@ func (handler *ProductHandler) UpdateProductById(c echo.Context) error {
 	}
 
 	fileHeader, err := c.FormFile("photo_product")
-	if err != nil {
+	if err != nil && err != http.ErrMissingFile {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse("error retrieving the file", nil))
 	}
 
-	imageURL, err := handler.cld.UploadImage(fileHeader)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error uploading the image", nil))
+	var imageURL string
+	if fileHeader != nil {
+		imageURL, err = handler.cld.UploadImage(fileHeader)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, responses.WebResponse("error uploading the image", nil))
+		}
 	}
 
 	productCore := RequestToCore(updateProduct, imageURL, uint(userIdLogin))
