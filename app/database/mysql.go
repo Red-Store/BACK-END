@@ -7,6 +7,7 @@ import (
 	ud "MyEcommerce/features/user/data"
 	pd "MyEcommerce/features/product/data"
 	cd "MyEcommerce/features/cart/data"
+	od "MyEcommerce/features/order/data"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -24,7 +25,7 @@ func InitDBMysql(cfg *config.AppConfig) *gorm.DB {
 		panic(err)
 	}
 
-	DB.AutoMigrate(&ud.User{}, &pd.Product{}, &cd.Cart{})
+	DB.AutoMigrate(&ud.User{}, &pd.Product{}, &cd.Cart{}, &od.Order{}, &od.OrderItem{})
 
 	return DB
 }
