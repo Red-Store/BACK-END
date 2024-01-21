@@ -3,13 +3,12 @@ package order
 import (
 	cd "MyEcommerce/features/cart"
 	ud "MyEcommerce/features/user"
-	"github.com/google/uuid"
 	"time"
 )
 
 type OrderCore struct {
 	// ID uint
-	ID          uuid.UUID
+	ID          string
 	UserID      uint
 	Address     string
 	PaymentType string
@@ -23,7 +22,7 @@ type OrderCore struct {
 }
 
 type OrderItemCore struct {
-	OrderID   uuid.UUID
+	OrderID   string
 	CartID    uint
 	Order     OrderCore
 	Cart      cd.Core
