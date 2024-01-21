@@ -8,13 +8,18 @@ type orderService struct {
 	orderData order.OrderDataInterface
 }
 
-// Create implements order.OrderServiceInterface.
-func (*orderService) Create(userIdLogin int, cartId int, input order.OrderCore) error {
-	panic("unimplemented")
-}
-
 func New(repo order.OrderDataInterface) order.OrderServiceInterface {
 	return &orderService{
 		orderData: repo,
 	}
+}
+
+// CreateOrder implements order.OrderServiceInterface.
+func (os *orderService) CreateOrder(userIdLogin int, cartIds []uint, inputOrder order.OrderCore) error {
+	err := os.orderData.InsertOrder(userIdLogin, inputOrder, cartIds)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
