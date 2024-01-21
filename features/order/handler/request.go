@@ -11,7 +11,7 @@ type OrderRequest struct {
 	Status      string `json:"status" form:"status"`
 	Bank        string `json:"bank" form:"bank"`
 	VaNumber    int    `json:"va_number" form:"va_number"`
-	CartIDs     []uint         `json:"cart_ids" form:"cart_ids"`
+	CartIDs     []uint `json:"cart_ids" form:"cart_ids"`
 }
 
 func RequestToCoreOrder(input OrderRequest) order.OrderCore {

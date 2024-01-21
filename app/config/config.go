@@ -6,12 +6,18 @@ import (
 	"strconv"
 
 	"github.com/cloudinary/cloudinary-go/v2"
+	// "github.com/midtrans/midtrans-go"
 	"github.com/spf13/viper"
 )
 
 var (
 	JWT_SECRET string
 )
+
+// type MidtransConfig struct {
+// 	ApiKey string
+// 	Env    midtrans.EnvironmentType
+// }
 
 type AppConfig struct {
 	DB_USERNAME string
@@ -33,6 +39,7 @@ func ReadEnv() *AppConfig {
 		app.DB_USERNAME = val
 		isRead = false
 	}
+
 	if val, found := os.LookupEnv("DBPASS"); found {
 		app.DB_PASSWORD = val
 		isRead = false
@@ -89,3 +96,17 @@ func SetupCloudinary() (*cloudinary.Cloudinary, error) {
 
 	return cld, nil
 }
+
+// func (cfg *MidtransConfig) LoadFromEnv(file ...string) error {
+// 	cfg.ApiKey = viper.GetString("MIDKEY")
+// 	midtransEnv, _ := strconv.Atoi(viper.Get("MIDSANDBOX").(string))
+
+// 	if midtransEnv == 0 {
+// 		cfg.Env = midtrans.Production
+// 	} else {
+// 		cfg.Env = midtrans.Sandbox
+// 	}
+
+// 	return nil
+// }
+
