@@ -2,6 +2,7 @@ package handler
 
 import (
 	"MyEcommerce/features/order"
+	"MyEcommerce/utils/externalapi"
 	"MyEcommerce/utils/middlewares"
 	"MyEcommerce/utils/responses"
 	"net/http"
@@ -11,11 +12,13 @@ import (
 
 type OrderHandler struct {
 	orderService order.OrderServiceInterface
+	paymentMidtrans externalapi.MidtransInterface
 }
 
-func New(os order.OrderServiceInterface) *OrderHandler {
+func New(os order.OrderServiceInterface, mi externalapi.MidtransInterface) *OrderHandler {
 	return &OrderHandler{
 		orderService: os,
+		paymentMidtrans: mi,
 	}
 }
 
@@ -31,13 +34,20 @@ func (handler *OrderHandler) CreateOrder(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data order not valid", nil))
 	}
 
-
-
 	orderCore := RequestToCoreOrder(newOrder)
 	errInsert := handler.orderService.CreateOrder(userIdLogin, newOrder.CartIDs, orderCore)
 	if errInsert != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert data", nil))
 	}
 
-	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", nil))
+	items := []order.OrderItemCore{} 
+	
+
+	payment, err := handler.paymentMidtrans.NewOrderPayment(orderCore, items)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error create payment", err.Error()))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", payment))
+
 }

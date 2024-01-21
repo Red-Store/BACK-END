@@ -3,7 +3,6 @@ package data
 import (
 	cd "MyEcommerce/features/cart/data"
 	"MyEcommerce/features/order"
-	"time"
 
 	ud "MyEcommerce/features/user/data"
 
@@ -12,8 +11,9 @@ import (
 )
 
 type Order struct {
-	ID          uuid.UUID `gorm:"type:char(36);primary_key;"`
-	UserID      uint      `gorm:"foreignKey:UserID"`
+	ID          string `gorm:"type:varchar(36);primary_key" json:"id"`
+	gorm.Model
+	UserID      uint    
 	User        ud.User
 	Address     string
 	PaymentType string
@@ -21,14 +21,11 @@ type Order struct {
 	Status      string
 	Bank        string
 	VaNumber    int
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeletedAt   time.Time
 }
 
 type OrderItem struct {
 	gorm.Model
-	OrderID uuid.UUID
+	OrderID string
 	Order   Order
 	CartID  uint
 	Cart    cd.Cart
@@ -80,6 +77,6 @@ func (ot OrderItem) ModelToCoreOrderItem() order.OrderItemCore {
 }
 
 func (order *Order) BeforeCreate(tx *gorm.DB) (err error) {
-	order.ID = uuid.New()
+	order.ID = uuid.New().String()
 	return
 }
