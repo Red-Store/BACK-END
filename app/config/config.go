@@ -5,7 +5,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/spf13/viper"
 )
 
@@ -24,7 +23,6 @@ type AppConfig struct {
 	DB_PORT     int
 	DB_NAME     string
 }
-
 
 func InitConfig() *AppConfig {
 	return ReadEnv()
@@ -85,14 +83,4 @@ func ReadEnv() *AppConfig {
 	}
 
 	return &app
-}
-
-func SetupCloudinary() (*cloudinary.Cloudinary, error) {
-
-	cld, err := cloudinary.NewFromURL(CLD_URL)
-	if err != nil {
-		return nil, err
-	}
-
-	return cld, nil
 }
