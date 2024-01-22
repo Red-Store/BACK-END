@@ -1,4 +1,4 @@
-ROM golang:1.20-alpine
+FROM golang:1.20-alpine
 
 # membuat direktori folder
 RUN mkdir /app
