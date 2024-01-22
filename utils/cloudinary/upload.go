@@ -26,7 +26,7 @@ func New() CloudinaryUploaderInterface {
 
 func (cu *CloudinaryUploader) UploadImage(fileHeader *multipart.FileHeader) (string, error) {
 	ctx := context.Background()
-	cld, err := config.SetupCloudinary(cld)
+	cld, err := config.SetupCloudinary(cldConfig)
 	if err != nil {
 		return "", err
 	}
