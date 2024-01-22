@@ -31,10 +31,9 @@ type OrderItemCore struct {
 }
 
 type OrderDataInterface interface {
-	InsertOrder(userIdLogin int, inputOrder OrderCore, cartIds []uint) error
+	InsertOrder(inputOrder *OrderCore, userIdLogin int, cartIds []uint) error
 }
-
 // interface untuk Service Layer
 type OrderServiceInterface interface {
-	CreateOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore) error
+	CreateOrder(cartIds []uint, userIdLogin int, inputOrder *OrderCore) (*OrderCore, error)
 }

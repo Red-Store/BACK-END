@@ -35,18 +35,24 @@ func (handler *OrderHandler) CreateOrder(c echo.Context) error {
 	}
 
 	orderCore := RequestToCoreOrder(newOrder)
-	errInsert := handler.orderService.CreateOrder(userIdLogin, newOrder.CartIDs, orderCore)
+	createdOrder, errInsert := handler.orderService.CreateOrder(newOrder.CartIDs, userIdLogin, &orderCore)
 	if errInsert != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert data", nil))
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert order", nil))
 	}
+	
 
 	items := []order.OrderItemCore{} 
 	
 
-	payment, err := handler.paymentMidtrans.NewOrderPayment(orderCore, items)
+	payment, err := handler.paymentMidtrans.NewOrderPayment(*createdOrder, items)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error create payment", err.Error()))
 	}
+
+	createdOrder.PaymentType = payment.PaymentType
+	createdOrder.Status = payment.Status
+	createdOrder.VaNumber = payment.VaNumber
+	createdOrder.GrossAmount = payment.GrossAmount
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", payment))
 

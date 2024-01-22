@@ -8,6 +8,7 @@ type orderService struct {
 	orderData order.OrderDataInterface
 }
 
+
 func New(repo order.OrderDataInterface) order.OrderServiceInterface {
 	return &orderService{
 		orderData: repo,
@@ -15,11 +16,11 @@ func New(repo order.OrderDataInterface) order.OrderServiceInterface {
 }
 
 // CreateOrder implements order.OrderServiceInterface.
-func (os *orderService) CreateOrder(userIdLogin int, cartIds []uint, inputOrder order.OrderCore) error {
-	err := os.orderData.InsertOrder(userIdLogin, inputOrder, cartIds)
+func (os *orderService) CreateOrder(cartIds []uint, userIdLogin int, inputOrder *order.OrderCore) (*order.OrderCore, error) {
+	err := os.orderData.InsertOrder(inputOrder, userIdLogin, cartIds)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return inputOrder, nil
 }

@@ -16,28 +16,50 @@ type MidtransInterface interface {
 	NewOrderPayment(data order.OrderCore, items []order.OrderItemCore) (*order.OrderCore, error)
 }
 
+type Midtrans struct {
+	ApiKey string
+	Env    mid.EnvironmentType
+}
+
 type midtrans struct {
-	config config.Midtrans
+	config Midtrans
 	client coreapi.Client
 }
 
-func NewMidtrans(config config.Midtrans) MidtransInterface {
-	var client coreapi.Client
-	client.New(config.ApiKey, config.Env)
+
+func New() MidtransInterface {
+	midConfig := Midtrans{
+		ApiKey: config.MID_KEY,
+	}
+
+	// Parse MID_SANDBOX as an integer and determine the environment
+	sandbox, err := strconv.Atoi(config.MID_SANDBOX)
+	if err != nil {
+		return &midtrans{}
+	}
+	if sandbox == 0 {
+		midConfig.Env = mid.Production
+	} else {
+		midConfig.Env = mid.Sandbox
+	}
 
 	return &midtrans{
-		config: config,
-		client: client,
+		config: midConfig,
+		client: coreapi.Client{},
 	}
 }
+
+
 
 // NewOrderPayment implements Midtrans.
 func (pay *midtrans) NewOrderPayment(data order.OrderCore, items []order.OrderItemCore) (*order.OrderCore, error) {
 	req := new(coreapi.ChargeReq)
+	
 	req.TransactionDetails = mid.TransactionDetails{
 		OrderID:  data.ID,
 		GrossAmt: int64(data.GrossAmount),
-	}
+	}		
+
 
 	var reqItem []mid.ItemDetails
 	for _, item := range items {
@@ -50,6 +72,10 @@ func (pay *midtrans) NewOrderPayment(data order.OrderCore, items []order.OrderIt
 	}
 
 	req.Items = &reqItem
+
+	if data.PaymentType == "" {
+		data.PaymentType = "bank_transfer"
+	}
 
 	switch data.Bank {
 	case "bca":

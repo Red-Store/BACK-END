@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
+"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
 
@@ -26,7 +27,8 @@ func New() CloudinaryUploaderInterface {
 
 func (cu *CloudinaryUploader) UploadImage(fileHeader *multipart.FileHeader) (string, error) {
 	ctx := context.Background()
-	cld, err := config.SetupCloudinary()
+
+	cld, err := cloudinary.NewFromURL(config.CLD_URL)
 	if err != nil {
 		return "", err
 	}

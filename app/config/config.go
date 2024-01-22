@@ -5,19 +5,16 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/cloudinary/cloudinary-go/v2"
-	// "github.com/midtrans/midtrans-go"
 	"github.com/spf13/viper"
 )
 
 var (
 	JWT_SECRET string
+	CLD_URL string
+	MID_KEY string
+	MID_SANDBOX string
 )
 
-// type MidtransConfig struct {
-// 	ApiKey string
-// 	Env    midtrans.EnvironmentType
-// }
 
 type AppConfig struct {
 	DB_USERNAME string
@@ -39,7 +36,6 @@ func ReadEnv() *AppConfig {
 		app.DB_USERNAME = val
 		isRead = false
 	}
-
 	if val, found := os.LookupEnv("DBPASS"); found {
 		app.DB_PASSWORD = val
 		isRead = false
@@ -61,6 +57,18 @@ func ReadEnv() *AppConfig {
 		JWT_SECRET = val
 		isRead = false
 	}
+	if val, found := os.LookupEnv("CLDURL"); found {
+		CLD_URL = val
+		isRead = false
+	}
+	if val, found := os.LookupEnv("MIDKEY"); found {
+		MID_KEY = val
+		isRead = false
+	}
+	if val, found := os.LookupEnv("MIDSANDBOX"); found {
+		MID_SANDBOX = val
+		isRead = false
+	}
 
 	if isRead {
 		viper.AddConfigPath(".")
@@ -73,6 +81,9 @@ func ReadEnv() *AppConfig {
 			return nil
 		}
 
+		CLD_URL = viper.GetString("CLDURL")
+		MID_KEY = viper.GetString("MIDKEY")
+		MID_SANDBOX = viper.GetString("MIDSANDBOX")
 		JWT_SECRET = viper.GetString("JWTSECRET")
 		app.DB_USERNAME = viper.Get("DBUSER").(string)
 		app.DB_PASSWORD = viper.Get("DBPASS").(string)
@@ -83,30 +94,3 @@ func ReadEnv() *AppConfig {
 
 	return &app
 }
-
-func SetupCloudinary() (*cloudinary.Cloudinary, error) {
-	cldName := viper.GetString("CLDNAME")
-	cldKey := viper.GetString("CLDKEY")
-	cldSecret := viper.GetString("CLDSECRET")
-
-	cld, err := cloudinary.NewFromParams(cldName, cldKey, cldSecret)
-	if err != nil {
-		return nil, err
-	}
-
-	return cld, nil
-}
-
-// func (cfg *MidtransConfig) LoadFromEnv(file ...string) error {
-// 	cfg.ApiKey = viper.GetString("MIDKEY")
-// 	midtransEnv, _ := strconv.Atoi(viper.Get("MIDSANDBOX").(string))
-
-// 	if midtransEnv == 0 {
-// 		cfg.Env = midtrans.Production
-// 	} else {
-// 		cfg.Env = midtrans.Sandbox
-// 	}
-
-// 	return nil
-// }
-

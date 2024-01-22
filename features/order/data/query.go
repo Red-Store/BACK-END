@@ -16,15 +16,21 @@ func New(db *gorm.DB) order.OrderDataInterface {
 	}
 }
 
-// Insert implements order.OrderDataInterface.
-func (repo *orderQuery) InsertOrder(userIdLogin int,  inputOrder order.OrderCore, cartIds []uint) error {
-	orderModel := CoreToModelOrder(inputOrder)
+// InsertOrder implements order.OrderDataInterface.
+func (repo *orderQuery) InsertOrder(inputOrder *order.OrderCore, userIdLogin int, cartIds []uint) error {
+	orderModel := CoreToModelOrder(*inputOrder)
 	orderModel.UserID = uint(userIdLogin)
+
+	orderModel.PaymentType = inputOrder.PaymentType
+	orderModel.Status = inputOrder.Status
+	orderModel.VaNumber = inputOrder.VaNumber
 
 	tx := repo.db.Create(&orderModel)
 	if tx.Error != nil {
 		return tx.Error
 	}
+
+	inputOrder.ID = orderModel.ID
 
 	for _, cartId := range cartIds {
 		orderItem := OrderItem{
@@ -36,8 +42,6 @@ func (repo *orderQuery) InsertOrder(userIdLogin int,  inputOrder order.OrderCore
 			return err
 		}
 	}
-
-	
 
 	return nil
 }

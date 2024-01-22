@@ -1,12 +1,10 @@
 package router
 
 import (
-	"MyEcommerce/app/config"
 	"MyEcommerce/utils/cloudinary"
 	"MyEcommerce/utils/encrypts"
 	"MyEcommerce/utils/externalapi"
 	"MyEcommerce/utils/middlewares"
-	"log"
 
 	ud "MyEcommerce/features/user/data"
 	uh "MyEcommerce/features/user/handler"
@@ -31,13 +29,13 @@ import (
 func InitRouter(db *gorm.DB, e *echo.Echo) {
 	hash := encrypts.New()
 	cloudinaryUploader := cloudinary.New()
-	midtransConfig := config.Midtrans{}
-	err := midtransConfig.LoadFromEnv("local.env")
-	if err != nil {
-		log.Fatal(err)
-	}
+	// midtransConfig := config.Midtrans{}
+	// err := midtransConfig.LoadFromEnv("local.env")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	midtrans := externalapi.NewMidtrans(midtransConfig)
+	midtrans := externalapi.New()
 	userData := ud.New(db)
 	userService := us.New(userData, hash)
 	userHandlerAPI := uh.New(userService, cloudinaryUploader)

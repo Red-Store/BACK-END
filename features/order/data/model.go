@@ -35,11 +35,8 @@ func CoreToModelOrder(input order.OrderCore) Order {
 	return Order{
 		UserID:      input.UserID,
 		Address:     input.Address,
-		PaymentType: input.PaymentType,
-		GrossAmount: input.GrossAmount,
-		Status:      input.Status,
-		VaNumber:    input.VaNumber,
 		Bank:        input.Bank,
+		GrossAmount: input.GrossAmount,
 	}
 }
 
