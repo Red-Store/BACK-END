@@ -100,7 +100,7 @@ func ReadEnv() *AppConfig {
 	return &app
 }
 
-func SetupCloudinary() (*cloudinary.Cloudinary, error) {
+func SetupCloudinary(cld *CldConfig) (*cloudinary.Cloudinary, error) {
 	cld, err := cloudinary.NewFromParams(cld.CLDNAME, cld.CLDKEY, cld.CLDSECRET)
 	if err != nil {
 		return nil, err
