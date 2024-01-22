@@ -6,12 +6,12 @@ import (
 	"strconv"
 
 	"github.com/cloudinary/cloudinary-go/v2"
-	// "github.com/midtrans/midtrans-go"
 	"github.com/spf13/viper"
 )
 
 var (
-	JWT_SECRET string
+	JWT_SECRET   string
+	Midtrans_Key string
 )
 
 // type MidtransConfig struct {
@@ -61,6 +61,14 @@ func ReadEnv() *AppConfig {
 		JWT_SECRET = val
 		isRead = false
 	}
+	if val, found := os.LookupEnv("JWTSECRET"); found {
+		JWT_SECRET = val
+		isRead = false
+	}
+	if val, found := os.LookupEnv("MIDKEY"); found {
+		Midtrans_Key = val
+		isRead = false
+	}
 
 	if isRead {
 		viper.AddConfigPath(".")
@@ -74,6 +82,7 @@ func ReadEnv() *AppConfig {
 		}
 
 		JWT_SECRET = viper.GetString("JWTSECRET")
+		Midtrans_Key = viper.GetString("MIDKEY")
 		app.DB_USERNAME = viper.Get("DBUSER").(string)
 		app.DB_PASSWORD = viper.Get("DBPASS").(string)
 		app.DB_HOSTNAME = viper.Get("DBHOST").(string)
@@ -99,9 +108,8 @@ func SetupCloudinary() (*cloudinary.Cloudinary, error) {
 
 // func (cfg *MidtransConfig) LoadFromEnv(file ...string) error {
 // 	cfg.ApiKey = viper.GetString("MIDKEY")
-// 	midtransEnv, _ := strconv.Atoi(viper.Get("MIDSANDBOX").(string))
-
-// 	if midtransEnv == 0 {
+// 	midtransEnv := viper.GetString("MIDSANBOX")
+// 	if midtransEnv == "0" {
 // 		cfg.Env = midtrans.Production
 // 	} else {
 // 		cfg.Env = midtrans.Sandbox
@@ -109,4 +117,3 @@ func SetupCloudinary() (*cloudinary.Cloudinary, error) {
 
 // 	return nil
 // }
-

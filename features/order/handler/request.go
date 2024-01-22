@@ -2,9 +2,12 @@ package handler
 
 import (
 	"MyEcommerce/features/order"
+
+	"github.com/google/uuid"
 )
 
 type OrderRequest struct {
+	ID          string
 	Address     string `json:"address" form:"address"`
 	PaymentType string `json:"payment_type" form:"payment_type"`
 	GrossAmount int    `json:"gross_amount" form:"gross_amount"`
@@ -16,6 +19,7 @@ type OrderRequest struct {
 
 func RequestToCoreOrder(input OrderRequest) order.OrderCore {
 	return order.OrderCore{
+		ID:          uuid.New().String(),
 		Address:     input.Address,
 		PaymentType: input.PaymentType,
 		GrossAmount: input.GrossAmount,
