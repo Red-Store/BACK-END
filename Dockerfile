@@ -1,17 +1,11 @@
-FROM golang:1.20-alpine
+FROM golang:1.21.4-alpine
 
-# membuat direktori folder
-RUN mkdir /app
+COPY . /app
 
-# set working direktory
 WORKDIR /app
-
-COPY ./ /app
 
 RUN go mod tidy
 
-# create executable
-RUN go build -o beapi
+RUN go build -o server .
 
-# run executable file
-CMD ["./beapi"]
+CMD [ "/app/server" ]
