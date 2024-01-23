@@ -17,6 +17,7 @@ require (
 )
 
 require (
+	github.com/cloudinary/cloudinary-go v1.7.0 // indirect
 	github.com/creasty/defaults v1.7.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect

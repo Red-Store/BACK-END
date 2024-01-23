@@ -35,11 +35,10 @@ func (handler *OrderHandler) CreateOrder(c echo.Context) error {
 	items := []order.OrderItemCore{}
 	payment, errInsert := handler.orderService.CreateOrder(userIdLogin, newOrder.CartIDs, orderCore, items)
 	if errInsert != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert data", nil))
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert order", nil))
 	}
-
+	
 	result := CoreToResponse(payment)
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", result))
-
 }

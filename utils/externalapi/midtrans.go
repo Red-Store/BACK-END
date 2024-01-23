@@ -20,10 +20,10 @@ type midtrans struct {
 	environment mid.EnvironmentType
 }
 
-func NewMidtrans() MidtransInterface {
+func New() MidtransInterface {
 	environment := mid.Sandbox
 	var client coreapi.Client
-	client.New(config.Midtrans_Key, environment)
+	client.New(config.MID_KEY, environment)
 
 	return &midtrans{
 		client: client,

@@ -40,6 +40,7 @@ type Payment struct {
 	FraudStatus     string
 }
 
+// interface untuk Data Layer
 type OrderDataInterface interface {
 	InsertOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore, items []OrderItemCore) (*OrderCore, error)
 }

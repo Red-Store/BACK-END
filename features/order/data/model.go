@@ -74,8 +74,3 @@ func (ot OrderItem) ModelToCoreOrderItem() order.OrderItemCore {
 		Order:     ot.Order.ModelToCoreOrder(),
 	}
 }
-
-// func (order *Order) BeforeCreate(tx *gorm.DB) (err error) {
-// 	order.ID = uuid.New().String()
-// 	return
-// }

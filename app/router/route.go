@@ -29,8 +29,8 @@ import (
 func InitRouter(db *gorm.DB, e *echo.Echo) {
 	hash := encrypts.New()
 	cloudinaryUploader := cloudinary.New()
-
-	midtrans := externalapi.NewMidtrans()
+	midtrans := externalapi.New()
+    
 	userData := ud.New(db)
 	userService := us.New(userData, hash)
 	userHandlerAPI := uh.New(userService, cloudinaryUploader)

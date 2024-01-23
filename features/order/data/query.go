@@ -19,7 +19,7 @@ func New(db *gorm.DB, mi externalapi.MidtransInterface) order.OrderDataInterface
 	}
 }
 
-// Insert implements order.OrderDataInterface.
+// InsertOrder implements order.OrderDataInterface.
 func (repo *orderQuery) InsertOrder(userIdLogin int, cartIds []uint, inputOrder order.OrderCore, items []order.OrderItemCore) (*order.OrderCore, error) {
 	payment, errPay := repo.paymentMidtrans.NewOrderPayment(inputOrder, items)
 	if errPay != nil {
@@ -33,6 +33,8 @@ func (repo *orderQuery) InsertOrder(userIdLogin int, cartIds []uint, inputOrder 
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
+
+	inputOrder.ID = orderModel.ID
 
 	for _, cartId := range cartIds {
 		orderItem := OrderItem{
