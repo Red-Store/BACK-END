@@ -84,6 +84,7 @@ func (pay *midtrans) NewOrderPayment(data order.OrderCore, items []order.OrderIt
 	data.Payment.Currency = res.Currency
 	data.Payment.TransactionTime = res.TransactionTime
 	data.Payment.FraudStatus = res.FraudStatus
+	data.Payment.ExpiredAt = res.ExpiryTime
 
 	return &data, nil
 }

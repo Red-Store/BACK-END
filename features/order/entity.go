@@ -39,6 +39,7 @@ type Payment struct {
 	Currency        string
 	TransactionTime string
 	FraudStatus     string
+	ExpiredAt       string
 }
 
 // interface untuk Data Layer
