@@ -49,6 +49,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 
 	// define routes/ endpoint ADMIN
 	e.GET("admin/users", userHandlerAPI.GetAdminUserData, middlewares.JWTMiddleware())
+	e.GET("/admin/orders", orderHandlerAPI.GetOrderAdmin, middlewares.JWTMiddleware())
 
 	// define routes/ endpoint USERS
 	e.POST("/login", userHandlerAPI.Login)

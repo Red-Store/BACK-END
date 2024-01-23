@@ -63,3 +63,21 @@ func (handler *OrderHandler) GetOrderUser(c echo.Context) error  {
 	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", userResult))
 
 }
+
+
+func (handler *OrderHandler) GetOrderAdmin(c echo.Context) error  {
+	userIdLogin := middlewares.ExtractTokenUserId(c)
+	if userIdLogin == 0 {
+		return c.JSON(http.StatusUnauthorized, responses.WebResponse("Unauthorized user", nil))
+	}
+
+	results, errSelect := handler.orderService.GetOrderAdmin(userIdLogin)
+	if errSelect != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+errSelect.Error(), nil))
+	}
+
+	response := CoreToResponseOrderAdmin(results)
+
+	// Kirim response
+	return c.JSON(http.StatusOK, response)
+}

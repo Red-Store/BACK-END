@@ -31,6 +31,10 @@ type CartProductResponse struct {
 	Toko        handler.CartUserResponse `json:"toko" form:"toko"`
 }
 
+type AdminProductResponse struct {
+	Name         string `json:"name" form:"name"`
+}
+
 func CoreToResponse(data product.Core) ProductResponse {
 	userResponse := handler.UserProductResponse{
 		Name:         data.User.Name,

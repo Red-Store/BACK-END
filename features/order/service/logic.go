@@ -24,9 +24,14 @@ func (os *orderService) CreateOrder(userIdLogin int, cartIds []uint, inputOrder 
 	return payment, nil
 }
 
-
 // GetOrderUser implements order.OrderServiceInterface.
 func (os *orderService) GetOrderUser(userIdLogin int) ([]order.OrderItemCore, error) {
 	result, err := os.orderData.SelectOrderUser(userIdLogin)
+	return result, err
+}
+
+// GetOrderAdmin implements order.OrderServiceInterface.
+func (os *orderService) GetOrderAdmin(userIdLogin int) ([]order.OrderItemCore, error) {
+	result, err := os.orderData.SelectOrderAdmin(userIdLogin)
 	return result, err
 }
