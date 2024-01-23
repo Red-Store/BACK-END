@@ -1,6 +1,10 @@
 package handler
 
-import "MyEcommerce/features/order"
+import (
+	"MyEcommerce/features/order"
+	ph "MyEcommerce/features/product/handler"
+	uh "MyEcommerce/features/user/handler"
+)
 
 type OrderResponse struct {
 	OrderID string `json:"order_id" form:"order_id"`
@@ -20,6 +24,41 @@ type PaymentResponse struct {
 	Currency        string `json:"currency" form:"currency"`
 	TransactionTime string `json:"transaction_time" form:"transaction_time"`
 	FraudStatus     string `json:"fraud_status" form:"fraud_status"`
+}
+
+type OrderItemResponse struct {
+	Product  ph.CartProductResponse `json:"product"`
+	User     uh.CartUserResponse    `json:"user"`
+	Quantity int                    `json:"quantity"`
+	Status   string                 `json:"status"`
+}
+
+type GetOrderUserResponse struct {
+	Order []OrderItemResponse `json:"order"`
+}
+
+func CoreToResponseOrderUser(data order.OrderCore, items []order.OrderItemCore) GetOrderUserResponse {
+	orderItems := make([]OrderItemResponse, len(items))
+	for i, item := range items {
+		user := uh.CartUserResponse{
+			Name: item.Cart.Product.User.Name,
+		}
+
+		orderItems[i] = OrderItemResponse{
+			Product: ph.CartProductResponse{
+				Name:         item.Cart.Product.Name,
+				Price:        item.Cart.Product.Price,
+				PhotoProduct: item.Cart.Product.PhotoProduct,
+				Toko:         user,
+			},
+			Quantity: item.Cart.Quantity,
+			Status:   data.Status,
+		}
+	}
+
+	return GetOrderUserResponse{
+		Order: orderItems,
+	}
 }
 
 func CoreToResponse(data *order.OrderCore) OrderResponse {

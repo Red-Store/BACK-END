@@ -12,7 +12,7 @@ import (
 type Order struct {
 	ID string `gorm:"type:varchar(36);primary_key" json:"id"`
 	gorm.Model
-	UserID      uint
+	UserID      uint 
 	User        ud.User
 	Address     string
 	PaymentType string
@@ -44,17 +44,21 @@ func CoreToModelOrder(input order.OrderCore) Order {
 
 func (o Order) ModelToCoreOrderUser() order.OrderCore {
 	return order.OrderCore{
-		UserID:      o.UserID,
 		ID:          o.ID,
+		UserID:      o.UserID,
 		Address:     o.Address,
 		PaymentType: o.PaymentType,
 		GrossAmount: o.GrossAmount,
 		Status:      o.Status,
 		VaNumber:    o.VaNumber,
+		Bank:        o.Bank,
+		User:        o.User.ModelToCore(),
+		CreatedAt:   o.CreatedAt,
+		UpdatedAt:   o.UpdatedAt,
 	}
 }
 
-func (ot OrderItem) ModelToCoreOrderItem() order.OrderItemCore {
+func (ot OrderItem) ModelToCoreOrderItemUser() order.OrderItemCore {
 	return order.OrderItemCore{
 		OrderID:   ot.OrderID,
 		CartID:    ot.CartID,

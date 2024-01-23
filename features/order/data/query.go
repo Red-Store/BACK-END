@@ -53,3 +53,19 @@ func (repo *orderQuery) InsertOrder(userIdLogin int, cartIds []uint, inputOrder 
 
 	return payment, nil
 }
+
+// SelectOrderUser implements order.OrderDataInterface.
+func (repo *orderQuery) SelectOrderUser(userIdLogin int) ([]order.OrderItemCore, error) {
+	var orderItems []OrderItem
+	err := repo.db.Joins("Order").Preload("Cart").Preload("Cart.Product").Preload("Cart.Product.User").Where("user_id = ?", userIdLogin).Find(&orderItems).Error
+	if err != nil {
+		return nil, err
+	}
+
+	orderItemCores := make([]order.OrderItemCore, len(orderItems))
+	for i, item := range orderItems {
+		orderItemCores[i] = item.ModelToCoreOrderItemUser()
+	}
+
+	return orderItemCores, nil
+}

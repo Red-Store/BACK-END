@@ -43,3 +43,23 @@ func (handler *OrderHandler) CreateOrder(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", result))
 }
+
+func (handler *OrderHandler) GetOrderUser(c echo.Context) error  {
+	userIdLogin := middlewares.ExtractTokenUserId(c)
+	if userIdLogin == 0 {
+		return c.JSON(http.StatusUnauthorized, responses.WebResponse("Unauthorized user", nil))
+	}
+
+	results, errSelect := handler.orderService.GetOrderUser(userIdLogin)
+	if errSelect != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+errSelect.Error(), nil))
+	}
+
+	userResult := make([]GetOrderUserResponse, len(results))
+	for i, result := range results {
+		userResult[i] = CoreToResponseOrderUser(result.Order, []order.OrderItemCore{result})
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", userResult))
+
+}

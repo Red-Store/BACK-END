@@ -28,7 +28,7 @@ type CartProductResponse struct {
 	Name         string `json:"name" form:"name"`
 	Price        int    `json:"price" form:"price"`
 	PhotoProduct string `json:"photo_product" form:"photo_product"`
-	Users        handler.CartUserResponse
+	Toko        handler.CartUserResponse
 }
 
 func CoreToResponse(data product.Core) ProductResponse {
