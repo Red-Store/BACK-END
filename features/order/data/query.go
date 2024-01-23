@@ -2,32 +2,36 @@ package data
 
 import (
 	"MyEcommerce/features/order"
+	"MyEcommerce/utils/externalapi"
 
 	"gorm.io/gorm"
 )
 
 type orderQuery struct {
-	db *gorm.DB
+	db              *gorm.DB
+	paymentMidtrans externalapi.MidtransInterface
 }
 
-func New(db *gorm.DB) order.OrderDataInterface {
+func New(db *gorm.DB, mi externalapi.MidtransInterface) order.OrderDataInterface {
 	return &orderQuery{
-		db: db,
+		db:              db,
+		paymentMidtrans: mi,
 	}
 }
 
 // InsertOrder implements order.OrderDataInterface.
-func (repo *orderQuery) InsertOrder(inputOrder *order.OrderCore, userIdLogin int, cartIds []uint) error {
-	orderModel := CoreToModelOrder(*inputOrder)
-	orderModel.UserID = uint(userIdLogin)
+func (repo *orderQuery) InsertOrder(userIdLogin int, cartIds []uint, inputOrder order.OrderCore, items []order.OrderItemCore) (*order.OrderCore, error) {
+	payment, errPay := repo.paymentMidtrans.NewOrderPayment(inputOrder, items)
+	if errPay != nil {
+		return nil, errPay
+	}
 
-	orderModel.PaymentType = inputOrder.PaymentType
-	orderModel.Status = inputOrder.Status
-	orderModel.VaNumber = inputOrder.VaNumber
+	orderModel := CoreToModelOrder(inputOrder)
+	orderModel.UserID = uint(userIdLogin)
 
 	tx := repo.db.Create(&orderModel)
 	if tx.Error != nil {
-		return tx.Error
+		return nil, tx.Error
 	}
 
 	inputOrder.ID = orderModel.ID
@@ -39,9 +43,9 @@ func (repo *orderQuery) InsertOrder(inputOrder *order.OrderCore, userIdLogin int
 		}
 
 		if err := repo.db.Create(&orderItem).Error; err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	return nil
+	return payment, nil
 }

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"MyEcommerce/features/order"
-	"MyEcommerce/utils/externalapi"
 	"MyEcommerce/utils/middlewares"
 	"MyEcommerce/utils/responses"
 	"net/http"
@@ -12,13 +11,11 @@ import (
 
 type OrderHandler struct {
 	orderService order.OrderServiceInterface
-	paymentMidtrans externalapi.MidtransInterface
 }
 
-func New(os order.OrderServiceInterface, mi externalapi.MidtransInterface) *OrderHandler {
+func New(os order.OrderServiceInterface) *OrderHandler {
 	return &OrderHandler{
 		orderService: os,
-		paymentMidtrans: mi,
 	}
 }
 
@@ -35,25 +32,13 @@ func (handler *OrderHandler) CreateOrder(c echo.Context) error {
 	}
 
 	orderCore := RequestToCoreOrder(newOrder)
-	createdOrder, errInsert := handler.orderService.CreateOrder(newOrder.CartIDs, userIdLogin, &orderCore)
+	items := []order.OrderItemCore{}
+	payment, errInsert := handler.orderService.CreateOrder(userIdLogin, newOrder.CartIDs, orderCore, items)
 	if errInsert != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert order", nil))
 	}
 	
+	result := CoreToResponse(payment)
 
-	items := []order.OrderItemCore{} 
-	
-
-	payment, err := handler.paymentMidtrans.NewOrderPayment(*createdOrder, items)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error create payment", err.Error()))
-	}
-
-	createdOrder.PaymentType = payment.PaymentType
-	createdOrder.Status = payment.Status
-	createdOrder.VaNumber = payment.VaNumber
-	createdOrder.GrossAmount = payment.GrossAmount
-
-	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", payment))
-
+	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", result))
 }

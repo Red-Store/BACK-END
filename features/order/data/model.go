@@ -6,14 +6,13 @@ import (
 
 	ud "MyEcommerce/features/user/data"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type Order struct {
-	ID          string `gorm:"type:varchar(36);primary_key" json:"id"`
+	ID string `gorm:"type:varchar(36);primary_key" json:"id"`
 	gorm.Model
-	UserID      uint    
+	UserID      uint
 	User        ud.User
 	Address     string
 	PaymentType string
@@ -33,10 +32,13 @@ type OrderItem struct {
 
 func CoreToModelOrder(input order.OrderCore) Order {
 	return Order{
+		ID:          input.ID,
 		UserID:      input.UserID,
 		Address:     input.Address,
-		Bank:        input.Bank,
 		GrossAmount: input.GrossAmount,
+		Status:      input.Status,
+		VaNumber:    input.VaNumber,
+		Bank:        input.Bank,
 	}
 }
 
@@ -71,9 +73,4 @@ func (ot OrderItem) ModelToCoreOrderItem() order.OrderItemCore {
 		Cart:      ot.Cart.ModelToCore(),
 		Order:     ot.Order.ModelToCoreOrder(),
 	}
-}
-
-func (order *Order) BeforeCreate(tx *gorm.DB) (err error) {
-	order.ID = uuid.New().String()
-	return
 }

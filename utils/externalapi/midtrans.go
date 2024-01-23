@@ -4,7 +4,6 @@ import (
 	"MyEcommerce/app/config"
 	"MyEcommerce/features/order"
 	"errors"
-	"fmt"
 	"strconv"
 
 	mid "github.com/midtrans/midtrans-go"
@@ -16,62 +15,28 @@ type MidtransInterface interface {
 	NewOrderPayment(data order.OrderCore, items []order.OrderItemCore) (*order.OrderCore, error)
 }
 
-type Midtrans struct {
-	ApiKey string
-	Env    mid.EnvironmentType
-}
-
 type midtrans struct {
-	config Midtrans
-	client coreapi.Client
+	client      coreapi.Client
+	environment mid.EnvironmentType
 }
-
 
 func New() MidtransInterface {
-	midConfig := Midtrans{
-		ApiKey: config.MID_KEY,
-	}
-
-	// Parse MID_SANDBOX as an integer and determine the environment
-	sandbox, err := strconv.Atoi(config.MID_SANDBOX)
-	if err != nil {
-		return &midtrans{}
-	}
-	if sandbox == 0 {
-		midConfig.Env = mid.Production
-	} else {
-		midConfig.Env = mid.Sandbox
-	}
+	environment := mid.Sandbox
+	var client coreapi.Client
+	client.New(config.MID_KEY, environment)
 
 	return &midtrans{
-		config: midConfig,
-		client: coreapi.Client{},
+		client: client,
 	}
 }
-
-
 
 // NewOrderPayment implements Midtrans.
 func (pay *midtrans) NewOrderPayment(data order.OrderCore, items []order.OrderItemCore) (*order.OrderCore, error) {
 	req := new(coreapi.ChargeReq)
-	
 	req.TransactionDetails = mid.TransactionDetails{
 		OrderID:  data.ID,
 		GrossAmt: int64(data.GrossAmount),
-	}		
-
-
-	var reqItem []mid.ItemDetails
-	for _, item := range items {
-		reqItem = append(reqItem, mid.ItemDetails{
-			ID:    fmt.Sprintf("%d", item.CartID),
-			Name:  item.Cart.Product.Name,
-			Price: int64(item.Cart.Product.Price),
-			Qty:   int32(item.Cart.Quantity),
-		})
 	}
-
-	req.Items = &reqItem
 
 	if data.PaymentType == "" {
 		data.PaymentType = "bank_transfer"
@@ -95,7 +60,7 @@ func (pay *midtrans) NewOrderPayment(data order.OrderCore, items []order.OrderIt
 		}
 
 	default:
-		return nil, errors.New("unsupported payment")
+		return nil, errors.New("payment not support")
 
 	}
 
@@ -104,15 +69,20 @@ func (pay *midtrans) NewOrderPayment(data order.OrderCore, items []order.OrderIt
 		return nil, err
 	}
 
-	// Check the transaction status
 	if res.StatusCode != "201" {
 		return nil, errors.New(res.StatusMessage)
 	}
 
-	// Update the order data with the payment details
+	// response
 	data.VaNumber, _ = strconv.Atoi(res.VaNumbers[0].VANumber)
 	data.PaymentType = res.PaymentType
 	data.Status = res.TransactionStatus
+	data.Payment.StatusCode = res.StatusCode
+	data.Payment.StatusMessage = res.StatusMessage
+	data.Payment.TransactionId = res.TransactionID
+	data.Payment.Currency = res.Currency
+	data.Payment.TransactionTime = res.TransactionTime
+	data.Payment.FraudStatus = res.FraudStatus
 
 	return &data, nil
 }

@@ -29,13 +29,8 @@ import (
 func InitRouter(db *gorm.DB, e *echo.Echo) {
 	hash := encrypts.New()
 	cloudinaryUploader := cloudinary.New()
-	// midtransConfig := config.Midtrans{}
-	// err := midtransConfig.LoadFromEnv("local.env")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
 	midtrans := externalapi.New()
+    
 	userData := ud.New(db)
 	userService := us.New(userData, hash)
 	userHandlerAPI := uh.New(userService, cloudinaryUploader)
@@ -48,9 +43,9 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	cartService := cs.New(cartData)
 	cartHandlerAPI := ch.New(cartService)
 
-	orderData := od.New(db)
+	orderData := od.New(db, midtrans)
 	orderService := os.New(orderData)
-	orderHandlerAPI := oh.New(orderService, midtrans)
+	orderHandlerAPI := oh.New(orderService)
 
 	// define routes/ endpoint ADMIN
 	e.GET("admin/users", userHandlerAPI.GetAdminUserData, middlewares.JWTMiddleware())
