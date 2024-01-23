@@ -12,7 +12,7 @@ import (
 type Order struct {
 	ID string `gorm:"type:varchar(36);primary_key" json:"id"`
 	gorm.Model
-	UserID      uint 
+	UserID      uint
 	User        ud.User
 	Address     string
 	PaymentType string
@@ -44,17 +44,19 @@ func CoreToModelOrder(input order.OrderCore) Order {
 
 func (o Order) ModelToCoreOrderUser() order.OrderCore {
 	return order.OrderCore{
-		ID:          o.ID,
-		UserID:      o.UserID,
-		Address:     o.Address,
-		PaymentType: o.PaymentType,
-		GrossAmount: o.GrossAmount,
-		Status:      o.Status,
-		VaNumber:    o.VaNumber,
-		Bank:        o.Bank,
-		User:        o.User.ModelToCore(),
+		// UserID: o.UserID,
+		Status: o.Status,
+	}
+}
+
+func (o Order) ModelToCoreOrderAdmin() order.OrderCore {
+	return order.OrderCore{
+		// ID:          o.ID,
 		CreatedAt:   o.CreatedAt,
-		UpdatedAt:   o.UpdatedAt,
+		Bank:        o.Bank,
+		GrossAmount: o.GrossAmount,
+		Address:     o.Address,
+		Status:      o.Status,
 	}
 }
 
@@ -62,9 +64,16 @@ func (ot OrderItem) ModelToCoreOrderItemUser() order.OrderItemCore {
 	return order.OrderItemCore{
 		OrderID:   ot.OrderID,
 		CartID:    ot.CartID,
-		CreatedAt: ot.CreatedAt,
-		UpdatedAt: ot.UpdatedAt,
 		Cart:      ot.Cart.ModelToCore(),
 		Order:     ot.Order.ModelToCoreOrderUser(),
+	}
+}
+
+func (ot OrderItem) ModelToCoreOrderItemAdmin() order.OrderItemCore {
+	return order.OrderItemCore{
+		OrderID:   ot.OrderID,
+		CartID:    ot.CartID,
+		Cart:      ot.Cart.ModelToCore(),
+		Order:     ot.Order.ModelToCoreOrderAdmin(),
 	}
 }

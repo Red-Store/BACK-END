@@ -4,6 +4,7 @@ import (
 	"MyEcommerce/features/order"
 	ph "MyEcommerce/features/product/handler"
 	uh "MyEcommerce/features/user/handler"
+	"time"
 )
 
 type OrderResponse struct {
@@ -26,25 +27,39 @@ type PaymentResponse struct {
 	FraudStatus     string `json:"fraud_status" form:"fraud_status"`
 }
 
-type OrderItemResponse struct {
+type OrderUserItemResponse struct {
 	Product  ph.CartProductResponse `json:"product"`
-	User     uh.CartUserResponse    `json:"user"`
 	Quantity int                    `json:"quantity"`
 	Status   string                 `json:"status"`
 }
 
+type OrderAdminItemResponse struct {
+	OrderID    string                 `json:"order_id"`
+	Product     ph.AdminProductResponse `json:"product"`
+	Quantity    int                    `json:"quantity"`
+	CreatedAt   time.Time              `json:"created_at"`
+	Bank        string                 `json:"bank"`
+	GrossAmount int                    `json:"gross_amount"`
+	Address     string                 `json:"address"`
+	Status      string                 `json:"status"`
+}
+
 type GetOrderUserResponse struct {
-	Order []OrderItemResponse `json:"order"`
+	Order []OrderUserItemResponse `json:"order"`
+}
+
+type GetOrderAdminResponse struct {
+	Order []OrderAdminItemResponse `json:"order"`
 }
 
 func CoreToResponseOrderUser(data order.OrderCore, items []order.OrderItemCore) GetOrderUserResponse {
-	orderItems := make([]OrderItemResponse, len(items))
+	orderItems := make([]OrderUserItemResponse, len(items))
 	for i, item := range items {
 		user := uh.CartUserResponse{
 			Name: item.Cart.Product.User.Name,
 		}
 
-		orderItems[i] = OrderItemResponse{
+		orderItems[i] = OrderUserItemResponse{
 			Product: ph.CartProductResponse{
 				Name:         item.Cart.Product.Name,
 				Price:        item.Cart.Product.Price,
@@ -57,6 +72,28 @@ func CoreToResponseOrderUser(data order.OrderCore, items []order.OrderItemCore) 
 	}
 
 	return GetOrderUserResponse{
+		Order: orderItems,
+	}
+}
+
+func CoreToResponseOrderAdmin(items []order.OrderItemCore) GetOrderAdminResponse {
+	orderItems := make([]OrderAdminItemResponse, len(items))
+	for i, item := range items {
+		orderItems[i] = OrderAdminItemResponse{
+			OrderID:    item.OrderID,
+			Product:    ph.AdminProductResponse{
+				Name:         item.Cart.Product.Name,
+			},
+			Quantity:   item.Cart.Quantity,
+			CreatedAt:  item.Order.CreatedAt,
+			Bank:       item.Order.Bank,
+			GrossAmount: item.Order.GrossAmount,
+			Address:    item.Order.Address,
+			Status:     item.Order.Status,
+		}
+	}
+
+	return GetOrderAdminResponse{
 		Order: orderItems,
 	}
 }

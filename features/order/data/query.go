@@ -69,3 +69,19 @@ func (repo *orderQuery) SelectOrderUser(userIdLogin int) ([]order.OrderItemCore,
 
 	return orderItemCores, nil
 }
+
+// SelectOrderAdmin implements order.OrderDataInterface.
+func (repo *orderQuery) SelectOrderAdmin(userIdLogin int) ([]order.OrderItemCore, error) {
+	var orderItems []OrderItem
+	err := repo.db.Joins("Order").Preload("Cart").Preload("Cart.Product").Where("user_id = ?", userIdLogin).Find(&orderItems).Error
+	if err != nil {
+		return nil, err
+	}
+
+	orderItemCores := make([]order.OrderItemCore, len(orderItems))
+	for i, item := range orderItems {
+		orderItemCores[i] = item.ModelToCoreOrderItemAdmin()
+	}
+
+	return orderItemCores, nil
+}
