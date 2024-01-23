@@ -19,6 +19,7 @@ type OrderCore struct {
 	User        ud.Core
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
+	Payment     Payment
 }
 
 type OrderItemCore struct {
@@ -30,11 +31,21 @@ type OrderItemCore struct {
 	UpdatedAt time.Time
 }
 
+type Payment struct {
+	StatusCode      string
+	StatusMessage   string
+	TransactionId   string
+	Currency        string
+	TransactionTime string
+	FraudStatus     string
+}
+
+// interface untuk Data Layer
 type OrderDataInterface interface {
-	InsertOrder(userIdLogin int, inputOrder OrderCore, cartIds []uint) error
+	InsertOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore, items []OrderItemCore) (*OrderCore, error)
 }
 
 // interface untuk Service Layer
 type OrderServiceInterface interface {
-	CreateOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore) error
+	CreateOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore, items []OrderItemCore) (*OrderCore, error)
 }

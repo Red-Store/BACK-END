@@ -10,10 +10,8 @@ import (
 
 var (
 	JWT_SECRET string
-)
-
-var (
 	CLD_URL string
+	MID_KEY string
 )
 
 type AppConfig struct {
@@ -57,8 +55,12 @@ func ReadEnv() *AppConfig {
 		JWT_SECRET = val
 		isRead = false
 	}
-	if val, found := os.LookupEnv("CLDURL"); found {
+  if val, found := os.LookupEnv("CLDURL"); found {
 		CLD_URL = val
+		isRead = false
+	}
+	if val, found := os.LookupEnv("MIDKEY"); found {
+		MID_KEY = val
 		isRead = false
 	}
 
@@ -75,6 +77,7 @@ func ReadEnv() *AppConfig {
 
 		CLD_URL = viper.GetString("CLDURL")
 		JWT_SECRET = viper.GetString("JWTSECRET")
+		MID_KEY = viper.GetString("MIDKEY")
 		app.DB_USERNAME = viper.Get("DBUSER").(string)
 		app.DB_PASSWORD = viper.Get("DBPASS").(string)
 		app.DB_HOSTNAME = viper.Get("DBHOST").(string)

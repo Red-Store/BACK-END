@@ -3,6 +3,7 @@ package router
 import (
 	"MyEcommerce/utils/cloudinary"
 	"MyEcommerce/utils/encrypts"
+	"MyEcommerce/utils/externalapi"
 	"MyEcommerce/utils/middlewares"
 
 	ud "MyEcommerce/features/user/data"
@@ -28,6 +29,8 @@ import (
 func InitRouter(db *gorm.DB, e *echo.Echo) {
 	hash := encrypts.New()
 	cloudinaryUploader := cloudinary.New()
+	midtrans := externalapi.New()
+    
 	userData := ud.New(db)
 	userService := us.New(userData, hash)
 	userHandlerAPI := uh.New(userService, cloudinaryUploader)
@@ -40,7 +43,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	cartService := cs.New(cartData)
 	cartHandlerAPI := ch.New(cartService)
 
-	orderData := od.New(db)
+	orderData := od.New(db, midtrans)
 	orderService := os.New(orderData)
 	orderHandlerAPI := oh.New(orderService)
 

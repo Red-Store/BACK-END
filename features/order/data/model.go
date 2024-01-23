@@ -6,7 +6,6 @@ import (
 
 	ud "MyEcommerce/features/user/data"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -33,9 +32,9 @@ type OrderItem struct {
 
 func CoreToModelOrder(input order.OrderCore) Order {
 	return Order{
+		ID:          input.ID,
 		UserID:      input.UserID,
 		Address:     input.Address,
-		PaymentType: input.PaymentType,
 		GrossAmount: input.GrossAmount,
 		Status:      input.Status,
 		VaNumber:    input.VaNumber,
@@ -74,9 +73,4 @@ func (ot OrderItem) ModelToCoreOrderItem() order.OrderItemCore {
 		Cart:      ot.Cart.ModelToCore(),
 		Order:     ot.Order.ModelToCoreOrder(),
 	}
-}
-
-func (order *Order) BeforeCreate(tx *gorm.DB) (err error) {
-	order.ID = uuid.New().String()
-	return
 }
