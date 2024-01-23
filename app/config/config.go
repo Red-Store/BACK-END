@@ -14,7 +14,6 @@ var (
 	MID_KEY string
 )
 
-
 type AppConfig struct {
 	DB_USERNAME string
 	DB_PASSWORD string
