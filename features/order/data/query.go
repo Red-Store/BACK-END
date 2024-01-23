@@ -3,6 +3,7 @@ package data
 import (
 	"MyEcommerce/features/order"
 	"MyEcommerce/utils/externalapi"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -84,4 +85,22 @@ func (repo *orderQuery) SelectOrderAdmin(userIdLogin int) ([]order.OrderItemCore
 	}
 
 	return orderItemCores, nil
+}
+
+// SelectOrderAdmin implements order.OrderDataInterface.
+func (repo *orderQuery) CancleOrder(userIdLogin int, orderId string, orderCore order.OrderCore) error {
+	if orderCore.Status == "cancelled" {
+		repo.paymentMidtrans.CancelOrderPayment(orderId)
+	}
+
+	dataGorm := CoreToModelOrderCancle(orderCore)
+	tx := repo.db.Model(&Order{}).Where("id = ? AND user_id = ?", orderId, userIdLogin).Updates(dataGorm)
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	if tx.RowsAffected == 0 {
+		return errors.New("error record not found ")
+	}
+	return nil
 }

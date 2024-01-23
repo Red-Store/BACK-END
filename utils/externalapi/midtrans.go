@@ -13,6 +13,7 @@ import (
 
 type MidtransInterface interface {
 	NewOrderPayment(data order.OrderCore, items []order.OrderItemCore) (*order.OrderCore, error)
+	CancelOrderPayment(order_id string) error
 }
 
 type midtrans struct {
@@ -85,4 +86,13 @@ func (pay *midtrans) NewOrderPayment(data order.OrderCore, items []order.OrderIt
 	data.Payment.FraudStatus = res.FraudStatus
 
 	return &data, nil
+}
+
+func (pay *midtrans) CancelOrderPayment(orderId string) error {
+	res, _ := pay.client.CancelTransaction(orderId)
+	if res.StatusCode != "200" && res.StatusCode != "412" {
+		return errors.New(res.StatusMessage)
+	}
+
+	return nil
 }
