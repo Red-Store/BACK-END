@@ -38,6 +38,7 @@ func (handler *OrderHandler) CreateOrder(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert order", nil))
 	}
 	
+	
 	result := CoreToResponse(payment)
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", result))

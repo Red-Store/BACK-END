@@ -42,7 +42,7 @@ func CoreToModelOrder(input order.OrderCore) Order {
 	}
 }
 
-func (o Order) ModelToCoreOrder() order.OrderCore {
+func (o Order) ModelToCoreOrderUser() order.OrderCore {
 	return order.OrderCore{
 		UserID:      o.UserID,
 		ID:          o.ID,
@@ -51,16 +51,6 @@ func (o Order) ModelToCoreOrder() order.OrderCore {
 		GrossAmount: o.GrossAmount,
 		Status:      o.Status,
 		VaNumber:    o.VaNumber,
-		Bank:        o.Bank,
-		CreatedAt:   o.CreatedAt,
-		UpdatedAt:   o.UpdatedAt,
-	}
-}
-
-func CoreToModelOrderItem(input order.OrderItemCore) OrderItem {
-	return OrderItem{
-		OrderID: input.OrderID,
-		CartID:  input.CartID,
 	}
 }
 
@@ -71,6 +61,6 @@ func (ot OrderItem) ModelToCoreOrderItem() order.OrderItemCore {
 		CreatedAt: ot.CreatedAt,
 		UpdatedAt: ot.UpdatedAt,
 		Cart:      ot.Cart.ModelToCore(),
-		Order:     ot.Order.ModelToCoreOrder(),
+		Order:     ot.Order.ModelToCoreOrderUser(),
 	}
 }

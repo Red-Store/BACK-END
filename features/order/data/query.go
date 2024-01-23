@@ -29,6 +29,10 @@ func (repo *orderQuery) InsertOrder(userIdLogin int, cartIds []uint, inputOrder 
 	orderModel := CoreToModelOrder(inputOrder)
 	orderModel.UserID = uint(userIdLogin)
 
+	orderModel.PaymentType = payment.PaymentType
+	orderModel.Status = payment.Status
+	orderModel.VaNumber = payment.VaNumber
+
 	tx := repo.db.Create(&orderModel)
 	if tx.Error != nil {
 		return nil, tx.Error
