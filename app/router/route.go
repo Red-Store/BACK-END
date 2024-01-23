@@ -30,7 +30,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	hash := encrypts.New()
 	cloudinaryUploader := cloudinary.New()
 	midtrans := externalapi.New()
-    
+
 	userData := ud.New(db)
 	userService := us.New(userData, hash)
 	userHandlerAPI := uh.New(userService, cloudinaryUploader)
@@ -48,7 +48,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	orderHandlerAPI := oh.New(orderService)
 
 	// define routes/ endpoint ADMIN
-	e.GET("admin/users", userHandlerAPI.GetAdminUserData, middlewares.JWTMiddleware())
+	e.GET("/admin/users", userHandlerAPI.GetAdminUserData, middlewares.JWTMiddleware())
 	e.GET("/admin/orders", orderHandlerAPI.GetOrderAdmin, middlewares.JWTMiddleware())
 
 	// define routes/ endpoint USERS
@@ -76,4 +76,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// define routes/ endpoint ORDERS
 	e.POST("/orders", orderHandlerAPI.CreateOrder, middlewares.JWTMiddleware())
 	e.GET("/users/orders", orderHandlerAPI.GetOrderUser, middlewares.JWTMiddleware())
+	e.PUT("/orders/:id", orderHandlerAPI.CancleOrderById, middlewares.JWTMiddleware())
 }

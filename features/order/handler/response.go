@@ -25,6 +25,7 @@ type PaymentResponse struct {
 	Currency        string `json:"currency" form:"currency"`
 	TransactionTime string `json:"transaction_time" form:"transaction_time"`
 	FraudStatus     string `json:"fraud_status" form:"fraud_status"`
+	ExpiredAt       string `json:"expired_at" form:"expired_at"`
 }
 
 type OrderUserItemResponse struct {
@@ -34,14 +35,14 @@ type OrderUserItemResponse struct {
 }
 
 type OrderAdminItemResponse struct {
-	OrderID    string                 `json:"order_id"`
+	OrderID     string                  `json:"order_id"`
 	Product     ph.AdminProductResponse `json:"product"`
-	Quantity    int                    `json:"quantity"`
-	CreatedAt   time.Time              `json:"created_at"`
-	Bank        string                 `json:"bank"`
-	GrossAmount int                    `json:"gross_amount"`
-	Address     string                 `json:"address"`
-	Status      string                 `json:"status"`
+	Quantity    int                     `json:"quantity"`
+	CreatedAt   time.Time               `json:"created_at"`
+	Bank        string                  `json:"bank"`
+	GrossAmount int                     `json:"gross_amount"`
+	Address     string                  `json:"address"`
+	Status      string                  `json:"status"`
 }
 
 type GetOrderUserResponse struct {
@@ -80,16 +81,16 @@ func CoreToResponseOrderAdmin(items []order.OrderItemCore) GetOrderAdminResponse
 	orderItems := make([]OrderAdminItemResponse, len(items))
 	for i, item := range items {
 		orderItems[i] = OrderAdminItemResponse{
-			OrderID:    item.OrderID,
-			Product:    ph.AdminProductResponse{
-				Name:         item.Cart.Product.Name,
+			OrderID: item.OrderID,
+			Product: ph.AdminProductResponse{
+				Name: item.Cart.Product.Name,
 			},
-			Quantity:   item.Cart.Quantity,
-			CreatedAt:  item.Order.CreatedAt,
-			Bank:       item.Order.Bank,
+			Quantity:    item.Cart.Quantity,
+			CreatedAt:   item.Order.CreatedAt,
+			Bank:        item.Order.Bank,
 			GrossAmount: item.Order.GrossAmount,
-			Address:    item.Order.Address,
-			Status:     item.Order.Status,
+			Address:     item.Order.Address,
+			Status:      item.Order.Status,
 		}
 	}
 
@@ -114,6 +115,7 @@ func CoreToResponse(data *order.OrderCore) OrderResponse {
 			Currency:        data.Payment.Currency,
 			TransactionTime: data.Payment.TransactionTime,
 			FraudStatus:     data.Payment.FraudStatus,
+			ExpiredAt:       data.Payment.ExpiredAt,
 		},
 	}
 	return result

@@ -42,6 +42,12 @@ func CoreToModelOrder(input order.OrderCore) Order {
 	}
 }
 
+func CoreToModelOrderCancle(input order.OrderCore) Order {
+	return Order{
+		Status: input.Status,
+	}
+}
+
 func (o Order) ModelToCoreOrderUser() order.OrderCore {
 	return order.OrderCore{
 		// UserID: o.UserID,
@@ -62,18 +68,18 @@ func (o Order) ModelToCoreOrderAdmin() order.OrderCore {
 
 func (ot OrderItem) ModelToCoreOrderItemUser() order.OrderItemCore {
 	return order.OrderItemCore{
-		OrderID:   ot.OrderID,
-		CartID:    ot.CartID,
-		Cart:      ot.Cart.ModelToCore(),
-		Order:     ot.Order.ModelToCoreOrderUser(),
+		OrderID: ot.OrderID,
+		CartID:  ot.CartID,
+		Cart:    ot.Cart.ModelToCore(),
+		Order:   ot.Order.ModelToCoreOrderUser(),
 	}
 }
 
 func (ot OrderItem) ModelToCoreOrderItemAdmin() order.OrderItemCore {
 	return order.OrderItemCore{
-		OrderID:   ot.OrderID,
-		CartID:    ot.CartID,
-		Cart:      ot.Cart.ModelToCore(),
-		Order:     ot.Order.ModelToCoreOrderAdmin(),
+		OrderID: ot.OrderID,
+		CartID:  ot.CartID,
+		Cart:    ot.Cart.ModelToCore(),
+		Order:   ot.Order.ModelToCoreOrderAdmin(),
 	}
 }

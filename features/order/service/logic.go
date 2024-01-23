@@ -35,3 +35,13 @@ func (os *orderService) GetOrderAdmin(userIdLogin int) ([]order.OrderItemCore, e
 	result, err := os.orderData.SelectOrderAdmin(userIdLogin)
 	return result, err
 }
+
+// CancleOrder implements order.OrderServiceInterface.
+func (os *orderService) CancleOrder(userIdLogin int, orderId string, orderCore order.OrderCore) error {
+	if orderCore.Status == "" {
+		orderCore.Status = "cancelled"
+	}
+
+	err := os.orderData.CancleOrder(userIdLogin, orderId, orderCore)
+	return err
+}
