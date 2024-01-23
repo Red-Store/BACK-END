@@ -22,7 +22,7 @@ func CoreToResponse(data cart.Core) CartResponse {
 		Name:         data.Product.Name,
 		Price:        data.Product.Price,
 		PhotoProduct: data.Product.PhotoProduct,
-		Users:        userResponse,
+		Toko:        userResponse,
 	}
 
 	return CartResponse{

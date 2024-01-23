@@ -20,6 +20,7 @@ type OrderCore struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	Payment     Payment
+	OrderItems []OrderItemCore
 }
 
 type OrderItemCore struct {
@@ -43,9 +44,11 @@ type Payment struct {
 // interface untuk Data Layer
 type OrderDataInterface interface {
 	InsertOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore, items []OrderItemCore) (*OrderCore, error)
+	SelectOrderUser(userIdLogin int) ([]OrderItemCore, error)
 }
 
 // interface untuk Service Layer
 type OrderServiceInterface interface {
 	CreateOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore, items []OrderItemCore) (*OrderCore, error)
+	GetOrderUser(userIdLogin int) ([]OrderItemCore, error)
 }

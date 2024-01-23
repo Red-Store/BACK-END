@@ -74,5 +74,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 
 	// define routes/ endpoint ORDERS
 	e.POST("/orders", orderHandlerAPI.CreateOrder, middlewares.JWTMiddleware())
-
+	e.GET("/users/orders", orderHandlerAPI.GetOrderUser, middlewares.JWTMiddleware())
 }
