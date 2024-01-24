@@ -4,6 +4,7 @@ import (
 	"MyEcommerce/features/order"
 	"MyEcommerce/utils/middlewares"
 	"MyEcommerce/utils/responses"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -110,4 +111,21 @@ func (handler *OrderHandler) CancleOrderById(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success cancle order", nil))
+}
+
+func (handler *OrderHandler) WebhoocksNotification(c echo.Context) error {
+	var reqNotif = WebhoocksRequest{}
+	errBind := c.Bind(&reqNotif)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid", nil))
+	}
+
+	orderCore := WebhoocksRequestToCore(reqNotif)
+	err := handler.orderService.WebhoocksService(orderCore)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error Notif "+err.Error(), nil))
+	}
+
+	log.Println("transaction success")
+	return c.JSON(http.StatusOK, responses.WebResponse("transaction success", nil))
 }

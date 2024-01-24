@@ -30,6 +30,12 @@ type OrderItem struct {
 	Cart    cd.Cart
 }
 
+func CoreToModel(reqNotif order.OrderCore) Order {
+	return Order{
+		Status: reqNotif.Status,
+	}
+}
+
 func CoreToModelOrder(input order.OrderCore) Order {
 	return Order{
 		ID:          input.ID,

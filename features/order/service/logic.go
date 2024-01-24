@@ -64,3 +64,17 @@ func (os *orderService) CancleOrder(userIdLogin int, orderId string, orderCore o
 	err := os.orderData.CancleOrder(userIdLogin, orderId, orderCore)
 	return err
 }
+
+// WebhoocksService implements order.OrderServiceInterface.
+func (os *orderService) WebhoocksService(reqNotif order.OrderCore) error {
+	if reqNotif.ID == "" {
+		return errors.New("invalid order id")
+	}
+
+	err := os.orderData.WebhoocksData(reqNotif)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

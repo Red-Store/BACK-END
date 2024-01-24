@@ -42,12 +42,27 @@ type Payment struct {
 	ExpiredAt       string
 }
 
+// type Webhoocks struct {
+// 	TransactionID     string
+// 	StatusCode        string
+// 	StatusMessage     string
+// 	TransactionStatus string
+// 	PaymentType       string
+// 	GrossAmount       string
+// 	Bank              string
+// 	VaNumber          string
+// 	Currency          string
+// 	TransactionTime   string
+// 	FraudStatus       string
+// }
+
 // interface untuk Data Layer
 type OrderDataInterface interface {
 	InsertOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore) (*OrderCore, error)
 	SelectOrderUser(userIdLogin int) ([]OrderItemCore, error)
 	SelectOrderAdmin(page, limit int) ([]OrderItemCore, error)
 	CancleOrder(userIdLogin int, orderId string, orderCore OrderCore) error
+	WebhoocksData(reqNotif OrderCore) error
 }
 
 // interface untuk Service Layer
@@ -56,4 +71,5 @@ type OrderServiceInterface interface {
 	GetOrderUser(userIdLogin int) ([]OrderItemCore, error)
 	GetOrderAdmin(page, limit int) ([]OrderItemCore, error)
 	CancleOrder(userIdLogin int, orderId string, orderCore OrderCore) error
+	WebhoocksService(reqNotif OrderCore) error
 }
