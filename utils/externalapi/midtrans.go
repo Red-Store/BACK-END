@@ -12,7 +12,7 @@ import (
 )
 
 type MidtransInterface interface {
-	NewOrderPayment(data order.OrderCore, items []order.OrderItemCore) (*order.OrderCore, error)
+	NewOrderPayment(data order.OrderCore) (*order.OrderCore, error)
 	CancelOrderPayment(order_id string) error
 }
 
@@ -32,7 +32,7 @@ func New() MidtransInterface {
 }
 
 // NewOrderPayment implements Midtrans.
-func (pay *midtrans) NewOrderPayment(data order.OrderCore, items []order.OrderItemCore) (*order.OrderCore, error) {
+func (pay *midtrans) NewOrderPayment(data order.OrderCore) (*order.OrderCore, error) {
 	req := new(coreapi.ChargeReq)
 	req.TransactionDetails = mid.TransactionDetails{
 		OrderID:  data.ID,
