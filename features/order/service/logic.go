@@ -31,8 +31,16 @@ func (os *orderService) GetOrderUser(userIdLogin int) ([]order.OrderItemCore, er
 }
 
 // GetOrderAdmin implements order.OrderServiceInterface.
-func (os *orderService) GetOrderAdmin(userIdLogin int) ([]order.OrderItemCore, error) {
-	result, err := os.orderData.SelectOrderAdmin(userIdLogin)
+func (os *orderService) GetOrderAdmin(page, limit int) ([]order.OrderItemCore, error) {
+	if page == 0 {
+		page = 1
+	}
+
+	if limit == 0 {
+		limit = 10
+	}
+
+	result, err := os.orderData.SelectOrderAdmin(page, limit)
 	return result, err
 }
 

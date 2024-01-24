@@ -5,6 +5,7 @@ import (
 	"MyEcommerce/utils/middlewares"
 	"MyEcommerce/utils/responses"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -69,7 +70,16 @@ func (handler *OrderHandler) GetOrderAdmin(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, responses.WebResponse("Unauthorized user", nil))
 	}
 
-	results, errSelect := handler.orderService.GetOrderAdmin(userIdLogin)
+	page, errPage := strconv.Atoi(c.QueryParam("page"))
+	if errPage != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error. page should be number", nil))
+	}
+	limit, errLimit := strconv.Atoi(c.QueryParam("limit"))
+	if errLimit != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error. limit should be number", nil))
+	}
+
+	results, errSelect := handler.orderService.GetOrderAdmin(page, limit)
 	if errSelect != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+errSelect.Error(), nil))
 	}

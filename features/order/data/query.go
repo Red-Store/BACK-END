@@ -72,9 +72,9 @@ func (repo *orderQuery) SelectOrderUser(userIdLogin int) ([]order.OrderItemCore,
 }
 
 // SelectOrderAdmin implements order.OrderDataInterface.
-func (repo *orderQuery) SelectOrderAdmin(userIdLogin int) ([]order.OrderItemCore, error) {
+func (repo *orderQuery) SelectOrderAdmin(page, limit int) ([]order.OrderItemCore, error) {
 	var orderItems []OrderItem
-	err := repo.db.Joins("Order").Preload("Cart").Preload("Cart.Product").Where("user_id = ?", userIdLogin).Find(&orderItems).Error
+	err := repo.db.Joins("Order").Preload("Cart").Preload("Cart.Product").Limit(limit).Offset((page - 1) * limit).Find(&orderItems).Error
 	if err != nil {
 		return nil, err
 	}
