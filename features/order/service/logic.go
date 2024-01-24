@@ -15,8 +15,8 @@ func New(repo order.OrderDataInterface) order.OrderServiceInterface {
 }
 
 // CreateOrder implements order.OrderServiceInterface.
-func (os *orderService) CreateOrder(userIdLogin int, cartIds []uint, inputOrder order.OrderCore, items []order.OrderItemCore) (*order.OrderCore, error) {
-	payment, err := os.orderData.InsertOrder(userIdLogin, cartIds, inputOrder, items)
+func (os *orderService) CreateOrder(userIdLogin int, cartIds []uint, inputOrder order.OrderCore) (*order.OrderCore, error) {
+	payment, err := os.orderData.InsertOrder(userIdLogin, cartIds, inputOrder)
 	if err != nil {
 		return nil, err
 	}
@@ -31,8 +31,16 @@ func (os *orderService) GetOrderUser(userIdLogin int) ([]order.OrderItemCore, er
 }
 
 // GetOrderAdmin implements order.OrderServiceInterface.
-func (os *orderService) GetOrderAdmin(userIdLogin int) ([]order.OrderItemCore, error) {
-	result, err := os.orderData.SelectOrderAdmin(userIdLogin)
+func (os *orderService) GetOrderAdmin(page, limit int) ([]order.OrderItemCore, error) {
+	if page == 0 {
+		page = 1
+	}
+
+	if limit == 0 {
+		limit = 10
+	}
+
+	result, err := os.orderData.SelectOrderAdmin(page, limit)
 	return result, err
 }
 
