@@ -104,3 +104,17 @@ func (repo *orderQuery) CancleOrder(userIdLogin int, orderId string, orderCore o
 	}
 	return nil
 }
+
+// Update implements user.UserDataInterface.
+func (repo *orderQuery) WebhoocksData(reqNotif order.OrderCore) error {
+	dataGorm := CoreToModel(reqNotif)
+	tx := repo.db.Model(&Order{}).Where("id = ?", reqNotif.ID).Updates(dataGorm)
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	if tx.RowsAffected == 0 {
+		return errors.New("error record not found ")
+	}
+	return nil
+}

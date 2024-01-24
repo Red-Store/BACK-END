@@ -77,4 +77,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.POST("/orders", orderHandlerAPI.CreateOrder, middlewares.JWTMiddleware())
 	e.GET("/users/orders", orderHandlerAPI.GetOrderUser, middlewares.JWTMiddleware())
 	e.PUT("/orders/:id", orderHandlerAPI.CancleOrderById, middlewares.JWTMiddleware())
+	e.POST("/payment/notification", orderHandlerAPI.WebhoocksNotification)
 }
