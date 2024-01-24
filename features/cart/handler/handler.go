@@ -50,13 +50,13 @@ func (handler *CartHandler) UpdateCart(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse("error parsing cart id", nil))
 	}
 
-	updateCart := CartRequest{}
+	updateCart := PutCartRequest{}
 	errBind := c.Bind(&updateCart)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid", nil))
 	}
 
-	cartCore := RequestToCore(updateCart, uint(userIdLogin), uint(cartID))
+	cartCore := RequestPutToCore(updateCart, uint(userIdLogin), uint(cartID))
 
 	errUpdate := handler.cartService.UpdateCart(userIdLogin, cartID, cartCore)
 	if errUpdate != nil {
