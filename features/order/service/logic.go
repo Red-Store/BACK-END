@@ -15,8 +15,8 @@ func New(repo order.OrderDataInterface) order.OrderServiceInterface {
 }
 
 // CreateOrder implements order.OrderServiceInterface.
-func (os *orderService) CreateOrder(userIdLogin int, cartIds []uint, inputOrder order.OrderCore, items []order.OrderItemCore) (*order.OrderCore, error) {
-	payment, err := os.orderData.InsertOrder(userIdLogin, cartIds, inputOrder, items)
+func (os *orderService) CreateOrder(userIdLogin int, cartIds []uint, inputOrder order.OrderCore) (*order.OrderCore, error) {
+	payment, err := os.orderData.InsertOrder(userIdLogin, cartIds, inputOrder)
 	if err != nil {
 		return nil, err
 	}

@@ -33,8 +33,7 @@ func (handler *OrderHandler) CreateOrder(c echo.Context) error {
 	}
 
 	orderCore := RequestToCoreOrder(newOrder)
-	items := []order.OrderItemCore{}
-	payment, errInsert := handler.orderService.CreateOrder(userIdLogin, newOrder.CartIDs, orderCore, items)
+	payment, errInsert := handler.orderService.CreateOrder(userIdLogin, newOrder.CartIDs, orderCore)
 	if errInsert != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert order", nil))
 	}

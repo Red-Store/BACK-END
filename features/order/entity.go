@@ -44,7 +44,7 @@ type Payment struct {
 
 // interface untuk Data Layer
 type OrderDataInterface interface {
-	InsertOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore, items []OrderItemCore) (*OrderCore, error)
+	InsertOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore) (*OrderCore, error)
 	SelectOrderUser(userIdLogin int) ([]OrderItemCore, error)
 	SelectOrderAdmin(page, limit int) ([]OrderItemCore, error)
 	CancleOrder(userIdLogin int, orderId string, orderCore OrderCore) error
@@ -52,7 +52,7 @@ type OrderDataInterface interface {
 
 // interface untuk Service Layer
 type OrderServiceInterface interface {
-	CreateOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore, items []OrderItemCore) (*OrderCore, error)
+	CreateOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore) (*OrderCore, error)
 	GetOrderUser(userIdLogin int) ([]OrderItemCore, error)
 	GetOrderAdmin(page, limit int) ([]OrderItemCore, error)
 	CancleOrder(userIdLogin int, orderId string, orderCore OrderCore) error
