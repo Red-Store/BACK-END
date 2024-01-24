@@ -3,6 +3,7 @@ package data
 import (
 	"MyEcommerce/features/order"
 	"MyEcommerce/utils/externalapi"
+	cd "MyEcommerce/features/cart/data"
 	"errors"
 
 	"gorm.io/gorm"
@@ -50,6 +51,19 @@ func (repo *orderQuery) InsertOrder(userIdLogin int, cartIds []uint, inputOrder 
 		if err := repo.db.Create(&orderItem).Error; err != nil {
 			return nil, err
 		}
+		
+		var cart  cd.Cart
+
+		if err := repo.db.Preload("Product").Where("id = ?", cartId).First(&cart).Error; err != nil {
+			return nil, err
+		}
+
+		cart.Product.Stock -= cart.Quantity
+
+		if err := repo.db.Save(&cart.Product).Error; err != nil {
+			return nil, err
+	}
+
 	}
 
 	return payment, nil
