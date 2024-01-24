@@ -68,14 +68,12 @@ func (repo *cartQuery) Select(userIdLogin int) ([]cart.Core, error) {
 // Update implements cart.CartDataInterface.
 func (repo *cartQuery) Update(userIdLogin int, cartId int, input cart.Core) error {
 	var cartGorm Cart
-
 	tx := repo.db.Where("user_id = ? AND id = ?", userIdLogin, cartId).First(&cartGorm)
 	if tx.Error != nil {
 		return tx.Error
 	}
 
 	cartInputGorm := CoreToModel(input)
-
 	tx = repo.db.Model(&cartGorm).Updates(&cartInputGorm)
 	if tx.Error != nil {
 		return tx.Error
