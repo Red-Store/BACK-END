@@ -10,6 +10,7 @@ type UserResponse struct {
 	UserName     string `json:"user_name" form:"user_name"`
 	Email        string `json:"email" form:"email"`
 	PhotoProfile string `json:"photo_profile" form:"photo_profile"`
+	Role         string `json:"role" form:"role"`
 }
 
 type AdminUserResponse struct {
@@ -31,9 +32,8 @@ type UserProductResponse struct {
 }
 
 type CartUserResponse struct {
-	Name         string `json:"name" form:"name"`
+	Name string `json:"name" form:"name"`
 }
-
 
 func CoreToResponse(data *user.Core) UserResponse {
 	var result = UserResponse{
@@ -41,6 +41,7 @@ func CoreToResponse(data *user.Core) UserResponse {
 		UserName:     data.UserName,
 		Email:        data.Email,
 		PhotoProfile: data.PhotoProfile,
+		Role:         data.Role,
 	}
 	return result
 }

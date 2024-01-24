@@ -19,9 +19,7 @@ type Cart struct {
 
 func CoreToModel(input cart.Core) Cart {
 	return Cart{
-		Quantity:  input.Quantity,
-		UserID:    input.UserID,
-		ProductID: input.ProductID,
+		Quantity: input.Quantity,
 	}
 }
 

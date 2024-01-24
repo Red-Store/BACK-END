@@ -10,10 +10,8 @@ type CartRequest struct {
 	Quantity  int `json:"quantity" form:"quantity"`
 }
 
-func RequestToCore(input CartRequest, userIdLogin, productId uint) cart.Core {
+func RequestToCore(input CartRequest) cart.Core {
 	return cart.Core{
-		UserID:    userIdLogin,
-		Quantity:  input.Quantity,
-		ProductID: productId,
+		Quantity: input.Quantity,
 	}
 }

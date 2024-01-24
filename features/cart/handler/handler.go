@@ -56,7 +56,7 @@ func (handler *CartHandler) UpdateCart(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid", nil))
 	}
 
-	cartCore := RequestToCore(updateCart, uint(userIdLogin), uint(cartID))
+	cartCore := RequestToCore(updateCart)
 
 	errUpdate := handler.cartService.UpdateCart(userIdLogin, cartID, cartCore)
 	if errUpdate != nil {
