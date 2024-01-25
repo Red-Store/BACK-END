@@ -102,6 +102,6 @@ func (handler *CartHandler) GetProductCart(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+errSelect.Error(), nil))
 	}
 
-	var userResult = CoreToResponseList(results)
-	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", userResult))
+	var cartResult = CoreToResponseList(results)
+	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", cartResult))
 }

@@ -52,7 +52,7 @@ func (repo *cartQuery) Insert(userIdLogin int, productId int) error {
 // Select implements cart.CartDataInterface.
 func (repo *cartQuery) Select(userIdLogin int) ([]cart.Core, error) {
 	var cartDataGorms []Cart
-	tx := repo.db.Preload("Product").Preload("Product.User").Where("user_id = ?", userIdLogin).Find(&cartDataGorms)
+	tx := repo.db.Preload("Product").Preload("Product.User").Where("user_id = ? AND id NOT IN (SELECT cart_id FROM order_items WHERE user_id = ?)", userIdLogin, userIdLogin).Find(&cartDataGorms)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
