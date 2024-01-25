@@ -5,6 +5,7 @@ import (
 	"MyEcommerce/features/order"
 	"MyEcommerce/utils/externalapi"
 	"errors"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -23,6 +24,24 @@ func New(db *gorm.DB, mi externalapi.MidtransInterface) order.OrderDataInterface
 
 // InsertOrder implements order.OrderDataInterface.
 func (repo *orderQuery) InsertOrder(userIdLogin int, cartIds []uint, inputOrder order.OrderCore) (*order.OrderCore, error) {
+
+	var totalHargaKeseluruhan int
+	for _, cartId := range cartIds {
+		var cartGorm cd.Cart
+		ts := repo.db.Preload("Product").Where("user_id = ? AND id = ?", userIdLogin, cartId).First(&cartGorm)
+		if ts.Error != nil {
+			return nil, ts.Error
+		}
+		subTotal := cartGorm.Product.Price * cartGorm.Quantity
+		totalHargaKeseluruhan += subTotal
+	}
+
+	log.Println(totalHargaKeseluruhan)
+	log.Println(cartIds)
+	// log.Println(price)
+	// Set the gross amount to the calculated total price
+	inputOrder.GrossAmount = totalHargaKeseluruhan
+
 	payment, errPay := repo.paymentMidtrans.NewOrderPayment(inputOrder)
 	if errPay != nil {
 		return nil, errPay
