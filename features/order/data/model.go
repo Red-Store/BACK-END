@@ -56,9 +56,10 @@ func CoreToModelOrderCancle(input order.OrderCore) Order {
 
 func (o Order) ModelToCoreOrderUser() order.OrderCore {
 	return order.OrderCore{
-		Status: o.Status,
+		Status:      o.Status,
 		GrossAmount: o.GrossAmount,
-		VaNumber: o.VaNumber,
+		VaNumber:    o.VaNumber,
+		Bank:        o.Bank,
 	}
 }
 
