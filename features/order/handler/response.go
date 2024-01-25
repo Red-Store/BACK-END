@@ -96,7 +96,8 @@ func CoreToResponseOrderAdmin(items []order.OrderItemCore) GetOrderAdminResponse
 		orderItems[i] = OrderAdminItemResponse{
 			OrderID: item.OrderID,
 			Product: ph.AdminProductResponse{
-				Name: item.Cart.Product.Name,
+				Name:  item.Cart.Product.Name,
+				Price: item.Cart.Product.Price,
 			},
 			Quantity:    item.Cart.Quantity,
 			CreatedAt:   item.Order.CreatedAt,
