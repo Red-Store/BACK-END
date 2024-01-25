@@ -65,13 +65,30 @@ func (repo *orderQuery) InsertOrder(userIdLogin int, cartIds []uint, inputOrder 
 		}
 	}
 
+	for _, cartId := range cartIds {
+		var cartGorm cd.Cart
+		ts := repo.db.Where("user_id = ? AND id = ?", userIdLogin, cartId).First(&cartGorm)
+		if ts.Error != nil {
+			return nil, ts.Error
+		}
+
+		td := repo.db.Delete(&cartGorm)
+		if td.Error != nil {
+			return nil, td.Error
+		}
+
+		if td.RowsAffected == 0 {
+			return nil, errors.New("error record not found")
+		}
+	}
+
 	return payment, nil
 }
 
 // SelectOrderUser implements order.OrderDataInterface.
 func (repo *orderQuery) SelectOrderUser(userIdLogin int) ([]order.OrderItemCore, error) {
 	var orderItems []OrderItem
-	err := repo.db.Joins("Order").Preload("Cart").Preload("Cart.Product").Preload("Cart.Product.User").Where("user_id = ?", userIdLogin).Find(&orderItems).Error
+	err := repo.db.Unscoped().Joins("Order").Preload("Cart").Preload("Cart.Product").Preload("Cart.Product.User").Where("user_id = ?", userIdLogin).Find(&orderItems).Error
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +104,7 @@ func (repo *orderQuery) SelectOrderUser(userIdLogin int) ([]order.OrderItemCore,
 // SelectOrderAdmin implements order.OrderDataInterface.
 func (repo *orderQuery) SelectOrderAdmin(page, limit int) ([]order.OrderItemCore, error) {
 	var orderItems []OrderItem
-	err := repo.db.Joins("Order").Preload("Cart").Preload("Cart.Product").Limit(limit).Offset((page - 1) * limit).Find(&orderItems).Error
+	err := repo.db.Unscoped().Joins("Order").Preload("Cart").Preload("Cart.Product").Limit(limit).Offset((page - 1) * limit).Find(&orderItems).Error
 	if err != nil {
 		return nil, err
 	}

@@ -34,6 +34,7 @@ type OrderUserItemResponse struct {
 	Status      string                 `json:"status"`
 	GrossAmount int                    `json:"gross_amount"`
 	VaNumber    int                    `json:"va_number"`
+	Bank        string                 `json:"bank"`
 }
 
 type GetOrderUserResponse struct {
@@ -74,6 +75,7 @@ func CoreToResponseOrderUser(data order.OrderCore, items []order.OrderItemCore) 
 			Status:      data.Status,
 			GrossAmount: data.GrossAmount,
 			VaNumber:    data.VaNumber,
+			Bank:        data.Bank,
 		}
 		orderMap[item.OrderID] = append(orderMap[item.OrderID], orderItem)
 	}
