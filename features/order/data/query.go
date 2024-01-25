@@ -5,7 +5,6 @@ import (
 	"MyEcommerce/features/order"
 	"MyEcommerce/utils/externalapi"
 	"errors"
-	"log"
 
 	"gorm.io/gorm"
 )
@@ -36,10 +35,6 @@ func (repo *orderQuery) InsertOrder(userIdLogin int, cartIds []uint, inputOrder 
 		totalHargaKeseluruhan += subTotal
 	}
 
-	log.Println(totalHargaKeseluruhan)
-	log.Println(cartIds)
-	// log.Println(price)
-	// Set the gross amount to the calculated total price
 	inputOrder.GrossAmount = totalHargaKeseluruhan
 
 	payment, errPay := repo.paymentMidtrans.NewOrderPayment(inputOrder)
