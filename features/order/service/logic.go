@@ -15,7 +15,7 @@ func New(repo order.OrderDataInterface) order.OrderServiceInterface {
 	}
 }
 
-func (os *orderService) CreateOrder(userIdLogin int, cartIds []uint, inputOrder order.OrderCore, items []order.OrderItemCore) (*order.OrderCore, error) {
+func (os *orderService) CreateOrder(userIdLogin int, cartIds []uint, inputOrder order.OrderCore) (*order.OrderCore, error) {
 	if len(cartIds) == 0 {
 		return nil, errors.New("masukan barang anda")
 	}
@@ -27,7 +27,7 @@ func (os *orderService) CreateOrder(userIdLogin int, cartIds []uint, inputOrder 
 		return nil, errors.New("total pembayaran anda salah")
 	}
 
-	payment, err := os.orderData.InsertOrder(userIdLogin, cartIds, inputOrder, items)
+	payment, err := os.orderData.InsertOrder(userIdLogin, cartIds, inputOrder)
 	if err != nil {
 		return nil, err
 	}
