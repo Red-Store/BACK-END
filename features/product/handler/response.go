@@ -6,13 +6,13 @@ import (
 )
 
 type ProductResponse struct {
-	ID           uint   `json:"id" form:"id"`
-	Name         string `json:"name" form:"name"`
-	Description  string `json:"description" form:"description"`
-	Category     string `json:"category" form:"category"`
-	Stock        int    `json:"stock" form:"stock"`
-	Price        int    `json:"price" form:"price"`
-	PhotoProduct string `json:"photo_product" form:"photo_product"`
+	ID           uint                        `json:"id" form:"id"`
+	Name         string                      `json:"name" form:"name"`
+	Description  string                      `json:"description" form:"description"`
+	Category     string                      `json:"category" form:"category"`
+	Stock        int                         `json:"stock" form:"stock"`
+	Price        int                         `json:"price" form:"price"`
+	PhotoProduct string                      `json:"photo_product" form:"photo_product"`
 	Users        handler.UserProductResponse `json:"toko" form:"toko"`
 }
 
@@ -25,14 +25,15 @@ type GetAllProductResponse struct {
 }
 
 type CartProductResponse struct {
-	Name         string `json:"name" form:"name"`
-	Price        int    `json:"price" form:"price"`
-	PhotoProduct string `json:"photo_product" form:"photo_product"`
-	Toko        handler.CartUserResponse `json:"toko" form:"toko"`
+	Name         string                   `json:"name" form:"name"`
+	Price        int                      `json:"price" form:"price"`
+	PhotoProduct string                   `json:"photo_product" form:"photo_product"`
+	Toko         handler.CartUserResponse `json:"toko" form:"toko"`
 }
 
 type AdminProductResponse struct {
-	Name         string `json:"name" form:"name"`
+	Name  string `json:"name" form:"name"`
+	Price int    `json:"price" form:"price"`
 }
 
 func CoreToResponse(data product.Core) ProductResponse {
