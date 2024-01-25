@@ -29,9 +29,16 @@ type PaymentResponse struct {
 }
 
 type OrderUserItemResponse struct {
-	Product  ph.CartProductResponse `json:"product"`
-	Quantity int                    `json:"quantity"`
-	Status   string                 `json:"status"`
+	Product     ph.CartProductResponse `json:"product"`
+	Quantity    int                    `json:"quantity"`
+	Status      string                 `json:"status"`
+	GrossAmount int                    `json:"gross_amount"`
+	VaNumber    int                    `json:"va_number"`
+}
+
+type GetOrderUserResponse struct {
+	ID    string                  `json:"order_id"`
+	Order []OrderUserItemResponse `json:"order"`
 }
 
 type OrderAdminItemResponse struct {
@@ -45,36 +52,40 @@ type OrderAdminItemResponse struct {
 	Status      string                  `json:"status"`
 }
 
-type GetOrderUserResponse struct {
-	Order []OrderUserItemResponse `json:"order"`
-}
-
 type GetOrderAdminResponse struct {
 	Order []OrderAdminItemResponse `json:"order"`
 }
 
-func CoreToResponseOrderUser(data order.OrderCore, items []order.OrderItemCore) GetOrderUserResponse {
-	orderItems := make([]OrderUserItemResponse, len(items))
-	for i, item := range items {
+func CoreToResponseOrderUser(data order.OrderCore, items []order.OrderItemCore) []GetOrderUserResponse {
+	orderMap := make(map[string][]OrderUserItemResponse)
+	for _, item := range items {
 		user := uh.CartUserResponse{
 			Name: item.Cart.Product.User.Name,
 		}
 
-		orderItems[i] = OrderUserItemResponse{
+		orderItem := OrderUserItemResponse{
 			Product: ph.CartProductResponse{
 				Name:         item.Cart.Product.Name,
 				Price:        item.Cart.Product.Price,
 				PhotoProduct: item.Cart.Product.PhotoProduct,
 				Toko:         user,
 			},
-			Quantity: item.Cart.Quantity,
-			Status:   data.Status,
+			Quantity:    item.Cart.Quantity,
+			Status:      data.Status,
+			GrossAmount: data.GrossAmount,
+			VaNumber:    data.VaNumber,
 		}
+		orderMap[item.OrderID] = append(orderMap[item.OrderID], orderItem)
 	}
 
-	return GetOrderUserResponse{
-		Order: orderItems,
+	var response []GetOrderUserResponse
+	for id, orderItems := range orderMap {
+		response = append(response, GetOrderUserResponse{
+			ID:    id,
+			Order: orderItems,
+		})
 	}
+	return response
 }
 
 func CoreToResponseOrderAdmin(items []order.OrderItemCore) GetOrderAdminResponse {

@@ -55,12 +55,12 @@ func (handler *OrderHandler) GetOrderUser(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+errSelect.Error(), nil))
 	}
 
-	userResult := make([]GetOrderUserResponse, len(results))
-	for i, result := range results {
-		userResult[i] = CoreToResponseOrderUser(result.Order, []order.OrderItemCore{result})
+	var orderResult []GetOrderUserResponse
+	for _, result := range results {
+		orderResult = append(orderResult, CoreToResponseOrderUser(result.Order, []order.OrderItemCore{result})...)
 	}
 
-	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", userResult))
+	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", orderResult))
 
 }
 
