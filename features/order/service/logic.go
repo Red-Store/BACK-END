@@ -23,10 +23,6 @@ func (os *orderService) CreateOrder(userIdLogin int, cartIds []uint, inputOrder 
 		return nil, errors.New("masukan alamat anda")
 	}
 
-	if inputOrder.GrossAmount == 0 {
-		return nil, errors.New("total pembayaran anda salah")
-	}
-
 	payment, err := os.orderData.InsertOrder(userIdLogin, cartIds, inputOrder)
 	if err != nil {
 		return nil, err
