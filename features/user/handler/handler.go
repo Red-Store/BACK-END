@@ -27,13 +27,13 @@ func (handler *UserHandler) RegisterUser(c echo.Context) error {
 	newUser := UserRequest{}
 	errBind := c.Bind(&newUser)
 	if errBind != nil {
-		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid", nil))
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data, data not valid", nil))
 	}
 
 	userCore := RequestToCore(newUser)
 	errInsert := handler.userService.Create(userCore)
 	if errInsert != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert data "+errInsert.Error(), nil))
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert data. "+errInsert.Error(), nil))
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", nil))
@@ -48,7 +48,7 @@ func (handler *UserHandler) GetUser(c echo.Context) error {
 	}
 
 	var userResult = CoreToResponse(result)
-	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", userResult))
+	return c.JSON(http.StatusOK, responses.WebResponse("success read data", userResult))
 }
 
 func (handler *UserHandler) UpdateUser(c echo.Context) error {
@@ -76,7 +76,7 @@ func (handler *UserHandler) UpdateUser(c echo.Context) error {
 	userCore := UpdateRequestToCore(userData, imageURL)
 	errUpdate := handler.userService.Update(userIdLogin, userCore)
 	if errUpdate != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error update data "+errUpdate.Error(), nil))
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error update data. "+errUpdate.Error(), nil))
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success update data", nil))
@@ -87,7 +87,7 @@ func (handler *UserHandler) DeleteUser(c echo.Context) error {
 
 	errDelete := handler.userService.Delete(userIdLogin)
 	if errDelete != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error delete data "+errDelete.Error(), nil))
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error delete data. "+errDelete.Error(), nil))
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success delete data", nil))
@@ -97,11 +97,11 @@ func (handler *UserHandler) Login(c echo.Context) error {
 	var reqData = LoginRequest{}
 	errBind := c.Bind(&reqData)
 	if errBind != nil {
-		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid", nil))
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data, data not valid", nil))
 	}
 	result, token, err := handler.userService.Login(reqData.Email, reqData.Password)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error login "+err.Error(), nil))
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error login. "+err.Error(), nil))
 	}
 	responseData := map[string]any{
 		"token": token,
@@ -128,5 +128,5 @@ func (handler *UserHandler) GetAdminUserData(c echo.Context) error {
 	}
 
 	var userResult = CoreToResponseList(result)
-	return c.JSON(http.StatusOK, responses.WebResponse("success read data.", userResult))
+	return c.JSON(http.StatusOK, responses.WebResponse("success read data", userResult))
 }
