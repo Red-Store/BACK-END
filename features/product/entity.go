@@ -24,7 +24,7 @@ type ProductDataInterface interface {
 	SelectAll(page, limit int) ([]Core, error)
 	SelectById(IdProduct int) (*Core, error)
 	Update(userIdLogin int, input Core) error
-	Delete(IdProduct int) error
+	Delete(userIdLogin, IdProduct int) error
 	SelectByUserId(userIdLogin int) ([]Core, error)
 	Search(query string) ([]Core, error)
 }

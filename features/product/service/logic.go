@@ -28,7 +28,7 @@ func (ps *productService) Create(userIdLogin int, input product.Core) error {
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 }
 
@@ -58,16 +58,7 @@ func (ps *productService) GetById(IdProduct int) (*product.Core, error) {
 
 // Update implements product.ProductServiceInterface.
 func (ps *productService) Update(userIdLogin int, input product.Core) error {
-	product, err := ps.productData.SelectById(int(input.ID))
-	if err != nil {
-		return err
-	}
-
-	if product.UserID != uint(userIdLogin) {
-		return errors.New("you do not have permission to edit this product")
-	}
-
-	err = ps.productData.Update(userIdLogin, input)
+	err := ps.productData.Update(userIdLogin, input)
 	if err != nil {
 		return err
 	}
@@ -76,19 +67,11 @@ func (ps *productService) Update(userIdLogin int, input product.Core) error {
 
 // Delete implements product.ProductServiceInterface.
 func (ps *productService) Delete(userIdLogin int, IdProduct int) error {
-	product, err := ps.productData.SelectById(IdProduct)
+	err := ps.productData.Delete(userIdLogin, IdProduct)
 	if err != nil {
 		return err
 	}
 
-	if product.UserID != uint(userIdLogin) {
-		return errors.New("you do not have permission to delete this product")
-	}
-
-	err = ps.productData.Delete(IdProduct)
-	if err != nil {
-		return err
-	}
 	return nil
 }
 
