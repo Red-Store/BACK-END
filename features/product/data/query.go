@@ -84,8 +84,8 @@ func (repo *productQuery) Update(userIdLogin int, input product.Core) error {
 }
 
 // Delete implements product.ProductDataInterface.
-func (repo *productQuery) Delete(IdProduct int) error {
-	tx := repo.db.Delete(&Product{}, IdProduct)
+func (repo *productQuery) Delete(userIdLogin, IdProduct int) error {
+	tx := repo.db.Where("id = ? AND user_id = ?",IdProduct, userIdLogin).Delete(&Product{})
 	if tx.Error != nil {
 		return tx.Error
 	}
