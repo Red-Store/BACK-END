@@ -53,6 +53,12 @@ paths:
                   message: 
                     type: string
                     example: success login
+                  name:
+                    type: string
+                    example: arja
+                  role:
+                    type: string
+                    example: user
                   token:
                     type: string
                     example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpM
@@ -85,7 +91,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UsersSchema'
-        description: Created user object
+        description: Created user object (role otomatis diisi dari backend)
         required: true
       responses:
         '200':
@@ -152,7 +158,7 @@ paths:
         - jwtAuth: []
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/EditProfil'
         description: Updated user object
@@ -229,7 +235,38 @@ paths:
 
 
 
-
+  /users/products:
+    get:
+      tags:
+        - Product
+      summary: Get My Product
+      security:
+        - jwtAuth: []
+      responses:
+        '200':
+          description: successful Get Product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGetAllResponse'
+        '400':
+          description: Error Get Product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+        '404':
+          description: Product Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
   /products:
     post:
       tags:
@@ -240,7 +277,7 @@ paths:
         - jwtAuth: []
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/ProductSchema'
       responses:
@@ -325,8 +362,6 @@ paths:
             type: number
             example: 1
           required: true
-      security:
-        - jwtAuth: []
       responses:
         '200':
           description: successful Get Product By Id
@@ -374,7 +409,7 @@ paths:
         - jwtAuth: []
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/ProductSchema'
       responses:
@@ -449,6 +484,43 @@ paths:
                 $ref: '#/components/schemas/Response401'
         '404':
           description: Product Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+  /products/search:
+    get:
+      tags:
+        - Product
+      summary: Search Product
+      parameters:
+        - name: search
+          in: query
+          description: Query string untuk pencarian
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Hasil pencarian ditemukan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGetAllResponse'
+        '400':
+          description: Error Get Product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+        '404':
+          description: Hasil pencarian tidak ditemukan
           content:
             application/json:
               schema:
@@ -553,6 +625,15 @@ paths:
             type: number
             example: 1
           required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  example: 5
       responses:
         '200':
           description: successful Update product
@@ -561,7 +642,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Response200'
         '400':
-          description: Error Add Product
+          description: Error puT Product
           content:
             application/json:
               schema:
@@ -668,10 +749,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response401'
+  /users/orders:
     get:
       tags:
         - Order
-      summary: Get Order
+      summary: Get My Order
       description: This can only be done by the logged in user.
       security:
         - jwtAuth: []
@@ -681,7 +763,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderSchema'
+                $ref: '#/components/schemas/GetOrderSchema'
                 # $ref: '#/components/schemas/ArrayOfCartSchema'
         '400':
           description: Error Get Order
@@ -701,12 +783,72 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Response401'
+  /orders/{id}:
+    put:
+      tags:
+        - Order
+      summary: cancel order by Id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            example: 1
+          required: true
+      security:
+        - jwtAuth: []
+      responses:
+        "200":
+          description: Success cancel order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response200"
+        '400':
+          description: Error cancel order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '404':
+          description: Product Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
   /admin/users:
     get:
       tags:
         - Admin
       summary: Get User
       description: This can only be done by the logged in user.
+      parameters:
+        - name: page
+          in: query
+          description: Nomor halaman yang diminta
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: Jumlah produk per halaman
+          required: false
+          schema:
+            type: integer
+            default: 10
       security:
         - jwtAuth: []
       responses:
@@ -741,6 +883,21 @@ paths:
         - Admin
       summary: Get All Order
       description: This can only be done by the logged in user.
+      parameters:
+        - name: page
+          in: query
+          description: Nomor halaman yang diminta
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: Jumlah produk per halaman
+          required: false
+          schema:
+            type: integer
+            default: 10
       security:
         - jwtAuth: []
       responses:
@@ -749,7 +906,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AdminOrderResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdminOrderResponse'
                 # $ref: '#/components/schemas/ArrayOfCartSchema'
         '400':
           description: Error Get Order
@@ -859,47 +1018,17 @@ components:
           type: string
         user_name:
           type: string
+        email:
+          type: string
         photo_profil:
           type: string
           format: uri
           description: URL of the product photo
-        Orders:
-          type: array
-          items:
-            allOf:
-              - $ref: '#/components/schemas/OrderSchema'
-              - type: object
-                properties:
-                  status:
-                    type: string
       example:
         name: "lendra syaputra"
         user_name: "lendra"
+        email: "lendra@gmail.com"
         photo_profil: 'https://sariroti.com/arjauser.jpg'
-        Orders:
-          - cart_id: 1
-        items:
-          - product:
-              id: 1
-              name: "Samsung"
-              price: 60000
-              photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
-            quantity: 2
-            status: "dibatalkan"
-          - product:
-              id: 2
-              name: "vivo"
-              price: 60000
-              photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
-            quantity: 3
-            status: "selesai"
-        address: 
-          street: "Jalan Veteran No.10"
-          city: "Malang"
-          state: "Indonesia"
-          zip: 10101
-        payment:
-          name: "COD (Cash Or Duel)"
     EditProfil:
       type: object
       properties:
@@ -978,52 +1107,44 @@ components:
         photo_product: 'https://sariroti.com/smartphone/photovivo.jpg'
         users: 
           id: 1
-          name: TOKO ARJA
+          name: "TOKO ARJA"
+          user_name: "@tokoarja"
           photo_profil: 'https://sariroti.com/arjauser.jpg'
     ProductGetAllResponse:
-      type: array
-      items:
-        type: object
         properties:
-          id:
-            type: integer
-          name:
-            type: string
-          price:
-            type: integer
-          photo_product:
-            type: string
-            format: uri
-            description: URL of the product photo
-          users: 
+          Product:
             type: array
             items:
-             $ref: '#/components/schemas/UsersSchema'
-      example:
-      - id: 1
-        name: "Vivo"
-        price: 50000
-        photo_product: 'https://sariroti.com/smartphone/photovivo.jpg'
-        users: 
-          - id: 1
-            name: "TOKO ARJA"
-            photo_profil: 'https://sariroti.com/arjauser.jpg'
-      - id: 2
-        name: "Samsung"
-        price: 60000
-        photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
-        users: 
-          - id: 2
-            name: "TOKO BINTANG"
-            photo_profil: 'https://sariroti.com/bintanguser.jpg'
-      - id: 3
-        name: "Xiaomi"
-        price: 55000
-        photo_product: 'https://sariroti.com/smartphone/photoxiaomi.jpg'
-        users: 
-          - id: 3
-            name: "TOKO CENTRAL"
-            photo_profil: 'https://sariroti.com/centraluser.jpg'
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                price:
+                  type: integer
+                category:
+                  type: string
+                photo_product:
+                  type: string
+                  format: uri
+                  description: URL of the product photo
+            example:
+            - id: 1
+              name: "Vivo"
+              price: 50000
+              category: phone
+              photo_product: 'https://sariroti.com/smartphone/photovivo.jpg'
+            - id: 2
+              name: "Samsung"
+              price: 60000
+              category: phone
+              photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
+            - id: 3
+              name: "Xiaomi"
+              price: 55000
+              category: phone
+              photo_product: 'https://sariroti.com/smartphone/photoxiaomi.jpg'
     CartResponse:
       type: array
       items:
@@ -1039,12 +1160,14 @@ components:
             name: "Samsung"
             price: 60000
             photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
+          cart_id: 2
           quantity: 2
         - product:
             id: 2
             name: "vivo"
             price: 60000
             photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
+          cart_id: 1
           quantity: 3
     AdminUserResponse:
       type: object
@@ -1058,7 +1181,7 @@ components:
         email:
           type: string
           format: email
-        role:
+        status:
           type: string
         createdAt:
           type: string
@@ -1068,14 +1191,14 @@ components:
         name: "John Doe"
         username: "johndoe"
         email: "johndoe@example.com"
-        role: "admin"
+        status: "active"
         createdAt: "2024-01-13T18:22:55Z"
 
     AdminOrderResponse:
       type: object
       properties:
         id:
-          type: integer
+          type: string
         productName:
           type: string
         quantity:
@@ -1083,9 +1206,11 @@ components:
         createdAt:
           type: string
           format: date-time
-        payment:
+        bank:
           type: string
-        totalPrice:
+        price:
+          type: integer
+        gross_amount:
           type: number
           format: float
         address:
@@ -1094,49 +1219,38 @@ components:
           type: string
           enum: [proses, selesai, dibatalkan]
       example:
-        id: 1
+        id: 21421412hjhbhjvgj4124
         productName: "Vivo Y12"
         quantity: 2
         createdAt: "2024-01-13T18:22:55Z"
-        payment: "Credit Card"
-        totalPrice: 3000000
+        bank: "bca"
+        price: 1500000
+        gross_amount: 3000000
         address: "Jalan Merdeka No.123, Jakarta"
-        status: "proses"
-    OrderSchema:
+        status: "pending"
+    GetOrderSchema:
       type: object
       properties:
-        cart_id:
+        id:
           type: integer
-        items:
-            # type: array
-            # $ref: '#/components/schemas/ProductResponse'
+        status:
+          type: string
+        data:
           type: array
           items:
             type: object
             properties:
               product:
-                $ref: '#/components/schemas/ProductResponse'
+                $ref: '#/components/schemas/CartResponse'
               quantity:
                 type: integer
-        address:
-          type: object
-          properties:
-            street:
-              type: string
-            city:
-              type: string
-            state:
-              type: string
-            zip:
-              type: number
-        payment:
-          type: object
-          properties:
-            name:
-              type: string
       example:
-        cart_id: 1
-        items:
+        id: "UID123"
+        status: "pending"
+        va_number: "03219402104i21"
+        bank: "bca"
+        gross_amount: 12000
+        data:
           - product:
               id: 1
               name: "Samsung"
@@ -1149,13 +1263,33 @@ components:
               price: 60000
               photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
             quantity: 3
-        address: 
-          street: "Jalan Veteran No.10"
-          city: "Malang"
-          state: "Indonesia"
-          zip: 10101
+    OrderSchema:
+      type: object
+      properties:
+        cart_id:
+          type: integer
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                $ref: '#/components/schemas/ProductResponse'
+              quantity:
+                type: integer
+        address:
+          properties:
+            name:
+              type: string
         payment:
-          name: "COD (Cash Or Duel)"
+          type: object
+          properties:
+            name:
+              type: string
+      example:
+        cart_id: [1,2]
+        address: "Jalan Veteran No.10"
+        bank: "bca"
   securitySchemes:
     jwtAuth:
       type: http
