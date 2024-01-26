@@ -4,16 +4,19 @@
 Aplikasi E-Commerce ini dirancang untuk memudahkan transaksi jual beli produk secara online. Dibangun dengan menggunakan bahasa pemrograman Golang, aplikasi ini menawarkan performa yang cepat dan stabil.
 
 # ERD
-![Screnshot](utils/images/md/MyERD.png)
+![Screnshot](utils/images/md/myerd.png)
 
 # USERS OPENAPI
-![Screnshot](utils/images/md/usersAPI.png)
+![Screnshot](utils/images/md/userAPI.png)
 
 # PRODUCTS OPENAPI
-![Screnshot](utils/images/md/productAPI.png)
+![Screnshot](utils/images/md/prAPI.png)
 
-# CARTS, ORDERS, ADMIN OPENAPI
-![Screnshot](utils/images/md/cart.png)
+# CARTS, ORDERS, OPENAPI
+![Screnshot](utils/images/md/cartorAPI.png)
+
+# ADMIN OPENAPI
+![Screnshot](utils/images/md/admAPI.png)
 
 ### Fitur Utama
 - Autentikasi dan Manajemen User
