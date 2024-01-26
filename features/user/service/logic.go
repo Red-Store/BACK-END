@@ -56,7 +56,7 @@ func (service *userService) GetById(userIdLogin int) (*user.Core, error) {
 // Update implements user.UserServiceInterface.
 func (service *userService) Update(userIdLogin int, input user.Core) error {
 	if userIdLogin <= 0 {
-		return errors.New("invalid id")
+		return errors.New("invalid id.")
 	}
 
 	if input.Password != "" {
@@ -83,13 +83,13 @@ func (service *userService) Delete(userIdLogin int) error {
 // Login implements user.UserServiceInterface.
 func (service *userService) Login(email string, password string) (data *user.Core, token string, err error) {
 	if email == "" && password == "" {
-		return nil, "", errors.New("email dan password wajib diisi")
+		return nil, "", errors.New("email dan password wajib diisi.")
 	}
 	if email == "" {
-		return nil, "", errors.New("email wajib diisi")
+		return nil, "", errors.New("email wajib diisi.")
 	}
 	if password == "" {
-		return nil, "", errors.New("password wajib diisi")
+		return nil, "", errors.New("password wajib diisi.")
 	}
 
 	data, err = service.userData.Login(email, password)
@@ -115,7 +115,7 @@ func (service *userService) GetAdminUsers(userIdLogin, page, limit int) ([]user.
 		return nil, errVal
 	}
 	if valUser.Role == "user" {
-		return nil, errors.New("Sorry, your role does not have this access")
+		return nil, errors.New("Sorry, your role does not have this access.")
 	}
 
 	if page == 0 {
