@@ -117,10 +117,11 @@ func TestGetOrderAdmin(t *testing.T) {
 	t.Run("default page and limit", func(t *testing.T) {
 		page := 0
 		limit := 0
+		userIdLogin := 1
 
 		repo.On("SelectOrderAdmin", 1, 10).Return(returnData, nil).Once()
 
-		result, err := srv.GetOrderAdmin(page, limit)
+		result, err := srv.GetOrderAdmin(userIdLogin, page, limit)
 
 		assert.NoError(t, err)
 		assert.Equal(t, returnData, result)
@@ -131,10 +132,11 @@ func TestGetOrderAdmin(t *testing.T) {
 	t.Run("error from repository", func(t *testing.T) {
 		page := 1
 		limit := 10
+		userIdLogin := 1
 
 		repo.On("SelectOrderAdmin", page, limit).Return(nil, errors.New("database error")).Once()
 
-		result, err := srv.GetOrderAdmin(page, limit)
+		result, err := srv.GetOrderAdmin(userIdLogin, page, limit)
 
 		assert.Error(t, err)
 		assert.Nil(t, result)
@@ -146,10 +148,11 @@ func TestGetOrderAdmin(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		page := 1
 		limit := 10
+		userIdLogin := 1
 
 		repo.On("SelectOrderAdmin", page, limit).Return(returnData, nil).Once()
 
-		result, err := srv.GetOrderAdmin(page, limit)
+		result, err := srv.GetOrderAdmin(userIdLogin, page, limit)
 
 		assert.NoError(t, err)
 		assert.Equal(t, returnData, result)
@@ -178,41 +181,41 @@ func TestCancleOrder(t *testing.T) {
 }
 
 func TestWebhoocksService(t *testing.T) {
-    repo := new(mocks.OrderData)
-    srv := New(repo)
+	repo := new(mocks.OrderData)
+	srv := New(repo)
 
-    reqNotif := order.OrderCore{
-        ID: "oreifin",
-    }
+	reqNotif := order.OrderCore{
+		ID: "oreifin",
+	}
 
 	t.Run("invalid order id", func(t *testing.T) {
-        idOrder := reqNotif.ID
-        reqNotif.ID = ""
-        err := srv.WebhoocksService(reqNotif)
+		idOrder := reqNotif.ID
+		reqNotif.ID = ""
+		err := srv.WebhoocksService(reqNotif)
 
-        assert.Error(t, err)
-        assert.Contains(t, err.Error(), "invalid order id")
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "invalid order id")
 
-        reqNotif.ID = idOrder
-    })
+		reqNotif.ID = idOrder
+	})
 
-	 t.Run("error from repository", func(t *testing.T) {
-        repo.On("WebhoocksData", reqNotif).Return(errors.New("database error")).Once()
+	t.Run("error from repository", func(t *testing.T) {
+		repo.On("WebhoocksData", reqNotif).Return(errors.New("database error")).Once()
 
-        err := srv.WebhoocksService(reqNotif)
+		err := srv.WebhoocksService(reqNotif)
 
-        assert.Error(t, err)
-        assert.Equal(t, "database error", err.Error())
+		assert.Error(t, err)
+		assert.Equal(t, "database error", err.Error())
 
-        repo.AssertExpectations(t)
-    })
+		repo.AssertExpectations(t)
+	})
 
-    t.Run("success", func(t *testing.T) {
-        repo.On("WebhoocksData", reqNotif).Return(nil).Once()
+	t.Run("success", func(t *testing.T) {
+		repo.On("WebhoocksData", reqNotif).Return(nil).Once()
 
-        err := srv.WebhoocksService(reqNotif)
+		err := srv.WebhoocksService(reqNotif)
 
-        assert.NoError(t, err)
-        repo.AssertExpectations(t)
-    })
+		assert.NoError(t, err)
+		repo.AssertExpectations(t)
+	})
 }

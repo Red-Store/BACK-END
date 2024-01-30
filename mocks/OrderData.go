@@ -61,9 +61,9 @@ func (_m *OrderData) InsertOrder(userIdLogin int, cartIds []uint, inputOrder ord
 	return r0, r1
 }
 
-// SelectOrderAdmin provides a mock function with given fields: page, limit
-func (_m *OrderData) SelectOrderAdmin(page int, limit int) ([]order.OrderItemCore, error) {
-	ret := _m.Called(page, limit)
+// SelectOrderAdmin provides a mock function with given fields: userIdLogin, page, limit
+func (_m *OrderData) SelectOrderAdmin(userIdLogin int, page int, limit int) ([]order.OrderItemCore, error) {
+	ret := _m.Called(userIdLogin, page, limit)
 
 	if len(ret) == 0 {
 		panic("no return value specified for SelectOrderAdmin")
@@ -71,19 +71,19 @@ func (_m *OrderData) SelectOrderAdmin(page int, limit int) ([]order.OrderItemCor
 
 	var r0 []order.OrderItemCore
 	var r1 error
-	if rf, ok := ret.Get(0).(func(int, int) ([]order.OrderItemCore, error)); ok {
-		return rf(page, limit)
+	if rf, ok := ret.Get(0).(func(int, int, int) ([]order.OrderItemCore, error)); ok {
+		return rf(userIdLogin, page, limit)
 	}
-	if rf, ok := ret.Get(0).(func(int, int) []order.OrderItemCore); ok {
-		r0 = rf(page, limit)
+	if rf, ok := ret.Get(0).(func(int, int, int) []order.OrderItemCore); ok {
+		r0 = rf(userIdLogin, page, limit)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]order.OrderItemCore)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(int, int) error); ok {
-		r1 = rf(page, limit)
+	if rf, ok := ret.Get(1).(func(int, int, int) error); ok {
+		r1 = rf(userIdLogin, page, limit)
 	} else {
 		r1 = ret.Error(1)
 	}
