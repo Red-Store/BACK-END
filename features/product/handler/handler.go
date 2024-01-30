@@ -35,6 +35,14 @@ func (handler *ProductHandler) CreateProduct(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid", nil))
 	}
 
+	if newProduct.Name == "" {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("nama produk tidak boleh kosong", nil))
+	}
+
+	if newProduct.Price <= 0 {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("harga produk harus lebih besar dari 0", nil))
+	}
+
 	fileHeader, err := c.FormFile("photo_product")
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse("error retrieving the file", nil))
@@ -50,10 +58,10 @@ func (handler *ProductHandler) CreateProduct(c echo.Context) error {
 
 	errInsert := handler.productService.Create(userIdLogin, productCore)
 	if errInsert != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse(errInsert.Error(), nil))
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error create product", nil))
 	}
 
-	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", nil))
+	return c.JSON(http.StatusOK, responses.WebResponse("success insert product", nil))
 }
 
 func (handler *ProductHandler) GetAllProduct(c echo.Context) error {
