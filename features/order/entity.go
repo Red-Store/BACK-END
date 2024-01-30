@@ -60,7 +60,7 @@ type Payment struct {
 type OrderDataInterface interface {
 	InsertOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore) (*OrderCore, error)
 	SelectOrderUser(userIdLogin int) ([]OrderItemCore, error)
-	SelectOrderAdmin(page, limit int) ([]OrderItemCore, error)
+	SelectOrderAdmin(userIdLogin, page, limit int) ([]OrderItemCore, error)
 	CancleOrder(userIdLogin int, orderId string, orderCore OrderCore) error
 	WebhoocksData(reqNotif OrderCore) error
 }
@@ -69,7 +69,7 @@ type OrderDataInterface interface {
 type OrderServiceInterface interface {
 	CreateOrder(userIdLogin int, cartIds []uint, inputOrder OrderCore) (*OrderCore, error)
 	GetOrderUser(userIdLogin int) ([]OrderItemCore, error)
-	GetOrderAdmin(page, limit int) ([]OrderItemCore, error)
+	GetOrderAdmin(userIdLogin, page, limit int) ([]OrderItemCore, error)
 	CancleOrder(userIdLogin int, orderId string, orderCore OrderCore) error
 	WebhoocksService(reqNotif OrderCore) error
 }

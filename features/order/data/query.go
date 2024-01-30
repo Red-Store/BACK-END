@@ -3,6 +3,7 @@ package data
 import (
 	cd "MyEcommerce/features/cart/data"
 	"MyEcommerce/features/order"
+	"MyEcommerce/features/user/data"
 	"MyEcommerce/utils/externalapi"
 	"errors"
 
@@ -116,7 +117,13 @@ func (repo *orderQuery) SelectOrderUser(userIdLogin int) ([]order.OrderItemCore,
 }
 
 // SelectOrderAdmin implements order.OrderDataInterface.
-func (repo *orderQuery) SelectOrderAdmin(page, limit int) ([]order.OrderItemCore, error) {
+func (repo *orderQuery) SelectOrderAdmin(userIdLogin, page, limit int) ([]order.OrderItemCore, error) {
+	var userDataGorm data.User
+	tx := repo.db.Where("role = 'admin' AND id = ?", userIdLogin).First(&userDataGorm, userIdLogin)
+	if tx.Error != nil {
+		return nil, errors.New("Sorry, your role does not have this access.")
+	}
+
 	var orderItems []OrderItem
 	err := repo.db.Unscoped().Joins("Order").Preload("Cart").Preload("Cart.Product").Limit(limit).Offset((page - 1) * limit).Find(&orderItems).Error
 	if err != nil {
