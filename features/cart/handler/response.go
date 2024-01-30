@@ -2,9 +2,8 @@ package handler
 
 import (
 	"MyEcommerce/features/cart"
-	ph"MyEcommerce/features/product/handler"
-	uh"MyEcommerce/features/user/handler"
-
+	ph "MyEcommerce/features/product/handler"
+	uh "MyEcommerce/features/user/handler"
 )
 
 type CartResponse struct {
@@ -21,8 +20,9 @@ func CoreToResponse(data cart.Core) CartResponse {
 	productResponse := ph.CartProductResponse{
 		Name:         data.Product.Name,
 		Price:        data.Product.Price,
+		Stock:        data.Product.Stock,
 		PhotoProduct: data.Product.PhotoProduct,
-		Toko:        userResponse,
+		Toko:         userResponse,
 	}
 
 	return CartResponse{
