@@ -27,6 +27,7 @@ type GetAllProductResponse struct {
 type CartProductResponse struct {
 	Name         string                   `json:"name" form:"name"`
 	Price        int                      `json:"price" form:"price"`
+	Stock        int                      `json:"stock" form:"stock"`
 	PhotoProduct string                   `json:"photo_product" form:"photo_product"`
 	Toko         handler.CartUserResponse `json:"toko" form:"toko"`
 }

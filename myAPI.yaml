@@ -8,10 +8,12 @@ info:
     email: l3nteam@gmail.com
 servers:
   # Added by API Auto Mocking Plugin
-  - description: E-commerce App
-    url:  https://virtserver.swaggerhub.com/L3NONEONE_1/EcommerceAppProject/1.0.0
-  - description: Local
+  - description: Local Server
     url: 'http://localhost:8000'
+  - description: Swagger Server
+    url:  https://virtserver.swaggerhub.com/L3NONEONE_1/EcommerceAppProject/1.0.0
+  - description: Deploy Server
+    url: 'http://l3n.my.id'
 tags:
   - name: Auth
     description: API AUTH
@@ -1158,6 +1160,7 @@ components:
         - product:
             id: 1
             name: "Samsung"
+            stock: 9
             price: 60000
             photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
           cart_id: 2
@@ -1165,6 +1168,7 @@ components:
         - product:
             id: 2
             name: "vivo"
+            stock: 10
             price: 60000
             photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
           cart_id: 1
