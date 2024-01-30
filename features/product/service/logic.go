@@ -37,7 +37,7 @@ func (ps *productService) Create(userIdLogin int, input product.Core) error {
 }
 
 // GettAll implements product.ProductServiceInterface.
-func (ps *productService) GetAll(page, limit int) ([]product.Core, error) {
+func (ps *productService) GetAll(page, limit int, category string) ([]product.Core, error) {
 	if page == 0 {
 		page = 1
 	}
@@ -46,7 +46,7 @@ func (ps *productService) GetAll(page, limit int) ([]product.Core, error) {
 		limit = 8
 	}
 
-	products, err := ps.productData.SelectAll(page, limit)
+	products, err := ps.productData.SelectAll(page, limit, category)
 	if err != nil {
 		return nil, err
 	}

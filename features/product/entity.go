@@ -21,7 +21,7 @@ type Core struct {
 
 type ProductDataInterface interface {
 	Insert(userIdLogin int, input Core) error
-	SelectAll(page, limit int) ([]Core, error)
+	SelectAll(page, limit int, category string) ([]Core, error)
 	SelectById(IdProduct int) (*Core, error)
 	Update(userIdLogin int, input Core) error
 	Delete(userIdLogin, IdProduct int) error
@@ -32,7 +32,7 @@ type ProductDataInterface interface {
 // interface untuk Service Layer
 type ProductServiceInterface interface {
 	Create(userIdLogin int, input Core) error
-	GetAll(page, limit int) ([]Core, error)
+	GetAll(page, limit int, category string) ([]Core, error)
 	GetById(IdProduct int) (*Core, error)
 	Update(userIdLogin int, input Core) error
 	Delete(userIdLogin, IdProduct int) error
