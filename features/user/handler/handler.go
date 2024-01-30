@@ -7,6 +7,7 @@ import (
 	"MyEcommerce/utils/responses"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -33,7 +34,11 @@ func (handler *UserHandler) RegisterUser(c echo.Context) error {
 	userCore := RequestToCore(newUser)
 	errInsert := handler.userService.Create(userCore)
 	if errInsert != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert data. "+errInsert.Error(), nil))
+		if strings.Contains(errInsert.Error(), "Error 1062 (23000): Duplicate entry") {
+			return c.JSON(http.StatusBadRequest, responses.WebResponse("error insert data. "+errInsert.Error(), nil))
+		} else {
+			return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert data. "+errInsert.Error(), nil))
+		}
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", nil))
@@ -76,7 +81,11 @@ func (handler *UserHandler) UpdateUser(c echo.Context) error {
 	userCore := UpdateRequestToCore(userData, imageURL)
 	errUpdate := handler.userService.Update(userIdLogin, userCore)
 	if errUpdate != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error update data. "+errUpdate.Error(), nil))
+		if strings.Contains(errUpdate.Error(), "Error 1062 (23000): Duplicate entry") {
+			return c.JSON(http.StatusBadRequest, responses.WebResponse("error update data. "+errUpdate.Error(), nil))
+		} else {
+			return c.JSON(http.StatusInternalServerError, responses.WebResponse("error update data. "+errUpdate.Error(), nil))
+		}
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success update data", nil))
@@ -87,7 +96,11 @@ func (handler *UserHandler) DeleteUser(c echo.Context) error {
 
 	errDelete := handler.userService.Delete(userIdLogin)
 	if errDelete != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error delete data. "+errDelete.Error(), nil))
+		if strings.Contains(errDelete.Error(), "error record not found") {
+			return c.JSON(http.StatusNotFound, responses.WebResponse("error delete data. "+errDelete.Error(), nil))
+		} else {
+			return c.JSON(http.StatusInternalServerError, responses.WebResponse("error delete data. "+errDelete.Error(), nil))
+		}
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success delete data", nil))
@@ -101,7 +114,15 @@ func (handler *UserHandler) Login(c echo.Context) error {
 	}
 	result, token, err := handler.userService.Login(reqData.Email, reqData.Password)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error login. "+err.Error(), nil))
+		if strings.Contains(err.Error(), "email wajib diisi.") {
+			return c.JSON(http.StatusUnauthorized, responses.WebResponse("error login. "+err.Error(), nil))
+		} else if strings.Contains(err.Error(), "password wajib diisi.") {
+			return c.JSON(http.StatusUnauthorized, responses.WebResponse("error login. "+err.Error(), nil))
+		} else if strings.Contains(err.Error(), "password tidak sesuai.") {
+			return c.JSON(http.StatusUnauthorized, responses.WebResponse("error login. "+err.Error(), nil))
+		} else {
+			return c.JSON(http.StatusInternalServerError, responses.WebResponse("error login. "+err.Error(), nil))
+		}
 	}
 	responseData := map[string]any{
 		"token": token,
