@@ -50,7 +50,7 @@ func (handler *ProductHandler) CreateProduct(c echo.Context) error {
 
 	errInsert := handler.productService.Create(userIdLogin, productCore)
 	if errInsert != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error insert data", nil))
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse(errInsert.Error(), nil))
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success insert data", nil))
@@ -78,7 +78,7 @@ func (handler *ProductHandler) GetProductById(c echo.Context) error {
 
 	result, errSelect := handler.productService.GetById(productID)
 	if errSelect != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+errSelect.Error(), nil))
+		return c.JSON(http.StatusNotFound, responses.WebResponse("product not found", nil))
 	}
 
 	var productResult = CoreToResponse(*result)
@@ -146,6 +146,9 @@ func (handler *ProductHandler) DeleteProductById(c echo.Context) error {
 		if errDelete.Error() == "you do not have permission to delete this product" {
 			return c.JSON(http.StatusForbidden, responses.WebResponse("you do not have permission to delete this product", nil))
 		}
+		if errDelete.Error() == "product not found" {
+			return c.JSON(http.StatusNotFound, responses.WebResponse("product not found", nil))
+		}
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error deleting data", nil))
 	}
 
@@ -176,6 +179,10 @@ func (handler *ProductHandler) SearchProduct(c echo.Context) error {
 	products, err := handler.productService.Search(query)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data", nil))
+	}
+
+	if len(products) == 0 {
+		return c.JSON(http.StatusNotFound, responses.WebResponse("The provided search query is not valid. Please provide a valid search term.", nil))
 	}
 
 	productResponses := CoreToResponseListGetAllProduct(products)

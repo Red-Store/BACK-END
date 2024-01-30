@@ -89,6 +89,9 @@ func (repo *productQuery) Delete(userIdLogin, IdProduct int) error {
 	if tx.Error != nil {
 		return tx.Error
 	}
+	if tx.RowsAffected == 0 {
+		return errors.New("product not found")
+	}
 	return nil
 }
 

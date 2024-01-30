@@ -7,7 +7,7 @@ import (
 
 type Core struct {
 	ID           uint
-	Name         string
+	Name         string `validate:"required"`
 	Description  string
 	Category     string
 	Stock        int
