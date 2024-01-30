@@ -35,11 +35,18 @@ func (repo *productQuery) Insert(userIdLogin int, input product.Core) error {
 }
 
 // SelectAll implements product.ProductDataInterface.
-func (repo *productQuery) SelectAll(page, limit int) ([]product.Core, error) {
+func (repo *productQuery) SelectAll(page, limit int, category string) ([]product.Core, error) {
 	var products []Product
-	err := repo.db.Order("created_at desc").Limit(limit).Offset((page - 1) * limit).Find(&products).Error
-	if err != nil {
-		return nil, err
+	if category == "" {
+		err := repo.db.Order("created_at desc").Limit(limit).Offset((page - 1) * limit).Find(&products).Error
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		err := repo.db.Order("created_at desc").Limit(limit).Offset((page-1)*limit).Where("category = ?", category).Find(&products).Error
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	var productCores []product.Core
@@ -85,7 +92,7 @@ func (repo *productQuery) Update(userIdLogin int, input product.Core) error {
 
 // Delete implements product.ProductDataInterface.
 func (repo *productQuery) Delete(userIdLogin, IdProduct int) error {
-	tx := repo.db.Where("id = ? AND user_id = ?",IdProduct, userIdLogin).Delete(&Product{})
+	tx := repo.db.Where("id = ? AND user_id = ?", IdProduct, userIdLogin).Delete(&Product{})
 	if tx.Error != nil {
 		return tx.Error
 	}

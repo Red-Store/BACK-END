@@ -67,8 +67,9 @@ func (handler *ProductHandler) CreateProduct(c echo.Context) error {
 func (handler *ProductHandler) GetAllProduct(c echo.Context) error {
 	page, _ := strconv.Atoi(c.QueryParam("page"))
 	limit, _ := strconv.Atoi(c.QueryParam("limit"))
+	category := c.QueryParam("category")
 
-	products, err := handler.productService.GetAll(page, limit)
+	products, err := handler.productService.GetAll(page, limit, category)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error get data", nil))
 	}
