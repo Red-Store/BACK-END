@@ -134,14 +134,9 @@ func (handler *UserHandler) Login(c echo.Context) error {
 
 func (handler *UserHandler) GetAdminUserData(c echo.Context) error {
 	userIdLogin := middlewares.ExtractTokenUserId(c)
-	page, errPage := strconv.Atoi(c.QueryParam("page"))
-	if errPage != nil {
-		return c.JSON(http.StatusBadRequest, responses.WebResponse("error. page should be number", nil))
-	}
-	limit, errLimit := strconv.Atoi(c.QueryParam("limit"))
-	if errLimit != nil {
-		return c.JSON(http.StatusBadRequest, responses.WebResponse("error. limit should be number", nil))
-	}
+	page, _ := strconv.Atoi(c.QueryParam("page"))
+	limit, _ := strconv.Atoi(c.QueryParam("limit"))
+	
 
 	result, errSelect, totalPage := handler.userService.GetAdminUsers(userIdLogin, page, limit)
 	if errSelect != nil {
