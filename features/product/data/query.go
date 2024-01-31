@@ -35,26 +35,47 @@ func (repo *productQuery) Insert(userIdLogin int, input product.Core) error {
 }
 
 // SelectAll implements product.ProductDataInterface.
-func (repo *productQuery) SelectAll(page, limit int, category string) ([]product.Core, error) {
+func (repo *productQuery) SelectAll(page, limit int, category string) ([]product.Core, int, error) {
 	var products []Product
-	if category == "" {
-		err := repo.db.Order("created_at desc").Limit(limit).Offset((page - 1) * limit).Find(&products).Error
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		err := repo.db.Order("created_at desc").Limit(limit).Offset((page-1)*limit).Where("category = ?", category).Find(&products).Error
-		if err != nil {
-			return nil, err
-		}
+	query := repo.db.Order("created_at desc")
+	if category != "" {
+		query = query.Where("category = ?", category)
 	}
+
+	
+	var totalData int64
+	err := query.Model(&products).Count(&totalData).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	totalPage := int((totalData + int64(limit) - 1) / int64(limit))
+
+	// var products []Product
+    // if category == "" {
+    //     err := repo.db.Order("created_at desc").Limit(limit).Offset((page - 1) * limit).Find(&products).Error
+    //     if err != nil {
+    //         return nil, err
+    //     }
+    // } else {
+    //     err := repo.db.Order("created_at desc").Limit(limit).Offset((page-1)*limit).Where("category = ?", category).Find(&products).Error
+    //     if err != nil {
+    //         return nil, err
+    //     }
+    // }
+
+	err = query.Limit(limit).Offset((page - 1) * limit).Find(&products).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
 
 	var productCores []product.Core
 	for _, p := range products {
 		productCores = append(productCores, p.ModelToCore())
 	}
 
-	return productCores, nil
+	return productCores, totalPage, nil
 }
 
 // SelectById implements product.ProductDataInterface.
