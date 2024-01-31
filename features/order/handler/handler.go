@@ -70,14 +70,10 @@ func (handler *OrderHandler) GetOrderAdmin(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, responses.WebResponse("Unauthorized user", nil))
 	}
 
-	page, errPage := strconv.Atoi(c.QueryParam("page"))
-	if errPage != nil {
-		return c.JSON(http.StatusBadRequest, responses.WebResponse("error. page should be number", nil))
-	}
-	limit, errLimit := strconv.Atoi(c.QueryParam("limit"))
-	if errLimit != nil {
-		return c.JSON(http.StatusBadRequest, responses.WebResponse("error. limit should be number", nil))
-	}
+	page, _ := strconv.Atoi(c.QueryParam("page"))
+	
+	limit, _ := strconv.Atoi(c.QueryParam("limit"))
+	
 
 	results, errSelect := handler.orderService.GetOrderAdmin(userIdLogin, page, limit)
 	if errSelect != nil {
