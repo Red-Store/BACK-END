@@ -143,11 +143,11 @@ func (handler *UserHandler) GetAdminUserData(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse("error. limit should be number", nil))
 	}
 
-	result, errSelect := handler.userService.GetAdminUsers(userIdLogin, page, limit)
+	result, errSelect, totalPage := handler.userService.GetAdminUsers(userIdLogin, page, limit)
 	if errSelect != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+errSelect.Error(), nil))
 	}
 
 	var userResult = CoreToResponseList(result)
-	return c.JSON(http.StatusOK, responses.WebResponse("success read data", userResult))
+	return c.JSON(http.StatusOK, responses.WebResponsePagi("success read data", userResult, totalPage))
 }

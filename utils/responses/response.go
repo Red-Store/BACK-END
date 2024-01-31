@@ -11,3 +11,17 @@ func WebResponse(message string, data interface{}) MapResponse {
 		Data:    data,
 	}
 }
+
+type MapResponsePagi struct {
+	Message   string      `json:"message"`
+	TotalPage int         `json:"total_page"`
+	Data      interface{} `json:"data,omitempty"`
+}
+
+func WebResponsePagi(message string, data interface{}, totalPage int) MapResponsePagi {
+	return MapResponsePagi{
+		Message:   message,
+		TotalPage: totalPage,
+		Data:      data,
+	}
+}

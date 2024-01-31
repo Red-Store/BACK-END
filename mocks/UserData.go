@@ -80,7 +80,7 @@ func (_m *UserData) Login(email string, password string) (*user.Core, error) {
 }
 
 // SelectAdminUsers provides a mock function with given fields: page, limit
-func (_m *UserData) SelectAdminUsers(page int, limit int) ([]user.Core, error) {
+func (_m *UserData) SelectAdminUsers(page int, limit int) ([]user.Core, error, int) {
 	ret := _m.Called(page, limit)
 
 	if len(ret) == 0 {
@@ -89,7 +89,8 @@ func (_m *UserData) SelectAdminUsers(page int, limit int) ([]user.Core, error) {
 
 	var r0 []user.Core
 	var r1 error
-	if rf, ok := ret.Get(0).(func(int, int) ([]user.Core, error)); ok {
+	var r2 int
+	if rf, ok := ret.Get(0).(func(int, int) ([]user.Core, error, int)); ok {
 		return rf(page, limit)
 	}
 	if rf, ok := ret.Get(0).(func(int, int) []user.Core); ok {
@@ -106,7 +107,13 @@ func (_m *UserData) SelectAdminUsers(page int, limit int) ([]user.Core, error) {
 		r1 = ret.Error(1)
 	}
 
-	return r0, r1
+	if rf, ok := ret.Get(2).(func(int, int) int); ok {
+		r2 = rf(page, limit)
+	} else {
+		r2 = ret.Get(2).(int)
+	}
+
+	return r0, r1, r2
 }
 
 // SelectById provides a mock function with given fields: userIdLogin

@@ -109,13 +109,13 @@ func (service *userService) Login(email string, password string) (data *user.Cor
 }
 
 // GetAdminUsers implements user.UserServiceInterface.
-func (service *userService) GetAdminUsers(userIdLogin, page, limit int) ([]user.Core, error) {
+func (service *userService) GetAdminUsers(userIdLogin, page, limit int) ([]user.Core, error, int) {
 	valUser, errVal := service.userData.SelectById(userIdLogin)
 	if errVal != nil {
-		return nil, errVal
+		return nil, errVal, 0
 	}
 	if valUser.Role == "user" {
-		return nil, errors.New("Sorry, your role does not have this access.")
+		return nil, errors.New("Sorry, your role does not have this access."), 0
 	}
 
 	if page == 0 {
@@ -126,6 +126,6 @@ func (service *userService) GetAdminUsers(userIdLogin, page, limit int) ([]user.
 		limit = 10
 	}
 
-	result, err := service.userData.SelectAdminUsers(page, limit)
-	return result, err
+	result, err, totalPage := service.userData.SelectAdminUsers(page, limit)
+	return result, err, totalPage
 }

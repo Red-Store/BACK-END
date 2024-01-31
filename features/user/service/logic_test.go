@@ -254,11 +254,12 @@ func TestGetAdminUsers(t *testing.T) {
 	t.Run("default page and limit", func(t *testing.T) {
 		page := 0
 		limit := 0
+		totalPage := 2
 
 		repo.On("SelectById", 1).Return(&userData, nil).Once()
-		repo.On("SelectAdminUsers", 1, 10).Return(returnData, nil).Once()
+		repo.On("SelectAdminUsers", 1, 10).Return(returnData, nil, totalPage).Once()
 
-		result, err := userService.GetAdminUsers(1, page, limit)
+		result, err, _ := userService.GetAdminUsers(1, page, limit)
 
 		assert.NoError(t, err)
 		assert.Equal(t, returnData, result)
@@ -272,7 +273,7 @@ func TestGetAdminUsers(t *testing.T) {
 
 		repo.On("SelectById", 1).Return(nil, errors.New("user not found")).Once()
 
-		result, err := userService.GetAdminUsers(1, page, limit)
+		result, err, _ := userService.GetAdminUsers(1, page, limit)
 
 		assert.Error(t, err)
 		assert.Nil(t, result)
@@ -293,7 +294,7 @@ func TestGetAdminUsers(t *testing.T) {
 
 		repo.On("SelectById", 1).Return(&userData, nil).Once()
 
-		result, err := userService.GetAdminUsers(1, page, limit)
+		result, err, _ := userService.GetAdminUsers(1, page, limit)
 
 		assert.Error(t, err)
 		assert.Nil(t, result)
@@ -305,11 +306,12 @@ func TestGetAdminUsers(t *testing.T) {
 	t.Run("error from repository", func(t *testing.T) {
 		page := 1
 		limit := 10
+		totalPage := 2
 
 		repo.On("SelectById", 1).Return(&userData, nil).Once()
-		repo.On("SelectAdminUsers", page, limit).Return(nil, errors.New("database error")).Once()
+		repo.On("SelectAdminUsers", page, limit).Return(nil, errors.New("database error"), totalPage).Once()
 
-		result, err := userService.GetAdminUsers(1, page, limit)
+		result, err, _ := userService.GetAdminUsers(1, page, limit)
 
 		assert.Error(t, err)
 		assert.Nil(t, result)
@@ -321,11 +323,12 @@ func TestGetAdminUsers(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		page := 1
 		limit := 10
+		totalPage := 2
 
 		repo.On("SelectById", 1).Return(&userData, nil).Once()
-		repo.On("SelectAdminUsers", page, limit).Return(returnData, nil).Once()
+		repo.On("SelectAdminUsers", page, limit).Return(returnData, nil, totalPage).Once()
 
-		result, err := userService.GetAdminUsers(1, page, limit)
+		result, err, _ := userService.GetAdminUsers(1, page, limit)
 
 		assert.NoError(t, err)
 		assert.Equal(t, returnData, result)

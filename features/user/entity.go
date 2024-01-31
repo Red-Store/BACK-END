@@ -22,7 +22,7 @@ type UserDataInterface interface {
 	Update(userIdLogin int, input Core) error
 	Delete(userIdLogin int) error
 	Login(email, password string) (data *Core, err error)
-	SelectAdminUsers(page, limit int) ([]Core, error)
+	SelectAdminUsers(page, limit int) ([]Core, error, int)
 }
 
 // interface untuk Service Layer
@@ -32,5 +32,5 @@ type UserServiceInterface interface {
 	Update(userIdLogin int, input Core) error
 	Delete(userIdLogin int) error
 	Login(email, password string) (data *Core, token string, err error)
-	GetAdminUsers(userIdLogin, page, limit int) ([]Core, error)
+	GetAdminUsers(userIdLogin, page, limit int) ([]Core, error, int)
 }
