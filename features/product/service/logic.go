@@ -3,19 +3,15 @@ package service
 import (
 	"MyEcommerce/features/product"
 	"errors"
-
-	"github.com/go-playground/validator/v10"
 )
 
 type productService struct {
 	productData product.ProductDataInterface
-	validate    *validator.Validate
 }
 
 func New(repo product.ProductDataInterface) product.ProductServiceInterface {
 	return &productService{
 		productData: repo,
-		validate:    validator.New(),
 	}
 }
 
