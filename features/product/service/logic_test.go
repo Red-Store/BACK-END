@@ -98,7 +98,7 @@ func TestGetAll(t *testing.T) {
 
 		repo.On("SelectAll", 1, 8).Return(returnData, nil).Once()
 
-		result, err := srv.GetAll(page, limit, category)
+		result, _, err := srv.GetAll(page, limit, category)
 
 		assert.NoError(t, err)
 		assert.Equal(t, returnData, result)
@@ -113,7 +113,7 @@ func TestGetAll(t *testing.T) {
 
 		repo.On("SelectAll", page, limit).Return(nil, errors.New("database error")).Once()
 
-		result, err := srv.GetAll(page, limit, category)
+		result, _, err := srv.GetAll(page, limit, category)
 
 		assert.Error(t, err)
 		assert.Nil(t, result)
@@ -129,7 +129,7 @@ func TestGetAll(t *testing.T) {
 
 		repo.On("SelectAll", page, limit).Return(returnData, nil).Once()
 
-		result, err := srv.GetAll(page, limit, category)
+		result, _, err := srv.GetAll(page, limit, category)
 
 		assert.NoError(t, err)
 		assert.Equal(t, returnData, result)

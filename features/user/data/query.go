@@ -102,5 +102,6 @@ func (repo *userQuery) SelectAdminUsers(page, limit int) ([]user.Core, error, in
 		var usersCore = value.ModelToCoreAdmin()
 		usersDataCore = append(usersDataCore, usersCore)
 	}
+
 	return usersDataCore, nil, int(totalPage)
 }

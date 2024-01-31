@@ -69,14 +69,14 @@ func (handler *ProductHandler) GetAllProduct(c echo.Context) error {
 	limit, _ := strconv.Atoi(c.QueryParam("limit"))
 	category := c.QueryParam("category")
 
-	products, err := handler.productService.GetAll(page, limit, category)
+	products, totalPage, err := handler.productService.GetAll(page, limit, category)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error get data", nil))
 	}
 
 	productResponses := CoreToResponseListGetAllProduct(products)
 
-	return c.JSON(http.StatusOK, responses.WebResponse("success get data", productResponses))
+	return c.JSON(http.StatusOK, responses.WebResponsePagi("success get data", productResponses, totalPage))
 }
 
 func (handler *ProductHandler) GetProductById(c echo.Context) error {
