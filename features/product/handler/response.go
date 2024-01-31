@@ -21,6 +21,7 @@ type GetAllProductResponse struct {
 	Name         string `json:"name" form:"name"`
 	Category     string `json:"category" form:"category"`
 	Price        int    `json:"price" form:"price"`
+	Stock        int    `json:"stock" form:"stock"`
 	PhotoProduct string `json:"photo_product" form:"photo_product"`
 }
 
@@ -62,6 +63,7 @@ func CoreToGetAllResponse(data product.Core) GetAllProductResponse {
 		Name:         data.Name,
 		Category:     data.Category,
 		Price:        data.Price,
+		Stock:        data.Stock,
 		PhotoProduct: data.PhotoProduct,
 	}
 }
