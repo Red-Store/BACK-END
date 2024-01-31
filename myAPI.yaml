@@ -1125,6 +1125,8 @@ components:
                   type: string
                 price:
                   type: integer
+                stock:
+                  type: integer
                 category:
                   type: string
                 photo_product:
@@ -1135,16 +1137,19 @@ components:
             - id: 1
               name: "Vivo"
               price: 50000
+              stock: 12
               category: phone
               photo_product: 'https://sariroti.com/smartphone/photovivo.jpg'
             - id: 2
               name: "Samsung"
               price: 60000
+              stock: 5
               category: phone
               photo_product: 'https://sariroti.com/smartphone/photosamsung.jpg'
             - id: 3
               name: "Xiaomi"
               price: 55000
+              stock: 10
               category: phone
               photo_product: 'https://sariroti.com/smartphone/photoxiaomi.jpg'
     CartResponse:

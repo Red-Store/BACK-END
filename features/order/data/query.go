@@ -6,6 +6,7 @@ import (
 	"MyEcommerce/features/user/data"
 	"MyEcommerce/utils/externalapi"
 	"errors"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -117,17 +118,25 @@ func (repo *orderQuery) SelectOrderUser(userIdLogin int) ([]order.OrderItemCore,
 }
 
 // SelectOrderAdmin implements order.OrderDataInterface.
-func (repo *orderQuery) SelectOrderAdmin(userIdLogin, page, limit int) ([]order.OrderItemCore, error) {
+func (repo *orderQuery) SelectOrderAdmin(userIdLogin, page, limit int) ([]order.OrderItemCore, int, error) {
 	var userDataGorm data.User
 	tx := repo.db.Where("role = 'admin' AND id = ?", userIdLogin).First(&userDataGorm, userIdLogin)
 	if tx.Error != nil {
-		return nil, errors.New("Sorry, your role does not have this access.")
+		return nil, 0, errors.New("Sorry, your role does not have this access.")
 	}
 
 	var orderItems []OrderItem
+	var totalData int64
+	tc := repo.db.Unscoped().Model(&orderItems).Count(&totalData)
+	if tc.Error != nil {
+		return nil, 0, tc.Error
+	}
+	totalPage := int((totalData + int64(limit) - 1) / int64(limit))
+	log.Println(totalPage)
+
 	err := repo.db.Unscoped().Joins("Order").Preload("Cart").Preload("Cart.Product").Limit(limit).Offset((page - 1) * limit).Find(&orderItems).Error
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	orderItemCores := make([]order.OrderItemCore, len(orderItems))
@@ -135,7 +144,7 @@ func (repo *orderQuery) SelectOrderAdmin(userIdLogin, page, limit int) ([]order.
 		orderItemCores[i] = item.ModelToCoreOrderItemAdmin()
 	}
 
-	return orderItemCores, nil
+	return orderItemCores, int(totalPage), nil
 }
 
 // SelectOrderAdmin implements order.OrderDataInterface.

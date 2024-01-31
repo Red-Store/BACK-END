@@ -75,15 +75,13 @@ func (handler *OrderHandler) GetOrderAdmin(c echo.Context) error {
 	limit, _ := strconv.Atoi(c.QueryParam("limit"))
 	
 
-	results, errSelect := handler.orderService.GetOrderAdmin(userIdLogin, page, limit)
+	results, totalPage, errSelect := handler.orderService.GetOrderAdmin(userIdLogin, page, limit)
 	if errSelect != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+errSelect.Error(), nil))
 	}
 
 	response := CoreToResponseOrderAdmin(results)
-
-	// Kirim response
-	return c.JSON(http.StatusOK, response)
+	return c.JSON(http.StatusOK, responses.WebResponsePagi("success read data", response, totalPage))
 }
 
 func (handler *OrderHandler) CancleOrderById(c echo.Context) error {
