@@ -38,7 +38,7 @@ func (os *orderService) GetOrderUser(userIdLogin int) ([]order.OrderItemCore, er
 }
 
 // GetOrderAdmin implements order.OrderServiceInterface.
-func (os *orderService) GetOrderAdmin(userIdLogin, page, limit int) ([]order.OrderItemCore, error) {
+func (os *orderService) GetOrderAdmin(userIdLogin, page, limit int) ([]order.OrderItemCore, int, error) {
 	if page == 0 {
 		page = 1
 	}
@@ -47,8 +47,8 @@ func (os *orderService) GetOrderAdmin(userIdLogin, page, limit int) ([]order.Ord
 		limit = 10
 	}
 
-	result, err := os.orderData.SelectOrderAdmin(userIdLogin, page, limit)
-	return result, err
+	result, totalPage, err := os.orderData.SelectOrderAdmin(userIdLogin, page, limit)
+	return result, totalPage, err
 }
 
 // CancleOrder implements order.OrderServiceInterface.

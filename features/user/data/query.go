@@ -95,7 +95,7 @@ func (repo *userQuery) SelectAdminUsers(page, limit int) ([]user.Core, error, in
 	if tc.Error != nil {
 		return nil, tc.Error, 0
 	}
-	totalPage := totalData % int64(limit)
+	totalPage := int((totalData + int64(limit) - 1) / int64(limit))
 
 	var usersDataCore []user.Core
 	for _, value := range usersDataGorm {

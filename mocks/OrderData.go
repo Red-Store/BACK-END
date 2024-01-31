@@ -62,7 +62,7 @@ func (_m *OrderData) InsertOrder(userIdLogin int, cartIds []uint, inputOrder ord
 }
 
 // SelectOrderAdmin provides a mock function with given fields: userIdLogin, page, limit
-func (_m *OrderData) SelectOrderAdmin(userIdLogin int, page int, limit int) ([]order.OrderItemCore, error) {
+func (_m *OrderData) SelectOrderAdmin(userIdLogin int, page int, limit int) ([]order.OrderItemCore, int, error) {
 	ret := _m.Called(userIdLogin, page, limit)
 
 	if len(ret) == 0 {
@@ -70,8 +70,9 @@ func (_m *OrderData) SelectOrderAdmin(userIdLogin int, page int, limit int) ([]o
 	}
 
 	var r0 []order.OrderItemCore
-	var r1 error
-	if rf, ok := ret.Get(0).(func(int, int, int) ([]order.OrderItemCore, error)); ok {
+	var r1 int
+	var r2 error
+	if rf, ok := ret.Get(0).(func(int, int, int) ([]order.OrderItemCore, int, error)); ok {
 		return rf(userIdLogin, page, limit)
 	}
 	if rf, ok := ret.Get(0).(func(int, int, int) []order.OrderItemCore); ok {
@@ -82,13 +83,19 @@ func (_m *OrderData) SelectOrderAdmin(userIdLogin int, page int, limit int) ([]o
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(int, int, int) error); ok {
+	if rf, ok := ret.Get(1).(func(int, int, int) int); ok {
 		r1 = rf(userIdLogin, page, limit)
 	} else {
-		r1 = ret.Error(1)
+		r1 = ret.Get(1).(int)
 	}
 
-	return r0, r1
+	if rf, ok := ret.Get(2).(func(int, int, int) error); ok {
+		r2 = rf(userIdLogin, page, limit)
+	} else {
+		r2 = ret.Error(2)
+	}
+
+	return r0, r1, r2
 }
 
 // SelectOrderUser provides a mock function with given fields: userIdLogin
