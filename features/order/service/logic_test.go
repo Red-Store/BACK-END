@@ -115,11 +115,11 @@ func TestGetOrderAdmin(t *testing.T) {
 	}
 
 	t.Run("default page and limit", func(t *testing.T) {
+		userIdLogin := 1
 		page := 0
 		limit := 0
-		userIdLogin := 1
 
-		repo.On("SelectOrderAdmin", 1, 10).Return(returnData, nil).Once()
+		repo.On("SelectOrderAdmin", 1, 1, 10).Return(returnData, 0, nil).Once()
 
 		result, _, err := srv.GetOrderAdmin(userIdLogin, page, limit)
 
@@ -134,7 +134,7 @@ func TestGetOrderAdmin(t *testing.T) {
 		limit := 10
 		userIdLogin := 1
 
-		repo.On("SelectOrderAdmin", page, limit).Return(nil, errors.New("database error")).Once()
+		repo.On("SelectOrderAdmin", userIdLogin, page, limit).Return(nil, 0, errors.New("database error")).Once()
 
 		result, _, err := srv.GetOrderAdmin(userIdLogin, page, limit)
 
@@ -150,7 +150,7 @@ func TestGetOrderAdmin(t *testing.T) {
 		limit := 10
 		userIdLogin := 1
 
-		repo.On("SelectOrderAdmin", page, limit).Return(returnData, nil).Once()
+		repo.On("SelectOrderAdmin", userIdLogin, page, limit).Return(returnData, 0, nil).Once()
 
 		result, _, err := srv.GetOrderAdmin(userIdLogin, page, limit)
 
