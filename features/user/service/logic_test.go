@@ -298,7 +298,7 @@ func TestGetAdminUsers(t *testing.T) {
 
 		assert.Error(t, err)
 		assert.Nil(t, result)
-		assert.Contains(t, "Sorry, your role does not have this access", err.Error())
+		assert.Contains(t, "Sorry, your role does not have this access.", err.Error())
 
 		repo.AssertExpectations(t)
 	})

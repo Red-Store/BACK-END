@@ -105,6 +105,7 @@ func (service *userService) Login(email string, password string) (data *user.Cor
 	if errJwt != nil {
 		return nil, "", errJwt
 	}
+	
 	return data, token, err
 }
 
