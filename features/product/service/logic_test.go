@@ -96,7 +96,7 @@ func TestGetAll(t *testing.T) {
 		limit := 0
 		category := ""
 
-		repo.On("SelectAll", 1, 8).Return(returnData, nil).Once()
+		repo.On("SelectAll", 1, 8, category).Return(returnData, nil).Once()
 
 		result, _, err := srv.GetAll(page, limit, category)
 
@@ -108,10 +108,10 @@ func TestGetAll(t *testing.T) {
 
 	t.Run("error from repository", func(t *testing.T) {
 		page := 1
-		limit := 10
+		limit := 8
 		category := "phones"
 
-		repo.On("SelectAll", page, limit).Return(nil, errors.New("database error")).Once()
+		repo.On("SelectAll", page, limit, category).Return(nil, errors.New("database error")).Once()
 
 		result, _, err := srv.GetAll(page, limit, category)
 
@@ -124,10 +124,10 @@ func TestGetAll(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		page := 1
-		limit := 10
+		limit := 8
 		category := "smartphones"
 
-		repo.On("SelectAll", page, limit).Return(returnData, nil).Once()
+		repo.On("SelectAll", page, limit, category).Return(returnData, nil).Once()
 
 		result, _, err := srv.GetAll(page, limit, category)
 
@@ -137,6 +137,7 @@ func TestGetAll(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 }
+
 
 func TestGetById(t *testing.T) {
 	repo := new(mocks.ProductData)
