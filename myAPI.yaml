@@ -250,7 +250,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductGetAllResponse'
+                $ref: '#/components/schemas/ProductResponse'
         '400':
           description: Error Get Product
           content:
@@ -448,7 +448,7 @@ paths:
     delete:
       tags:
         - Product
-      summary: Update Product By Id
+      summary: Delete Product By Id
       description: This can only be done by the logged in user.
       parameters:
         - in: path
@@ -766,7 +766,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetOrderSchema'
-                # $ref: '#/components/schemas/ArrayOfCartSchema'
         '400':
           description: Error Get Order
           content:
@@ -794,8 +793,8 @@ paths:
         - in: path
           name: id
           schema:
-            type: number
-            example: 1
+            type: string
+            example: "dkjg-dhjd-djbf-djsb"
           required: true
       security:
         - jwtAuth: []
@@ -908,10 +907,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
                   $ref: '#/components/schemas/AdminOrderResponse'
-                # $ref: '#/components/schemas/ArrayOfCartSchema'
         '400':
           description: Error Get Order
           content:
@@ -1113,12 +1109,16 @@ components:
           user_name: "@tokoarja"
           photo_profil: 'https://sariroti.com/arjauser.jpg'
     ProductGetAllResponse:
-        properties:
-          Product:
-            type: array
-            items:
-              type: object
-              properties:
+      properties:
+        message:
+          type: string
+          example: "Succes Read Data"
+        total_page:
+          type: integer
+          example: 3
+        data:
+            type: object
+            properties:
                 id:
                   type: integer
                 name:
@@ -1179,64 +1179,82 @@ components:
           cart_id: 1
           quantity: 3
     AdminUserResponse:
-      type: object
       properties:
-        id:
+        message:
+          type: string
+          example: "Succes Read Data"
+        total_page:
           type: integer
-        name:
-          type: string
-        username:
-          type: string
-        email:
-          type: string
-          format: email
-        status:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-      example:
-        id: 1
-        name: "John Doe"
-        username: "johndoe"
-        email: "johndoe@example.com"
-        status: "active"
-        createdAt: "2024-01-13T18:22:55Z"
+          example: 3
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: "Mamang Es"
+              username:
+                type: string
+                example: "mangmang22"
+              email:
+                type: string
+                format: email
+                example: "lele@gmail.com"
+              status:
+                type: string
+                example: "active"
+              createdAt:
+                type: string
+                format: date-time
+                example: "2024-01-13T18:22:55Z"
 
     AdminOrderResponse:
-      type: object
       properties:
-        id:
+        message:
           type: string
-        productName:
-          type: string
-        quantity:
+          example: "Succes Read Data"
+        total_page:
           type: integer
-        createdAt:
-          type: string
-          format: date-time
-        bank:
-          type: string
-        price:
-          type: integer
-        gross_amount:
-          type: number
-          format: float
-        address:
-          type: string
-        status:
-          type: string
-          enum: [proses, selesai, dibatalkan]
-      example:
-        id: 21421412hjhbhjvgj4124
-        productName: "Vivo Y12"
-        quantity: 2
-        createdAt: "2024-01-13T18:22:55Z"
-        bank: "bca"
-        price: 1500000
-        gross_amount: 3000000
-        address: "Jalan Merdeka No.123, Jakarta"
-        status: "pending"
+          example: 3
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "dkjg-dhjd-djbf-djsb"
+              productName:
+                type: string
+                example: "Vivo Y12"
+              quantity:
+                type: integer
+                example: 2
+              createdAt:
+                type: string
+                format: date-time
+                example: "2024-01-13T18:22:55Z"
+              bank:
+                type: string
+                example: "bca"
+              price:
+                type: integer
+                example: 1500000
+              gross_amount:
+                type: number
+                format: float
+                example: 3000000
+              address:
+                type: string
+                example: "Jalan Merdeka No.123, Jakarta"
+              status:
+                type: string
+                enum: [proses, selesai, dibatalkan]
+                example: "pending"
     GetOrderSchema:
       type: object
       properties:
