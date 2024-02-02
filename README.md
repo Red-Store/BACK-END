@@ -20,7 +20,7 @@ Aplikasi E-Commerce REDSTORE ini dirancang untuk memudahkan transaksi jual beli 
     - Mencari Produk
 - Keranjang Belanja
     - Menambahkan Produk ke Keranjang
-    - Memperbarui Keranjang
+    - Menambah Quantity Produk di Keranjang
     - Menghapus Produk dari Keranjang
     - Mendapatkan Produk di Keranjang
 - Proses Checkout dan Pembayaran
@@ -37,9 +37,6 @@ Aplikasi E-Commerce REDSTORE ini dirancang untuk memudahkan transaksi jual beli 
 
 # ERD
 ![Screnshot](utils/images/md/myerd.png)
-
-## Swagger Documentation
-[>> Swagger Documentation <<<](https://app.swaggerhub.com/apis-docs/L3NONEONE_1/EcommerceAppProject/1.0.0)
 
 ## List Endpoint
 
@@ -68,6 +65,9 @@ Aplikasi E-Commerce REDSTORE ini dirancang untuk memudahkan transaksi jual beli 
 | Admin | `GET /admin/users` |
 | Admin | `GET /admin/orders` |
 
+## Swagger Documentation
+[>>> Swagger Documentation <<<](https://app.swaggerhub.com/apis-docs/L3NONEONE_1/EcommerceAppProject/1.0.0)
+
 # USERS OPENAPI
 ![Screnshot](utils/images/md/userAPI.png)
 
@@ -79,7 +79,6 @@ Aplikasi E-Commerce REDSTORE ini dirancang untuk memudahkan transaksi jual beli 
 
 # ADMIN OPENAPI
 ![Screnshot](utils/images/md/admAPI.png)
-
 
 # TESTING COVERAGE
 ![Screnshot](utils/images/md/testing.png)
